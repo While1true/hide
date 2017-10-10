@@ -16,6 +16,11 @@ public class BaseBean<E> implements Serializable {
     @SerializedName("data")
     private E data;
 
+    public BaseBean(int code, E data) {
+        this.code = code;
+        this.data = data;
+    }
+
     public boolean isSuccess() {
         return code == 0;
     }

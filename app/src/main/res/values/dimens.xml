@@ -1,4 +1,9 @@
 <resources>
+
+    <dimen name="titlesize">22sp</dimen>
+    <dimen name="subtitlesize">20sp</dimen>
+
+
     <dimen name="pt0.5">0.5pt</dimen>
     <dimen name="pt1">1pt</dimen>
     <dimen name="pt2">2pt</dimen>
@@ -600,9 +605,6 @@
     <dimen name="pt598">598pt</dimen>
     <dimen name="pt599">599pt</dimen>
     <dimen name="pt600">600pt</dimen>
-
-
-
 
 
 </resources>

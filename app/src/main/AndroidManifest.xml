@@ -27,8 +27,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            >
+            android:configChanges="orientation|keyboardHidden|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -39,25 +38,24 @@
             android:name=".Appxx.RadioActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="singleTask"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity android:name=".Appxx.Communicate.DoctorHome"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".Appxx.Communicate.DoctorHome"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
-
-
-
-
-
-
-
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".Appxx.Mine.Sign.SignActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask" />
 
 
         <!-- //来自融云的推送消息 小米 -->
         <activity
             android:name=".RongYun.PushHandlerActivity"
-            android:launchMode="singleTask"
             android:configChanges="orientation"
+            android:launchMode="singleTask"
             android:windowSoftInputMode="stateHidden|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -191,16 +189,17 @@
         </receiver>
 
 
-
-        <receiver android:name="com.xiaomi.market.sdk.DownloadCompleteReceiver" >
+        <receiver android:name="com.xiaomi.market.sdk.DownloadCompleteReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
             </intent-filter>
         </receiver>
-        <provider android:name=".Mi.MyProvider"
+
+        <provider
+            android:name=".Mi.MyProvider"
             android:authorities="com.kxjsj.doctorassistant.selfupdate.fileprovider"
             android:exported="false"
-            android:grantUriPermissions="true" >
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />

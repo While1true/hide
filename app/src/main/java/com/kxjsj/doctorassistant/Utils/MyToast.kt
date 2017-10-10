@@ -73,7 +73,7 @@ class MyToast private constructor(context: Context) {
         try {
             val method = toast.javaClass.getDeclaredMethod("getWindowParams")
             val layoutParams1 = method.invoke(toast) as WindowManager.LayoutParams
-            layoutParams1.height = 55 + dp2px(56f)
+            layoutParams1.height = actuallyHeight + dp2px(56f)
         } catch (e: Exception) {
             e.printStackTrace()
         }

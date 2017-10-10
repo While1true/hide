@@ -38,7 +38,14 @@ public class K2JUtils {
     public static void toast(CharSequence charSequence,int during){
         MyToast.Companion.showToaste(charSequence,during);
     }
-
+    /**
+     * 关联kotlin吐司
+     * @param charSequence
+     * @param
+     */
+    public static void toast(CharSequence charSequence){
+        toast(charSequence,1);
+    }
     /**
      * 给kotlin调用log
      * @param descripte

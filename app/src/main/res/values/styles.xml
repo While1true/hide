@@ -10,4 +10,8 @@
     </style>
     <!--<item name="android:screenOrientation">landscape</item>-->
     <!--<item name="android:configChanges">orientation|screenSize</item>-->
+    <style name="textstyle">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
 </resources>

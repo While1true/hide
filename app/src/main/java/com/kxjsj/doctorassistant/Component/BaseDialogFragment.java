@@ -9,12 +9,18 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+
+import com.kxjsj.doctorassistant.Utils.InputUtils;
 
 /**
  * Created by vange on 2017/9/30.
  */
 
 public abstract class BaseDialogFragment extends DialogFragment {
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -25,6 +31,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView(view, savedInstanceState);
+
     }
 
     /**
@@ -37,7 +44,9 @@ public abstract class BaseDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return super.onCreateDialog(savedInstanceState);
+        Dialog dialog = super.onCreateDialog(savedInstanceState);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        return dialog;
     }
 
     /**
@@ -49,5 +58,11 @@ public abstract class BaseDialogFragment extends DialogFragment {
     public BaseDialogFragment show(FragmentManager manager) {
         show(manager, getClass().getSimpleName());
         return this;
+    }
+
+    @Override
+    public void dismiss() {
+        InputUtils.hideKeyboard(getDialog());
+        super.dismiss();
     }
 }

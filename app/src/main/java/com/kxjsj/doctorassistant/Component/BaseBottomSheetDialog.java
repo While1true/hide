@@ -1,6 +1,5 @@
 package com.kxjsj.doctorassistant.Component;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
@@ -9,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.kxjsj.doctorassistant.R;
+import com.kxjsj.doctorassistant.Utils.InputUtils;
 
 
 /**
@@ -29,14 +28,10 @@ public abstract class BaseBottomSheetDialog extends BottomSheetDialogFragment {
         initView(view,savedInstanceState);
     }
 
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return super.onCreateDialog(savedInstanceState);
-    }
-
     protected  abstract int getLayoutId();
 
     protected abstract void initView(View view,Bundle savedInstanceState);
+
 
     /**
      * show
@@ -45,6 +40,12 @@ public abstract class BaseBottomSheetDialog extends BottomSheetDialogFragment {
     public BaseBottomSheetDialog show(FragmentManager manager){
         show(manager,getClass().getSimpleName());
         return this;
+    }
+
+    @Override
+    public void dismiss() {
+        InputUtils.hideKeyboard(getDialog());
+        super.dismiss();
     }
 
 }

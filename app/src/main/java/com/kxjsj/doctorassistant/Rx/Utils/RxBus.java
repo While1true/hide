@@ -35,12 +35,7 @@ public class RxBus {
     }
     public <T extends BaseBean> Observable<T> toObservable (final int Tag, Class<T> eventType) {
         return bus.ofType(eventType)
-                .filter(new Predicate<T>() {
-                    @Override
-                    public boolean test(T t) throws Exception {
-                        return t.getCode()==Tag;
-                    }
-                });
+                .filter(t -> t.getCode()==Tag);
 
     }
     private static class InstanceHolder{

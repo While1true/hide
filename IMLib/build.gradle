@@ -22,4 +22,9 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile files('libs/AMap_2DMap_V2.9.0_20160525.jar')
+    compile files('libs/AMap_Channel_Location_V1.4.0_20160708.jar')
+    compile files('libs/AMap_Search_V3.4.0_20160811.jar')
+    compile files('libs/MiPush_SDK_Client_3_2_2.jar')
+    compile files('libs/Rong_IMLib.jar')
 }
