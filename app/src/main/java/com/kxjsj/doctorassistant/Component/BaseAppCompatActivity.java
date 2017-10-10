@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import com.kxjsj.doctorassistant.Rx.RxLifeUtils;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * 包装了toolbarde的activity
@@ -34,5 +35,17 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         RxLifeUtils.getInstance().remove(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

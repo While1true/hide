@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.kxjsj.doctorassistant.R;
 import com.kxjsj.doctorassistant.Rx.RxLifeUtils;
 import com.kxjsj.doctorassistant.View.IndicateImageView;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * Created by vange on 2017/9/12.
@@ -116,5 +117,14 @@ public abstract class BaseTitleFragment extends Fragment {
         tv_title=null;
         iv_menu=null;
         RxLifeUtils.getInstance().remove(this);
+    }
+
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart(getClass().getSimpleName());
+    }
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(getClass().getSimpleName());
     }
 }

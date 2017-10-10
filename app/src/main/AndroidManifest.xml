@@ -219,6 +219,11 @@
         <!-- </intent-filter> -->
         <!-- </receiver> -->
         <!-- 小米 配置结束 < -->
+
+        <!--友盟统计配置-->
+        <meta-data android:value="59dc61fc9f06fd543a0000ae" android:name="UMENG_APPKEY"/>
+        <meta-data android:value="${UMENG_CHANNEL_VALUE}" android:name="UMENG_CHANNEL"/>
+        <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     </application>
 
 </manifest>

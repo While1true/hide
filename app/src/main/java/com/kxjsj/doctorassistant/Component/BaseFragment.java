@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.kxjsj.doctorassistant.Rx.RxLifeUtils;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * BaseFragment base
@@ -72,4 +73,14 @@ public abstract class BaseFragment extends Fragment {
         toolbar=null;
         RxLifeUtils.getInstance().remove(this);
     }
+
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart(getClass().getSimpleName());
+    }
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(getClass().getSimpleName());
+    }
+
 }

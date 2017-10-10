@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.kxjsj.doctorassistant.R;
 import com.kxjsj.doctorassistant.Rx.RxLifeUtils;
 import com.kxjsj.doctorassistant.View.IndicateImageView;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * Created by vange on 2017/9/12.
@@ -95,5 +96,17 @@ public abstract class BaseTitleActivity extends AppCompatActivity {
         iv_menu=null;
         tipTextView=null;
         RxLifeUtils.getInstance().remove(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }
