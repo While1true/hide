@@ -1,5 +1,9 @@
 package com.kxjsj.doctorassistant.Rx;
 
+import android.util.Log;
+
+import com.kxjsj.doctorassistant.Constant.Constance;
+
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
@@ -30,6 +34,8 @@ public abstract class MyObserver<T> implements Observer<T> {
 
     @Override
     public void onError(Throwable e) {
+        if (Constance.DEBUGTAG)
+            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onError: "+e.getMessage());
     }
 
     @Override

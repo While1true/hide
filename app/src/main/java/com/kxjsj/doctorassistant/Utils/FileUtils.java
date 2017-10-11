@@ -3,6 +3,8 @@ package com.kxjsj.doctorassistant.Utils;
 
 import android.os.Environment;
 
+import com.kxjsj.doctorassistant.JavaBean.KotlinBean;
+import com.kxjsj.doctorassistant.Rx.MyObserver;
 import com.kxjsj.doctorassistant.Rx.RxSchedulers;
 import com.kxjsj.doctorassistant.Rx.Utils.ProgressResponseBody;
 
@@ -12,6 +14,15 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.ObservableSource;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.ResponseBody;
 
 /**
  * Created by vange on 2017/9/15.
@@ -106,22 +117,6 @@ public class FileUtils {
             {".zip", "application/x-zip-compressed"}, {"", "*/*"}};
 
 
-    /**
-     * 异步下载
-     *
-     * @param name
-     * @param progressResponseBody
-     * @param callBack
-     */
-    public static void saveFileAsync(String name, ProgressResponseBody progressResponseBody, CallBack callBack) {
-        Observable.just(progressResponseBody)
-                .compose(RxSchedulers.compose())
-                .map(responseBody -> FileUtils.saveFile(name, progressResponseBody))
-                .subscribe(file -> {
-                    callBack.onSuccess(file.getAbsolutePath());
-                });
-    }
-
     public interface CallBack {
 
         void onSuccess(String file);
@@ -135,35 +130,31 @@ public class FileUtils {
      * @param responseBody
      * @return
      */
-    public static File saveFile(String name, ProgressResponseBody responseBody) {
-        InputStream is = responseBody.byteStream();
-        FileOutputStream fos = null;
-        File file = new File(Environment.getExternalStorageDirectory(), System.currentTimeMillis() + name);
-        if (!file.exists())
-            file.mkdirs();
-        byte[] buf = new byte[2048];
-        int len = 0;
-        try {
-            fos = new FileOutputStream(file);
-
-            while ((len = is.read(buf)) != -1) {
-                fos.write(buf, 0, len);
-            }
-            fos.flush();
-            return file;
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
+    public static Observable saveFile(String name, ResponseBody responseBody) {
+        return Observable.create((ObservableOnSubscribe<KotlinBean.ProgressBean>) e -> {
+            InputStream is = responseBody.byteStream();
+            FileOutputStream fos = null;
+            File file = new File(Environment.getExternalStorageDirectory(), System.currentTimeMillis() + name);
+            if (!file.exists())
+                file.mkdirs();
+            byte[] buf = new byte[2048];
+            int len = 0;
+            KotlinBean.ProgressBean progressBean = new KotlinBean.ProgressBean(name, 0, responseBody.contentLength(), file);
             try {
+                fos = new FileOutputStream(file);
+
+                while ((len = is.read(buf)) != -1) {
+                    fos.write(buf, 0, len);
+                    e.onNext(progressBean);
+                }
+                fos.flush();
+            } finally {
                 is.close();
                 fos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+                e.onComplete();
             }
+        }).compose(RxSchedulers.compose());
 
-        }
-        return null;
     }
-
 
 }

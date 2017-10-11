@@ -40,6 +40,11 @@
             android:launchMode="singleTask"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
+            android:name=".Appxx.RadioActivityD"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
             android:name=".Appxx.Communicate.DoctorHome"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
@@ -49,6 +54,12 @@
             android:windowSoftInputMode="stateHidden|adjustPan"
             android:screenOrientation="portrait"
             android:launchMode="singleTask" />
+
+        <activity
+            android:name=".Utils.ZXingUtils$MyCaptureActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
 
 
         <!-- //来自融云的推送消息 小米 -->

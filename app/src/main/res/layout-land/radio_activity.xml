@@ -24,18 +24,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
-        <RadioButton
-            android:id="@+id/rb_sickbed"
-            android:padding="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:button="@null"
-            android:textSize="14sp"
-            android:textColor="@drawable/radio_text_selector"
-            android:drawableTop="@drawable/sickbed_radio_selector"
-            android:gravity="center"
-            android:text="病床管理" />
+
 
         <RadioButton
             android:id="@+id/rb_hospital"
@@ -62,6 +51,18 @@
             android:drawableTop="@drawable/communicate_radio_selector"
             android:gravity="center"
             android:text="医患交流" />
+        <RadioButton
+            android:id="@+id/rb_knowledge"
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:button="@null"
+            android:textSize="14sp"
+            android:textColor="@drawable/radio_text_selector"
+            android:drawableTop="@drawable/knowledge_radio_selector"
+            android:gravity="center"
+            android:text="健康知识" />
 
         <RadioButton
             android:id="@+id/rb_mine"

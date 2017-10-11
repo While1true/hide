@@ -58,6 +58,8 @@
         android:layout_marginRight="32dp"
         android:layout_marginStart="32dp"
         android:text="验证手机号"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
         android:textSize="22sp"
         android:background="@drawable/stoken_round_background"
         app:layout_constraintHorizontal_bias="0.0"

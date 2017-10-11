@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.util.Log;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.ck.hello.nestrefreshlib.View.Adpater.Base.SimpleViewHolder;
 import com.ck.hello.nestrefreshlib.View.Adpater.DefaultStateListener;
 import com.ck.hello.nestrefreshlib.View.Adpater.SBaseMutilAdapter;
@@ -15,8 +16,12 @@ import com.kxjsj.doctorassistant.Constant.Constance;
 import com.kxjsj.doctorassistant.DialogAndPopWindow.LoginDialog;
 import com.kxjsj.doctorassistant.JavaBean.KotlinBean;
 import com.kxjsj.doctorassistant.R;
+import com.kxjsj.doctorassistant.Rx.BaseBean;
+import com.kxjsj.doctorassistant.Rx.MyObserver;
 import com.kxjsj.doctorassistant.Screen.OrentionUtils;
 import com.kxjsj.doctorassistant.Utils.K2JUtils;
+import com.kxjsj.doctorassistant.Utils.ZXingUtils;
+import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,7 +107,16 @@ public class SickbedF extends BaseFragment {
                     @Override
                     public void onBind(SimpleViewHolder holder, KotlinBean.SickBedBean item, int position) {
                         holder.itemView.setOnClickListener(view -> {
-                            new LoginDialog().show(getActivity().getSupportFragmentManager());
+                            ZXingUtils.startCapture(view.getContext(), new MyObserver<BaseBean<String>>(SickbedF.this) {
+                                @Override
+                                public void onNext(BaseBean<String> result) {
+                                    super.onNext(result);
+                                    new MaterialDialog.Builder(view.getContext())
+                                            .title(result.getData())
+                                            .build().show();
+                                    onComplete();
+                                }
+                            });
                             K2JUtils.toast(item.getName(),1);
                         });
                         holder.setText(R.id.textView, item.getName());

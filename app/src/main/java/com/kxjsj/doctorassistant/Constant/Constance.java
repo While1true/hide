@@ -22,6 +22,11 @@ public class Constance {
          * 关闭时关闭输入法
          */
         public static final int CLOST_INPUT=2;
+
+        /**
+         * 扫描二维码
+         */
+        public static final int QRCODE=3;
     }
 
 }
