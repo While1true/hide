@@ -4,20 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 
-import com.kxjsj.doctorassistant.Appxx.RadioActivity;
-import com.kxjsj.doctorassistant.Appxx.RadioActivityD;
-import com.kxjsj.doctorassistant.Constant.Constance;
-import com.kxjsj.doctorassistant.Net.HttpClientUtils;
-import com.kxjsj.doctorassistant.Rx.MyObserver;
+import com.kxjsj.doctorassistant.Appxx.Sicker.RadioActivity;
+import com.kxjsj.doctorassistant.Appxx.Doctor.RadioActivityD;
 import com.kxjsj.doctorassistant.Rx.RxLifeUtils;
 import com.kxjsj.doctorassistant.Utils.MyToast;
-
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 
 public class MainActivity extends AppCompatActivity {

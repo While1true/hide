@@ -73,8 +73,9 @@ public class RongYunInitialUtils {
              * @return 收到消息是否处理完成，true 表示自己处理铃声和后台通知，false 走融云默认处理方式。
              */
             RongIM.setOnReceiveMessageListener((message, i) -> {
+
                 if (Constance.DEBUGTAG)
-                    Log.i(Constance.DEBUG, "onReceived: " + message.getExtra() + i);
+                    Log.i(Constance.DEBUG, "onReceived: " + message.getExtra() +"--le"+ i+"--getSenderUserId--"+message.getSenderUserId());
                 return false;
             });
             /**

@@ -17,4 +17,16 @@ public class OrentionUtils {
         return context.getResources().getConfiguration().orientation
                 == Configuration.ORIENTATION_PORTRAIT;
     }
+
+    /**
+     * 横竖屏设置不同count
+     * @param context
+     * @return
+     */
+    public static int calculateSpanCount(Context context){
+        if (OrentionUtils.isPortrait(context))
+            return 3;
+        else
+            return 4;
+    }
 }

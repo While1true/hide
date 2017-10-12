@@ -1,10 +1,9 @@
-package com.kxjsj.doctorassistant.Appxx;
+package com.kxjsj.doctorassistant.Appxx.Doctor;
 
 import android.Manifest;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,8 +12,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 import android.view.View;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
+import com.kxjsj.doctorassistant.Appxx.MineF;
 import com.kxjsj.doctorassistant.Component.BaseTitleActivity;
 import com.kxjsj.doctorassistant.Constant.Constance;
 import com.kxjsj.doctorassistant.R;
@@ -36,17 +35,17 @@ import io.rong.imlib.model.Conversation;
  * Created by vange on 2017/9/19.
  */
 
-public class RadioActivity extends BaseTitleActivity implements RadioGroup.OnCheckedChangeListener, IUnReadMessageObserver {
+public class RadioActivityD extends BaseTitleActivity implements RadioGroup.OnCheckedChangeListener, IUnReadMessageObserver {
     @BindView(R.id.rg_group)
     RadioGroup rgGroup;
     @BindView(R.id.vp)
     NoScrollViewPager vp;
     private SickbedF sickbedF;
-    private CommunicateF communicateF;
-    private HospitalF hospitalF;
+    private CommunicateDF communicateF;
+    private HospitalDF hospitalF;
     private MineF mineF;
     private int checkedID = R.id.rb_sickbed;
-    private String[] titles = {"医护监控", "医患交流","健康知识","我的"};
+    private String[] titles = {"病床管理", "医护监控", "医患交流", "我的"};
     private Disposable subscribe;
 
     @Override
@@ -100,8 +99,8 @@ public class RadioActivity extends BaseTitleActivity implements RadioGroup.OnChe
         if (bundle != null) {
             FragmentManager supportFragmentManager = getSupportFragmentManager();
             sickbedF = (SickbedF) supportFragmentManager.getFragment(bundle, "sickbedF");
-            communicateF = (CommunicateF) supportFragmentManager.getFragment(bundle, "communicateF");
-            hospitalF = (HospitalF) supportFragmentManager.getFragment(bundle, "hospitalF");
+            communicateF = (CommunicateDF) supportFragmentManager.getFragment(bundle, "communicateF");
+            hospitalF = (HospitalDF) supportFragmentManager.getFragment(bundle, "hospitalF");
             mineF = (MineF) supportFragmentManager.getFragment(bundle, "mineF");
         }
         if (Constance.DEBUGTAG)
@@ -113,12 +112,12 @@ public class RadioActivity extends BaseTitleActivity implements RadioGroup.OnChe
 
 
         if (communicateF == null) {
-            communicateF = new CommunicateF();
+            communicateF = new CommunicateDF();
 //            supportFragmentManager.beginTransaction().add(communicateF,"CommunicateF");
         }
 
         if (hospitalF == null) {
-            hospitalF = new HospitalF();
+            hospitalF = new HospitalDF();
 //            supportFragmentManager.beginTransaction().add(hospitalF,"hospitalF");
         }
 
@@ -156,7 +155,7 @@ public class RadioActivity extends BaseTitleActivity implements RadioGroup.OnChe
 
     @Override
     protected int getContentLayoutId() {
-        return R.layout.radio_activity;
+        return R.layout.radio_activityd;
     }
 
     @Override

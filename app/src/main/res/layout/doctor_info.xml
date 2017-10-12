@@ -32,13 +32,17 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp" />
 
-    <Button
+    <com.kxjsj.doctorassistant.View.GradualButton
+        android:background="@drawable/stoken_background_selector"
         android:id="@+id/communicate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="16dp"
         android:text="点击咨询"
+        android:textSize="@dimen/titlesize"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/introduction"
         app:layout_constraintRight_toLeftOf="@+id/guideline"
@@ -68,13 +72,17 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.5" />
 
-    <Button
+    <com.kxjsj.doctorassistant.View.GradualButton
         android:id="@+id/ask"
         android:layout_width="0dp"
+        android:background="@drawable/stoken_background_selector"
         android:layout_height="wrap_content"
         android:text="留言提问"
+        android:textSize="@dimen/titlesize"
         app:layout_constraintTop_toTopOf="@+id/communicate"
         android:layout_marginTop="0dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
         android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="@+id/guideline"
         android:layout_marginRight="8dp"

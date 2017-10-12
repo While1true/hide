@@ -1,4 +1,4 @@
-package com.kxjsj.doctorassistant.Appxx;
+package com.kxjsj.doctorassistant.Appxx.Doctor;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,7 +10,7 @@ import com.kxjsj.doctorassistant.R;
  * Created by vange on 2017/9/28.
  */
 
-public class HospitalF extends BaseFragment {
+public class HospitalDF extends BaseFragment {
     @Override
     protected void initView(@Nullable Bundle savedInstanceState) {
         setRetainInstance(true);

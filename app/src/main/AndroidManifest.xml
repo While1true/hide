@@ -35,17 +35,17 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Appxx.RadioActivity"
+            android:name=".Appxx.Sicker.RadioActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="singleTask"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name=".Appxx.RadioActivityD"
+            android:name=".Appxx.Doctor.RadioActivityD"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="singleTask"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name=".Appxx.Communicate.DoctorHome"
+            android:name=".Appxx.Mine.DoctorHome"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
             android:windowSoftInputMode="stateHidden|adjustPan" />
@@ -60,7 +60,11 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
+        <activity
+            android:name=".Appxx.Mine.SickerHome"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
 
         <!-- //来自融云的推送消息 小米 -->
         <activity

@@ -1,10 +1,9 @@
-package com.kxjsj.doctorassistant.Appxx;
+package com.kxjsj.doctorassistant.Appxx.Sicker;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +12,8 @@ import com.ck.hello.nestrefreshlib.View.Adpater.Base.SimpleViewHolder;
 import com.ck.hello.nestrefreshlib.View.Adpater.DefaultStateListener;
 import com.ck.hello.nestrefreshlib.View.Adpater.SBaseMutilAdapter;
 import com.ck.hello.nestrefreshlib.View.RefreshViews.SRecyclerView;
-import com.kxjsj.doctorassistant.Appxx.Communicate.DoctorHome;
+import com.kxjsj.doctorassistant.Appxx.Mine.DoctorHome;
 import com.kxjsj.doctorassistant.Component.BaseFragment;
-import com.kxjsj.doctorassistant.Constant.Constance;
-import com.kxjsj.doctorassistant.JavaBean.KotlinBean;
 import com.kxjsj.doctorassistant.JavaBean.KotlinBean.Doctor;
 import com.kxjsj.doctorassistant.R;
 import com.kxjsj.doctorassistant.Screen.OrentionUtils;
@@ -34,33 +31,24 @@ import butterknife.Unbinder;
  */
 
 public class CommunicateF extends BaseFragment {
+    int spancount;
     @BindView(R.id.srecyclerview)
     SRecyclerView srecyclerview;
-    int spancount;
+    Unbinder unbinder;
     private SBaseMutilAdapter baseMutilAdapter;
     private GridLayoutManager manager;
 
     @Override
     protected void initView(Bundle savedInstanceState) {
         setRetainInstance(true);
-        /**
-         * 销毁重建的不重新初始化
-         */
-        if (savedInstanceState != null&&srecyclerview!=null) {
-            /**
-             * 屏幕旋转后activity重建
-             * 只要改变spancount 通知layout更新
-             *
-             */
-            caculateSpanCount();
-            manager.setSpanCount(spancount);
-            baseMutilAdapter.notifyDataSetChanged();
-            return;
+        if (savedInstanceState != null) {
+            loadLazy();
         }
     }
 
     /**
      * 调到医生主页
+     *
      * @param bean
      */
     private void go2DoctorHome(Doctor bean) {
@@ -83,22 +71,20 @@ public class CommunicateF extends BaseFragment {
     protected void loadLazy() {
         caculateSpanCount();
 
-        ButterKnife.bind(this, view);
-
         List<Doctor> list = new ArrayList<>(100);
         for (int i = 0; i < 100; i++) {
             if (i % 10 == 0) {
                 Doctor bean1 = new Doctor(0, "xxx科" + (i / 10) + "医师", "共10人");
                 list.add(bean1);
             }
-            Doctor bean = new Doctor(1, "xxx科" + (i / 10) + "医师", "xxx"+i%10+"医生");
+            Doctor bean = new Doctor(1, "xxx科" + (i / 10) + "医师", "xxx" + i % 10 + "医生");
             list.add(bean);
         }
 
 
         manager = new GridLayoutManager(getContext(), spancount);
         baseMutilAdapter = new SBaseMutilAdapter(list)
-                .addType(R.layout.sickbed_item_title, new SBaseMutilAdapter.ITEMHOLDER<Doctor>() {
+                .addType(R.layout.title_layout, new SBaseMutilAdapter.ITEMHOLDER<Doctor>() {
 
                     @Override
                     public void onBind(SimpleViewHolder holder, Doctor item, int position) {
@@ -142,7 +128,26 @@ public class CommunicateF extends BaseFragment {
                         }, 1000);
 
                     }
-                }).setRefreshing();
+                });
+                if(firstLoad) {
+                    srecyclerview.setRefreshing();
+                }else{
+                    baseMutilAdapter.showState(SBaseMutilAdapter.SHOW_NOMORE, "无更多内容了");
+                }
 
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // TODO: inflate a fragment view
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        unbinder = ButterKnife.bind(this, rootView);
+        return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }

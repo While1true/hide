@@ -1,4 +1,4 @@
-package com.kxjsj.doctorassistant.Appxx.Communicate;
+package com.kxjsj.doctorassistant.Appxx.Mine;
 
 import android.content.Context;
 import android.content.res.Configuration;
@@ -13,7 +13,6 @@ import com.ck.hello.nestrefreshlib.View.Adpater.Base.SimpleViewHolder;
 import com.ck.hello.nestrefreshlib.View.Adpater.DefaultStateListener;
 import com.ck.hello.nestrefreshlib.View.Adpater.SBaseMutilAdapter;
 import com.ck.hello.nestrefreshlib.View.RefreshViews.SRecyclerView;
-import com.kxjsj.doctorassistant.Component.BaseBottomSheetDialog;
 import com.kxjsj.doctorassistant.Component.BaseTitleActivity;
 import com.kxjsj.doctorassistant.Constant.Constance;
 import com.kxjsj.doctorassistant.JavaBean.KotlinBean.*;
@@ -22,6 +21,7 @@ import com.kxjsj.doctorassistant.RongYun.ConversationUtils;
 import com.kxjsj.doctorassistant.Screen.AdjustUtil;
 import com.kxjsj.doctorassistant.Screen.OrentionUtils;
 import com.kxjsj.doctorassistant.Utils.K2JUtils;
+import com.kxjsj.doctorassistant.View.GradualButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,12 +59,15 @@ public class DoctorHome extends BaseTitleActivity {
         ButterKnife.bind(this);
         datas = new ArrayList<>(50);
         for (int i = 0; i < 50; i++) {
-            datas.add(new DoctorInfo(i+""));
+            datas.add(new DoctorInfo(i + ""));
         }
         sBaseMutilAdapter = new SBaseMutilAdapter(datas)
                 .addType(R.layout.doctor_info, new SBaseMutilAdapter.ITEMHOLDER<DoctorInfo>() {
                     @Override
                     public void onBind(SimpleViewHolder holder, DoctorInfo item, int position) {
+
+                        startButtonAnimator(holder);
+
                         holder.setOnClickListener(R.id.ask, view -> askQuestion(item));
                         holder.setOnClickListener(R.id.communicate, view ->
                                 ConversationUtils.startChartSingle(DoctorHome.this, position + "", "XX情况咨询"));
@@ -78,6 +81,9 @@ public class DoctorHome extends BaseTitleActivity {
                 .addType(R.layout.doctor_info_land, new SBaseMutilAdapter.ITEMHOLDER<DoctorInfo>() {
                     @Override
                     public void onBind(SimpleViewHolder holder, DoctorInfo item, int position) {
+
+                        startButtonAnimator(holder);
+
                         holder.setOnClickListener(R.id.ask, view -> askQuestion(item));
                         holder.setOnClickListener(R.id.communicate, view ->
                                 ConversationUtils.startChartSingle(DoctorHome.this, position + "", "XX情况咨询"));
@@ -118,6 +124,14 @@ public class DoctorHome extends BaseTitleActivity {
                 .setRefreshing();
     }
 
+    private void startButtonAnimator(SimpleViewHolder holder) {
+        GradualButton askButton = holder.getView(R.id.ask);
+        askButton.start(askButton.getCurrentTextColor(), getColor(R.color.colorPrimary));
+
+        GradualButton communicateButton = holder.getView(R.id.communicate);
+        communicateButton.start(communicateButton.getCurrentTextColor(), getColor(R.color.navi_checked));
+    }
+
     /**
      * 提交留言问题
      *
@@ -144,13 +158,15 @@ public class DoctorHome extends BaseTitleActivity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        /**
-         * 为了不重启调整布局，把doctor_info后缀加了个Land
-         */
-        AdjustUtil.changeTypeValue(this);
-        sBaseMutilAdapter.notifyDataSetChanged();
-        if (Constance.DEBUGTAG)
-            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onConfigurationChanged: ");
+        if(sBaseMutilAdapter!=null) {
+            /**
+             * 为了不重启调整布局，把doctor_info后缀加了个Land
+             */
+            AdjustUtil.changeTypeValue(this);
+            sBaseMutilAdapter.notifyDataSetChanged();
+            if (Constance.DEBUGTAG)
+                Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onConfigurationChanged: ");
+        }
     }
 
     /**
@@ -167,6 +183,7 @@ public class DoctorHome extends BaseTitleActivity {
             Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onDestroy: ");
         srecyclerview.setRefreshingListener(null);
     }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

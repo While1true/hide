@@ -1,9 +1,11 @@
 package com.kxjsj.doctorassistant.Appxx
 
 import android.os.Bundle
+import android.view.View
 
 import com.kxjsj.doctorassistant.Component.BaseFragment
 import com.kxjsj.doctorassistant.R
+import kotlinx.android.synthetic.main.mine_layout.*
 
 /**
  * Created by vange on 2017/9/19.
@@ -12,6 +14,7 @@ import com.kxjsj.doctorassistant.R
 class MineF : BaseFragment() {
     override fun initView(savedInstanceState: Bundle?) {
         retainInstance = true
+        loginOut.start(loginOut.currentTextColor,resources.getColor(R.color.colorPrimary))
     }
 
     override fun getLayoutId(): Int {

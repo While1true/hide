@@ -1,0 +1,273 @@
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--android:orientation="vertical" android:layout_width="match_parent"-->
+    <!--android:paddingBottom="30dp"-->
+    <!--android:layout_height="wrap_content">-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/textView5"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="情况说明"-->
+        <!--android:textSize="@dimen/titlesize"-->
+        <!--android:textStyle="bold"-->
+        <!--android:layout_marginLeft="16dp"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+        <!--android:layout_marginTop="24dp"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/view2" />-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/instruction"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:lineSpacingExtra="8sp"-->
+        <!--android:textSize="@dimen/subtitlesize"-->
+        <!--android:text="热感冒伴有发热，冷感冒无发热症状。常发生在春秋季，常因室内外气温悬殊，导致汗孔闭塞，骤冷骤热的刺激诱发发热、恶寒、头痛、咽痛、口干舌燥、小便黄、全身乏力等症状。"-->
+        <!--android:layout_marginLeft="16dp"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+        <!--android:layout_marginRight="16dp"-->
+        <!--app:layout_constraintRight_toRightOf="parent"-->
+        <!--app:layout_constraintHorizontal_bias="0.0"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/textView5" />-->
+
+    <!--<com.kxjsj.doctorassistant.View.GradualButton-->
+        <!--android:id="@+id/callhelp"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginRight="8dp"-->
+        <!--android:drawableTop="@drawable/ic_callhelp"-->
+        <!--android:background="@drawable/stoken_round_background"-->
+        <!--android:paddingBottom="15dp"-->
+        <!--android:paddingTop="15dp"-->
+        <!--android:text="紧急呼叫"-->
+        <!--android:gravity="center"-->
+        <!--android:drawablePadding="8dp"-->
+        <!--android:textSize="@dimen/titlesize"-->
+        <!--app:layout_constraintRight_toRightOf="parent"-->
+        <!--android:layout_marginLeft="16dp"-->
+        <!--app:layout_constraintLeft_toLeftOf="@+id/guideline4"-->
+        <!--app:layout_constraintTop_toTopOf="@+id/number"-->
+        <!--android:layout_marginTop="0dp"-->
+        <!--app:layout_constraintHorizontal_bias="0.0" />-->
+
+    <!--<com.kxjsj.doctorassistant.View.GradualButton-->
+        <!--android:id="@+id/help"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginLeft="16dp"-->
+        <!--android:layout_marginRight="16dp"-->
+        <!--android:drawableTop="@drawable/ic_help"-->
+        <!--android:background="@drawable/stoken_round_background"-->
+        <!--android:paddingBottom="15dp"-->
+        <!--android:paddingTop="15dp"-->
+        <!--android:drawablePadding="8dp"-->
+        <!--android:text="需要帮助"-->
+        <!--android:gravity="center"-->
+        <!--android:textSize="@dimen/titlesize"-->
+        <!--app:layout_constraintLeft_toLeftOf="@+id/guideline4"-->
+        <!--app:layout_constraintRight_toRightOf="parent"-->
+        <!--app:layout_constraintHorizontal_bias="0.0"-->
+        <!--app:layout_constraintTop_toTopOf="@+id/textview4"-->
+        <!--android:layout_marginTop="0dp" />-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/textview1"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginLeft="16dp"-->
+        <!--android:layout_marginTop="32dp"-->
+        <!--android:text="病号："-->
+        <!--android:textStyle="bold"-->
+        <!--android:textSize="@dimen/titlesize"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/textview2"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="姓名："-->
+        <!--android:textStyle="bold"-->
+        <!--android:textSize="@dimen/titlesize"-->
+        <!--android:layout_marginTop="16dp"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/textview1"-->
+        <!--android:layout_marginLeft="0dp"-->
+        <!--app:layout_constraintLeft_toLeftOf="@+id/textview1" />-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/textview3"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="床号："-->
+        <!--android:textStyle="bold"-->
+        <!--android:textSize="@dimen/titlesize"-->
+        <!--android:layout_marginLeft="0dp"-->
+        <!--app:layout_constraintLeft_toLeftOf="@+id/textview2"-->
+        <!--android:layout_marginTop="16dp"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/textview2" />-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/textview4"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="责任护士："-->
+        <!--android:textStyle="bold"-->
+        <!--android:textSize="@dimen/titlesize"-->
+        <!--android:layout_marginLeft="0dp"-->
+        <!--app:layout_constraintLeft_toLeftOf="@+id/textview3"-->
+        <!--android:layout_marginTop="16dp"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/view" />-->
+
+    <!--<android.support.constraint.Guideline-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/guideline4"-->
+        <!--android:orientation="vertical"-->
+        <!--app:layout_constraintGuide_percent="0.5" />-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/textView12"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="入院日期："-->
+        <!--android:textStyle="bold"-->
+        <!--android:textSize="@dimen/titlesize"-->
+        <!--android:layout_marginTop="16dp"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/textview4"-->
+        <!--android:layout_marginLeft="0dp"-->
+        <!--app:layout_constraintLeft_toLeftOf="@+id/textview4" />-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/textview8"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginLeft="0dp"-->
+        <!--android:layout_marginTop="16dp"-->
+        <!--android:text="护理级别："-->
+        <!--android:textSize="@dimen/titlesize"-->
+        <!--android:textStyle="bold"-->
+        <!--app:layout_constraintLeft_toLeftOf="@+id/textView12"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/textView12" />-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/number"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="0dp"-->
+        <!--android:layout_marginLeft="8dp"-->
+        <!--android:layout_marginRight="8dp"-->
+        <!--android:layout_marginTop="0dp"-->
+        <!--android:text="XL32588"-->
+        <!--android:textSize="@dimen/titlesize"-->
+        <!--app:layout_constraintBottom_toBottomOf="@+id/textview1"-->
+        <!--app:layout_constraintHorizontal_bias="0.0"-->
+        <!--app:layout_constraintLeft_toRightOf="@+id/textview1"-->
+        <!--app:layout_constraintRight_toLeftOf="@+id/guideline4"-->
+        <!--app:layout_constraintTop_toTopOf="@+id/textview1"-->
+        <!--app:layout_constraintVertical_bias="0.5" />-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/name"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="0dp"-->
+        <!--android:layout_marginLeft="8dp"-->
+        <!--android:layout_marginRight="8dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:text="张xx"-->
+        <!--android:textSize="@dimen/titlesize"-->
+        <!--app:layout_constraintBottom_toBottomOf="@+id/textview2"-->
+        <!--app:layout_constraintHorizontal_bias="0.0"-->
+        <!--app:layout_constraintLeft_toRightOf="@+id/textview2"-->
+        <!--app:layout_constraintRight_toLeftOf="@+id/guideline4"-->
+        <!--app:layout_constraintTop_toTopOf="@+id/textview2"-->
+        <!--app:layout_constraintVertical_bias="1.0" />-->
+<!--<View-->
+    <!--android:background="@color/grgray"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="1dp"-->
+    <!--android:layout_marginLeft="8dp"-->
+    <!--app:layout_constraintLeft_toLeftOf="parent"-->
+    <!--android:id="@+id/view"-->
+    <!--app:layout_constraintRight_toLeftOf="@+id/guideline4"-->
+    <!--android:layout_marginRight="8dp"-->
+    <!--android:layout_marginTop="16dp"-->
+    <!--app:layout_constraintTop_toBottomOf="@+id/textview3" />-->
+
+    <!--<View-->
+        <!--android:id="@+id/view2"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="1dp"-->
+        <!--android:layout_marginLeft="8dp"-->
+        <!--android:layout_marginRight="8dp"-->
+        <!--android:layout_marginTop="16dp"-->
+        <!--android:background="@color/grgray"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+        <!--app:layout_constraintRight_toLeftOf="@+id/guideline4"-->
+        <!--app:layout_constraintHorizontal_bias="0.0"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/textview8" />-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/bennumber"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="2-205"-->
+        <!--android:textSize="@dimen/titlesize"-->
+        <!--app:layout_constraintTop_toTopOf="@+id/textview3"-->
+        <!--android:layout_marginTop="0dp"-->
+        <!--app:layout_constraintBottom_toBottomOf="@+id/textview3"-->
+        <!--android:layout_marginBottom="0dp"-->
+        <!--app:layout_constraintRight_toLeftOf="@+id/guideline4"-->
+        <!--android:layout_marginRight="8dp"-->
+        <!--app:layout_constraintLeft_toRightOf="@+id/textview3"-->
+        <!--android:layout_marginLeft="8dp" />-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/nurse"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="梨花雨"-->
+        <!--android:textSize="@dimen/titlesize"-->
+        <!--app:layout_constraintBottom_toBottomOf="@+id/textview4"-->
+        <!--android:layout_marginBottom="0dp"-->
+        <!--android:layout_marginRight="8dp"-->
+        <!--app:layout_constraintRight_toRightOf="parent"-->
+        <!--app:layout_constraintLeft_toRightOf="@+id/textview4"-->
+        <!--android:layout_marginLeft="8dp"-->
+        <!--app:layout_constraintTop_toTopOf="@+id/textview4"-->
+        <!--android:layout_marginTop="0dp" />-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/date"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="2012-12-12"-->
+        <!--android:textSize="@dimen/titlesize"-->
+        <!--app:layout_constraintTop_toTopOf="@+id/textView12"-->
+        <!--android:layout_marginTop="0dp"-->
+        <!--android:layout_marginRight="8dp"-->
+        <!--app:layout_constraintRight_toRightOf="parent"-->
+        <!--app:layout_constraintLeft_toRightOf="@+id/textView12"-->
+        <!--android:layout_marginLeft="8dp"-->
+        <!--app:layout_constraintBottom_toBottomOf="@+id/textView12"-->
+        <!--android:layout_marginBottom="0dp" />-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/level"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="一级"-->
+        <!--android:textSize="@dimen/titlesize"-->
+        <!--app:layout_constraintBottom_toBottomOf="@+id/textview8"-->
+        <!--android:layout_marginBottom="0dp"-->
+        <!--app:layout_constraintTop_toTopOf="@+id/textview8"-->
+        <!--android:layout_marginTop="0dp"-->
+        <!--android:layout_marginRight="8dp"-->
+        <!--app:layout_constraintRight_toRightOf="parent"-->
+        <!--app:layout_constraintLeft_toRightOf="@+id/textview8"-->
+        <!--android:layout_marginLeft="8dp" />-->
+
+<!--</android.support.constraint.ConstraintLayout>-->

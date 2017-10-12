@@ -24,7 +24,6 @@ public abstract class BaseFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (view == null)
             view = inflater.inflate(getLayoutId(), container, false);
         return view;
     }
@@ -55,8 +54,8 @@ public abstract class BaseFragment extends Fragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && viewCreated && firstLoad) {
-            firstLoad = false;
             loadLazy();
+            firstLoad = false;
         }
     }
 

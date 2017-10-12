@@ -14,24 +14,11 @@
         android:dividerPadding="2dp"
         android:elevation="2dp"
         android:orientation="horizontal"
-        android:paddingRight="2dp"
+        android:paddingTop="2dp"
         android:showDividers="middle|beginning|end"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
-
-        <RadioButton
-            android:id="@+id/rb_sickbed"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:button="@null"
-            android:drawableTop="@drawable/sickbed_radio_selector"
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="病床管理"
-            android:textColor="@drawable/radio_text_selector"
-            android:textSize="14sp" />
 
         <RadioButton
             android:id="@+id/rb_hospital"
@@ -56,6 +43,18 @@
             android:gravity="center"
             android:padding="10dp"
             android:text="医患交流"
+            android:textColor="@drawable/radio_text_selector"
+            android:textSize="14sp" />
+        <RadioButton
+            android:id="@+id/rb_knowledge"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/knowledge_radio_selector"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="健康知识"
             android:textColor="@drawable/radio_text_selector"
             android:textSize="14sp" />
         <RadioButton
