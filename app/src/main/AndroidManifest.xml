@@ -36,12 +36,12 @@
         </activity>
         <activity
             android:name=".Appxx.Sicker.RadioActivity"
-            android:configChanges="orientation|keyboardHidden"
+            android:configChanges="orientation|keyboardHidden|layoutDirection"
             android:launchMode="singleTask"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name=".Appxx.Doctor.RadioActivityD"
-            android:configChanges="orientation|keyboardHidden"
+            android:configChanges="orientation|keyboardHidden|layoutDirection"
             android:launchMode="singleTask"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
@@ -50,9 +50,13 @@
             android:launchMode="singleTask"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name=".Appxx.Mine.Sign.SignActivity"
+            android:name=".Appxx.Mine.Register.SignActivity"
             android:windowSoftInputMode="stateHidden|adjustPan"
             android:screenOrientation="portrait"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".Appxx.Mine.Register.RegisterActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
             android:launchMode="singleTask" />
 
         <activity
@@ -65,6 +69,17 @@
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="singleTask"
             android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".Appxx.Mine.Login.AuthActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".Appxx.Mine.Login.ChangePassActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask" />
+        <activity android:name=".Appxx.Mine.Login.LoginActivity"/>
 
         <!-- //来自融云的推送消息 小米 -->
         <activity

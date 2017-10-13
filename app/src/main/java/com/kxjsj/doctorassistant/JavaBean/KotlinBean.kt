@@ -7,6 +7,8 @@ import java.io.File
  */
 object KotlinBean {
 
+    data class DataBean constructor(var type : Int,var content : String)
+
     /**
      * 首页病床的数据
      */

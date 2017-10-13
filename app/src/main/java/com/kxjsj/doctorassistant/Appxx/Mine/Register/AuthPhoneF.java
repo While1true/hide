@@ -1,4 +1,4 @@
-package com.kxjsj.doctorassistant.Appxx.Mine.Sign;
+package com.kxjsj.doctorassistant.Appxx.Mine.Register;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

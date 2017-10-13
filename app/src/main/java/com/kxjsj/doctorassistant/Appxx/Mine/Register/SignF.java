@@ -1,4 +1,4 @@
-package com.kxjsj.doctorassistant.Appxx.Mine.Sign;
+package com.kxjsj.doctorassistant.Appxx.Mine.Register;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -51,6 +51,9 @@ public class SignF extends BaseFragment {
                         InputUtils.hideKeyboard(etaccount);
                     }
                 });
+
+       if(SignActivity.type==0)
+           layoutAccount.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -82,6 +85,11 @@ public class SignF extends BaseFragment {
     public void onViewClicked() {
         if(!InputUtils.validatePassword(layoutPassword,etpassword.getText().toString()))
             return;
+
+        if(SignActivity.type==0){
+            if(!InputUtils.validateAccount(layoutAccount,etpassword.getText().toString()))
+                return;
+        }
 
 
         InputUtils.hideKeyboard(etpassword);

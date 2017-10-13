@@ -2,10 +2,14 @@ package com.kxjsj.doctorassistant;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.kxjsj.doctorassistant.Appxx.Mine.Login.LoginActivity;
 import com.kxjsj.doctorassistant.Appxx.Sicker.RadioActivity;
 import com.kxjsj.doctorassistant.Appxx.Doctor.RadioActivityD;
 import com.kxjsj.doctorassistant.Rx.RxLifeUtils;
@@ -16,10 +20,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.chose);
         MyToast.Companion.init();
 
-
+//        startActivity(new Intent(this, LoginActivity.class));
+        new MaterialDialog.Builder(this)
+                .title("选择跳转")
+                .positiveText("Sicker")
+                .negativeText("Doctor")
+                .onPositive((dialog, which) -> {
+                    Sicker(null);
+                }).onNegative((dialog, which) -> {
+            Doctor(null);
+        }).build().show();
 
 
     }

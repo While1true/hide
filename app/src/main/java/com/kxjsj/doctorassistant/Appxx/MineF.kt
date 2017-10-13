@@ -5,7 +5,11 @@ import android.view.View
 
 import com.kxjsj.doctorassistant.Component.BaseFragment
 import com.kxjsj.doctorassistant.R
+import com.kxjsj.doctorassistant.View.GradualButton
+import io.reactivex.Observable
 import kotlinx.android.synthetic.main.mine_layout.*
+import log
+import java.util.concurrent.TimeUnit
 
 /**
  * Created by vange on 2017/9/19.
@@ -13,8 +17,10 @@ import kotlinx.android.synthetic.main.mine_layout.*
 
 class MineF : BaseFragment() {
     override fun initView(savedInstanceState: Bundle?) {
-        retainInstance = true
-        loginOut.start(loginOut.currentTextColor,resources.getColor(R.color.colorPrimary))
+        log("------------")
+        retainInstance=true
+        loginOut.postDelayed({ loginOut.start(loginOut.currentTextColor,resources.getColor(R.color.colorPrimary)) },600)
+
     }
 
     override fun getLayoutId(): Int {

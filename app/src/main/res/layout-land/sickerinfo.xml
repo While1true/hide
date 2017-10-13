@@ -13,31 +13,34 @@
         android:text="情况说明"
         android:textSize="@dimen/titlesize"
         android:textStyle="bold"
-        android:layout_marginLeft="16dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginTop="24dp"
-        app:layout_constraintTop_toBottomOf="@+id/view2" />
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline2"
+        app:layout_constraintTop_toTopOf="@+id/callhelp"
+        android:layout_marginTop="0dp" />
 
     <TextView
         android:id="@+id/instruction"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:lineSpacingExtra="8sp"
         android:textSize="@dimen/subtitlesize"
         android:text="热感冒伴有发热，冷感冒无发热症状。常发生在春秋季，常因室内外气温悬殊，导致汗孔闭塞，骤冷骤热的刺激诱发发热、恶寒、头痛、咽痛、口干舌燥、小便黄、全身乏力等症状。"
-        android:layout_marginLeft="16dp"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="0dp"
+        app:layout_constraintLeft_toLeftOf="@+id/textView5"
         android:layout_marginRight="16dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+        app:layout_constraintTop_toBottomOf="@+id/textView5"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/view2"
+        app:layout_constraintVertical_bias="0.0" />
 
     <com.kxjsj.doctorassistant.View.GradualButton
         android:id="@+id/callhelp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginRight="16dp"
+        android:layout_marginRight="8dp"
         android:drawableTop="@drawable/ic_callhelp"
         android:background="@drawable/stoken_background_selector"
         android:paddingBottom="15dp"
@@ -46,19 +49,19 @@
         android:gravity="center"
         android:drawablePadding="8dp"
         android:textSize="@dimen/titlesize"
-        app:layout_constraintRight_toRightOf="parent"
         android:layout_marginLeft="16dp"
         app:layout_constraintLeft_toLeftOf="@+id/guideline4"
         app:layout_constraintTop_toTopOf="@+id/number"
         android:layout_marginTop="0dp"
-        app:layout_constraintHorizontal_bias="0.0" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintRight_toLeftOf="@+id/guideline2" />
 
     <com.kxjsj.doctorassistant.View.GradualButton
         android:id="@+id/help"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginRight="8dp"
         android:drawableTop="@drawable/ic_help"
         android:background="@drawable/stoken_background_selector"
         android:paddingBottom="15dp"
@@ -68,10 +71,10 @@
         android:gravity="center"
         android:textSize="@dimen/titlesize"
         app:layout_constraintLeft_toLeftOf="@+id/guideline4"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintTop_toTopOf="@+id/textview4"
-        android:layout_marginTop="0dp" />
+        android:layout_marginTop="0dp"
+        app:layout_constraintRight_toLeftOf="@+id/guideline2" />
 
     <TextView
         android:id="@+id/textview1"
@@ -126,7 +129,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/guideline4"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
+        app:layout_constraintGuide_percent="0.33" />
 
     <TextView
         android:id="@+id/textView12"
@@ -206,9 +209,9 @@
         android:layout_marginTop="16dp"
         android:background="@color/grgray"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/guideline4"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintTop_toBottomOf="@+id/textview8" />
+        app:layout_constraintTop_toBottomOf="@+id/textview8"
+        app:layout_constraintRight_toLeftOf="@+id/guideline4" />
 
     <TextView
         android:id="@+id/bennumber"
@@ -275,5 +278,12 @@
         app:layout_constraintRight_toLeftOf="@+id/guideline4"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintVertical_bias="0.0" />
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline2"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.66" />
 
 </android.support.constraint.ConstraintLayout>

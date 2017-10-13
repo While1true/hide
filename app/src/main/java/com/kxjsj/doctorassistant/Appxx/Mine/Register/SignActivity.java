@@ -1,5 +1,6 @@
-package com.kxjsj.doctorassistant.Appxx.Mine.Sign;
+package com.kxjsj.doctorassistant.Appxx.Mine.Register;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -11,7 +12,6 @@ import com.kxjsj.doctorassistant.Rx.BaseBean;
 import com.kxjsj.doctorassistant.Rx.MyObserver;
 import com.kxjsj.doctorassistant.Rx.RxSchedulers;
 import com.kxjsj.doctorassistant.Rx.Utils.RxBus;
-import com.kxjsj.doctorassistant.Utils.InputUtils;
 import com.kxjsj.doctorassistant.Utils.K2JUtils;
 import com.kxjsj.doctorassistant.View.NoScrollViewPager;
 
@@ -27,6 +27,11 @@ public class SignActivity extends BaseTitleActivity {
     @BindView(R.id.vp)
     NoScrollViewPager vp;
 
+    /**
+     * 0:病人 1:医生
+     */
+    public static int type=0;
+
     @Override
     protected int getContentLayoutId() {
         return R.layout.noscrollviewpager;
@@ -40,6 +45,21 @@ public class SignActivity extends BaseTitleActivity {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
+        /**
+         * 获取用户选择的注册类型
+         */
+        Intent intent = getIntent();
+        if(intent!=null){
+            type=intent.getIntExtra("type",0);
+        }
+        /**
+         * 屏幕旋转恢复记录的类型
+         */
+        if(savedInstanceState!=null){
+            type=savedInstanceState.getInt("type");
+        }
+
+
         ButterKnife.bind(this);
         setTitle("注册账号");
         vp.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
@@ -70,6 +90,12 @@ public class SignActivity extends BaseTitleActivity {
                         K2JUtils.toast(phone);
                     }
                 });
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("type",type);
     }
 
     @Override
