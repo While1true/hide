@@ -2,6 +2,7 @@ package com.kxjsj.doctorassistant.Glide;
 
 import com.bumptech.glide.TransitionOptions;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.kxjsj.doctorassistant.R;
 
@@ -47,6 +48,6 @@ public class MyOptions extends RequestOptions {
      * @return
      */
     public static TransitionOptions getTransitionCrossFade() {
-        return new BitmapTransitionOptions().crossFade(2000);
+        return new DrawableTransitionOptions().crossFade(200);
     }
 }

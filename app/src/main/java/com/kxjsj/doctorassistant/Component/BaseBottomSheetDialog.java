@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.kxjsj.doctorassistant.Rx.RxLifeUtils;
 import com.kxjsj.doctorassistant.Utils.InputUtils;
 
 
@@ -48,4 +49,10 @@ public abstract class BaseBottomSheetDialog extends BottomSheetDialogFragment {
         super.dismiss();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        RxLifeUtils.getInstance().remove(this);
+
+    }
 }

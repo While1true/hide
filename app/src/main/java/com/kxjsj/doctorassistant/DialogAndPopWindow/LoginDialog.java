@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.kxjsj.doctorassistant.Appxx.Mine.Register.SignActivity;
+import com.kxjsj.doctorassistant.Appxx.Mine.Register.RegisterActivity;
 import com.kxjsj.doctorassistant.Component.BaseDialogFragment;
 import com.kxjsj.doctorassistant.R;
 
@@ -67,7 +67,7 @@ public class LoginDialog extends BaseDialogFragment {
         switch (view.getId()) {
             case R.id.sign:
                 dismiss();
-                startActivity(new Intent(getContext(), SignActivity.class));
+                startActivity(new Intent(getContext(), RegisterActivity.class));
                 break;
             case R.id.confirm:
                 dismiss();

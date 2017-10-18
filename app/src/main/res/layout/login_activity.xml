@@ -116,4 +116,18 @@
         android:id="@+id/guideline7"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.9" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="欢迎您"
+        android:textSize="@dimen/bigsize"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="32dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/password_layout"
+        app:layout_constraintVertical_bias="0.506" />
 </android.support.constraint.ConstraintLayout>

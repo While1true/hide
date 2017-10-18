@@ -10,7 +10,7 @@
 <TextView
     android:id="@+id/doctor"
     android:padding="15dp"
-    android:drawableTop="@mipmap/ic_launcher"
+    android:drawableTop="@drawable/ic_mine_checked"
     android:layout_width="match_parent"
     android:lineSpacingExtra="8dp"
     android:text="心理医生xxx\n点击咨询"

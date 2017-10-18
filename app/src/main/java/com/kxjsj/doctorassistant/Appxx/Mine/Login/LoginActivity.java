@@ -7,7 +7,7 @@ import android.support.design.widget.TextInputLayout;
 import android.view.View;
 import android.widget.Button;
 
-import com.kxjsj.doctorassistant.Appxx.Mine.Register.RegisterActivity;
+import com.kxjsj.doctorassistant.Appxx.Mine.Register.ChoseRegisterActivity;
 import com.kxjsj.doctorassistant.Component.BaseTitleActivity;
 import com.kxjsj.doctorassistant.R;
 
@@ -42,7 +42,7 @@ public class LoginActivity extends BaseTitleActivity {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-
+     setTitle("登录");
     }
 
     @Override
@@ -59,7 +59,7 @@ public class LoginActivity extends BaseTitleActivity {
                 startActivity(new Intent(this,AuthActivity.class));
                 break;
             case R.id.register:
-                startActivity(new Intent(this,RegisterActivity.class));
+                startActivity(new Intent(this,ChoseRegisterActivity.class));
                 break;
             case R.id.login:
                 break;

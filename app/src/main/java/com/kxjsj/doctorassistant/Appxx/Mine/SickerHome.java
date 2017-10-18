@@ -3,6 +3,7 @@ package com.kxjsj.doctorassistant.Appxx.Mine;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.widget.TextView;
@@ -128,10 +129,10 @@ public class SickerHome extends BaseTitleActivity {
 
     private void startButtonAnimator(SimpleViewHolder holder) {
         GradualButton askButton = holder.getView(R.id.callhelp);
-        askButton.start(askButton.getCurrentTextColor(), getColor(R.color.colorPrimary));
+        askButton.start(askButton.getCurrentTextColor(), getResources().getColor(R.color.colorPrimary));
 
         GradualButton communicateButton = holder.getView(R.id.help);
-        communicateButton.start(communicateButton.getCurrentTextColor(), getColor(R.color.navi_checked));
+        communicateButton.start(communicateButton.getCurrentTextColor(), getResources().getColor(R.color.navi_checked));
     }
 
     @Override

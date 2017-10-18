@@ -70,7 +70,7 @@ public class GsonUtils {
      * @param clazz
      * @return
      */
-    public static String parse2String(Class clazz) {
+    public static String parse2String(Object clazz) {
         return GsonHolder.gson.toJson(clazz);
     }
 

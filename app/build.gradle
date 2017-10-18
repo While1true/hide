@@ -85,6 +85,7 @@ android {
 }
 
 dependencies {
+    testCompile 'junit:junit:4.12'
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:multidex:1.0.0'
     compile 'com.android.support:appcompat-v7:25.3.1'
@@ -133,6 +134,7 @@ dependencies {
     compile project(':lib-zxing')
     compile files('libs/alipaySdk-20170922.jar')
     compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
+//    compile 'com.zhihu.android:matisse:0.4.3'
 }
 repositories {
     mavenCentral()

@@ -2,12 +2,10 @@ package com.kxjsj.doctorassistant;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.kxjsj.doctorassistant.Appxx.Mine.Login.LoginActivity;
 import com.kxjsj.doctorassistant.Appxx.Sicker.RadioActivity;
@@ -26,7 +24,11 @@ public class MainActivity extends AppCompatActivity {
         new MaterialDialog.Builder(this)
                 .title("选择跳转")
                 .positiveText("Sicker")
+                .neutralText("登录")
                 .negativeText("Doctor")
+                .onNeutral((dialog, which) -> {
+                    startActivity(new Intent(MainActivity.this,LoginActivity.class));
+                })
                 .onPositive((dialog, which) -> {
                     Sicker(null);
                 }).onNegative((dialog, which) -> {

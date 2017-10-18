@@ -126,10 +126,10 @@ public class DoctorHome extends BaseTitleActivity {
 
     private void startButtonAnimator(SimpleViewHolder holder) {
         GradualButton askButton = holder.getView(R.id.ask);
-        askButton.start(askButton.getCurrentTextColor(), getColor(R.color.colorPrimary));
+        askButton.start(askButton.getCurrentTextColor(), getResources().getColor(R.color.colorPrimary));
 
         GradualButton communicateButton = holder.getView(R.id.communicate);
-        communicateButton.start(communicateButton.getCurrentTextColor(), getColor(R.color.navi_checked));
+        communicateButton.start(communicateButton.getCurrentTextColor(), getResources().getColor(R.color.navi_checked));
     }
 
     /**

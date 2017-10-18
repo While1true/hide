@@ -1,6 +1,7 @@
 <resources>
 
     <dimen name="titlesize">22sp</dimen>
+    <dimen name="bigsize">48sp</dimen>
     <dimen name="subtitlesize">20sp</dimen>
 
 

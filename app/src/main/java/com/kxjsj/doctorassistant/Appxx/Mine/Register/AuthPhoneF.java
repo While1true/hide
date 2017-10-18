@@ -13,10 +13,14 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.kxjsj.doctorassistant.Appxx.Mine.Login.AuthActivity;
 import com.kxjsj.doctorassistant.Component.BaseFragment;
 import com.kxjsj.doctorassistant.Constant.Constance;
+import com.kxjsj.doctorassistant.Net.ApiController;
+import com.kxjsj.doctorassistant.Net.RetrofitHttpManger;
 import com.kxjsj.doctorassistant.R;
 import com.kxjsj.doctorassistant.Rx.BaseBean;
+import com.kxjsj.doctorassistant.Rx.DataObserver;
 import com.kxjsj.doctorassistant.Rx.MyObserver;
 import com.kxjsj.doctorassistant.Rx.RxSchedulers;
 import com.kxjsj.doctorassistant.Rx.Utils.RxBus;
@@ -33,6 +37,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import io.reactivex.Observable;
+import io.reactivex.annotations.NonNull;
 
 /**
  * Created by vange on 2017/10/9.
@@ -113,11 +118,22 @@ public class AuthPhoneF extends BaseFragment implements MessageUtils.MssListener
                 break;
             case R.id.sendcode:
                 if (InputUtils.validateAccount(etphonel, etphone.getText().toString())) {
-                    etphone.setEnabled(false);
-                    sendcode.setText("正在请求");
-                    sendcode.setEnabled(false);
-                    showdialog("正在请求");
-                    MessageUtils.sendMessage(etphone.getText().toString());
+                    ApiController.authPhone(etphone.getText().toString(), RegisterActivity.type).subscribe(new DataObserver(this) {
+                        @Override
+                        public void OnNEXT(Object o) {
+                            etphone.setEnabled(false);
+                            sendcode.setText("正在请求");
+                            sendcode.setEnabled(false);
+                            showdialog("正在请求");
+                            MessageUtils.sendMessage(etphone.getText().toString());
+                        }
+
+                        @Override
+                        public void OnERROR(String error) {
+                        K2JUtils.toast(error);
+                        }
+                    });
+
                 }
                 break;
         }

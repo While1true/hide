@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA"/>
 
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
@@ -50,12 +51,12 @@
             android:launchMode="singleTask"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name=".Appxx.Mine.Register.SignActivity"
+            android:name=".Appxx.Mine.Register.RegisterActivity"
             android:windowSoftInputMode="stateHidden|adjustPan"
             android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
-            android:name=".Appxx.Mine.Register.RegisterActivity"
+            android:name=".Appxx.Mine.Register.ChoseRegisterActivity"
             android:windowSoftInputMode="stateHidden|adjustPan"
             android:launchMode="singleTask" />
 
@@ -80,6 +81,10 @@
             android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity android:name=".Appxx.Mine.Login.LoginActivity"/>
+
+        <activity android:name=".Appxx.Mine.UserInfoActivity"/>
+
+
 
         <!-- //来自融云的推送消息 小米 -->
         <activity

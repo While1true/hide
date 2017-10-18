@@ -8,6 +8,7 @@ import com.kxjsj.doctorassistant.Constant.Constance;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -21,7 +22,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitHttpManger {
     private static final int DEFAULT_CONNECT_TIMEOUT = 5;
     private static final int DEFAULT_READ_TIMEOUT = 10;
-    private static final String BASEURL = "";
+    private static final String BASEURL = "http://10.0.110.127:8080/cxfSpringMaven/services/rest/bcszh/";
     private Retrofit mRetrofit;
 
 
@@ -33,17 +34,16 @@ public class RetrofitHttpManger {
                     if (Constance.DEBUGTAG)
                         Log.i(Constance.DEBUG, "log: " + message);
                 }).setLevel(HttpLoggingInterceptor.Level.BASIC))
+
+                // 添加公共参数拦截器
+                // 添加通用的Header
+                .addInterceptor(chain -> {
+                    Request.Builder builder = chain.request().newBuilder();
+                    builder.addHeader("zh", "grid");
+                    builder.addHeader("mm", "grid");
+                    return chain.proceed(builder.build());
+                })
                 .build();
-        // 添加公共参数拦截器
-        // 添加通用的Header
-//         .addInterceptor(new Interceptor() {
-//            @Override
-//            public Response intercept(Chain chain) throws IOException {
-//                Request.Builder builder = chain.request().newBuilder();
-//                builder.addHeader("token", "123");
-//                return chain.proceed(builder.build());
-//            }
-//        })
 
         mRetrofit = new Retrofit.Builder()
                 .client(httpclient)

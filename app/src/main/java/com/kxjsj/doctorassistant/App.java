@@ -5,9 +5,12 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 
 import com.bumptech.glide.Glide;
+import com.kxjsj.doctorassistant.Constant.Session;
 import com.kxjsj.doctorassistant.RongYun.RongYunInitialUtils;
 import com.kxjsj.doctorassistant.Screen.AdjustUtil;
 import com.kxjsj.doctorassistant.MobSMS.MessageUtils;
+import com.kxjsj.doctorassistant.Utils.GsonUtils;
+import com.kxjsj.doctorassistant.Utils.K2JUtils;
 import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 
 
@@ -51,6 +54,24 @@ public class App extends Application {
         RongYunInitialUtils.init(this);
         MessageUtils.init(this);
         ZXingLibrary.initDisplayOpinion(this);
+    }
+
+
+    /**
+     * 获取用户信息
+     * @return
+     */
+    public static Session getUserInfo(){
+        String userinfo=K2JUtils.get("userinfo","");
+        return GsonUtils.parse2Bean(userinfo,Session.class);
+    }
+
+    /**
+     * 获取token
+     * @return
+     */
+    public String getToken(){
+        return getUserInfo().getToken();
     }
 
 }

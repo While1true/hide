@@ -7,7 +7,15 @@ import java.io.File
  */
 object KotlinBean {
 
-    data class DataBean constructor(var type : Int,var content : String)
+    /**
+     * baseDataBean
+     */
+    data class DataBean constructor(var type: Int = 0,var content : String)
+
+    /**
+     * baeBean
+     */
+    data class BaseBean<T> constructor(var message :String,var error_code : Int, var data :T)
 
     /**
      * 首页病床的数据
@@ -28,4 +36,5 @@ object KotlinBean {
      * 下载进度封装
      */
     data class ProgressBean constructor(var name : String,var current : Long,var total : Long,var file : File )
+
 }

@@ -1,6 +1,7 @@
 package com.kxjsj.doctorassistant.Appxx.Doctor;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -16,17 +17,23 @@ import com.ck.hello.nestrefreshlib.View.Adpater.Base.SimpleViewHolder;
 import com.ck.hello.nestrefreshlib.View.Adpater.DefaultStateListener;
 import com.ck.hello.nestrefreshlib.View.Adpater.SBaseMutilAdapter;
 import com.ck.hello.nestrefreshlib.View.RefreshViews.SRecyclerView;
+import com.kxjsj.doctorassistant.Appxx.Mine.SickerHome;
 import com.kxjsj.doctorassistant.Component.BaseFragment;
 import com.kxjsj.doctorassistant.Constant.Constance;
 import com.kxjsj.doctorassistant.JavaBean.KotlinBean;
+import com.kxjsj.doctorassistant.JavaBean.SickBed;
+import com.kxjsj.doctorassistant.Net.ApiController;
 import com.kxjsj.doctorassistant.R;
 import com.kxjsj.doctorassistant.Rx.BaseBean;
+import com.kxjsj.doctorassistant.Rx.DataObserver;
 import com.kxjsj.doctorassistant.Rx.MyObserver;
 import com.kxjsj.doctorassistant.Screen.OrentionUtils;
 import com.kxjsj.doctorassistant.Utils.K2JUtils;
 import com.kxjsj.doctorassistant.Utils.ZXingUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -54,7 +61,7 @@ public class SickbedF extends BaseFragment {
     Unbinder unbinder;
     private SBaseMutilAdapter baseMutilAdapter;
     private GridLayoutManager manager;
-
+    List<SickBed> list = new ArrayList<>(10);
 
     @Override
     protected void initView(Bundle savedInstanceState) {
@@ -62,69 +69,62 @@ public class SickbedF extends BaseFragment {
 
         caculateSpanCount();
 
-        List<KotlinBean.SickBedBean> list = new ArrayList<>(100);
-        for (int i = 0; i < 100; i++) {
-            if (i % 10 == 0) {
-                KotlinBean.SickBedBean bean1 = new KotlinBean.SickBedBean(0, "第" + (i / 10) + "号楼", "第" + i % 10 + "床");
-                list.add(bean1);
-            }
-            KotlinBean.SickBedBean bean = new KotlinBean.SickBedBean(1, "第" + (i / 10) + "号楼", "第" + i % 10 + "床");
-            list.add(bean);
-        }
-
 
         manager = new GridLayoutManager(getContext(), spancount);
         baseMutilAdapter = new SBaseMutilAdapter(list)
-                .addType(R.layout.title_layout, new SBaseMutilAdapter.ITEMHOLDER<KotlinBean.SickBedBean>() {
+                .addType(R.layout.title_layout, new SBaseMutilAdapter.ITEMHOLDER<SickBed>() {
 
                     @Override
-                    public void onBind(SimpleViewHolder holder, KotlinBean.SickBedBean item, int position) {
-                        holder.setText(R.id.title, item.getTitle());
+                    public void onBind(SimpleViewHolder holder, SickBed item, int position) {
+                        holder.setText(R.id.title, item.getFloorid() + "楼"+item.getRoomid()+"房间" + item.getBedid() +"床");
                     }
 
                     @Override
-                    public boolean istype(KotlinBean.SickBedBean item, int position) {
-                        return item.getType() == 0;
+                    public boolean istype(SickBed item, int position) {
+                        return item.getStatus() == 0;
                     }
 
                     @Override
-                    protected int gridSpanSize(KotlinBean.SickBedBean item, int position) {
+                    protected int gridSpanSize(SickBed item, int position) {
                         return manager.getSpanCount();
                     }
-                }).addType(R.layout.sickbed_item_bed, new SBaseMutilAdapter.ITEMHOLDER<KotlinBean.SickBedBean>() {
+                }).addType(R.layout.sickbed_item_bed, new SBaseMutilAdapter.ITEMHOLDER<SickBed>() {
                     @Override
-                    public void onBind(SimpleViewHolder holder, KotlinBean.SickBedBean item, int position) {
-                        ImageView iv=holder.getView(R.id.iv);
-                        TextView tv=holder.getView(R.id.tv);
-                        if(position%3==2){
+                    public void onBind(SimpleViewHolder holder, SickBed item, int position) {
+                        ImageView iv = holder.getView(R.id.iv);
+                        TextView tv = holder.getView(R.id.tv);
+                        if (item.getIsfree() == 0) {
                             iv.setImageResource(R.drawable.ic_avaliable);
-                            tv.setText(item.getName());
-                        }else{
+                            tv.setText("病号" + item.getPatient_no());
+                        } else {
                             iv.setImageResource(R.drawable.ic_lived);
-                            tv.setText("病号：xm12596\n姓名：zx12"+position);
+                            tv.setText(item.getFloorid() + "楼" + item.getBedid() + item.getRoomid());
                         }
 
                         holder.itemView.setOnClickListener(view -> {
-                            ZXingUtils.startCapture(view.getContext(), new MyObserver<BaseBean<String>>(SickbedF.this) {
-                                @Override
-                                public void onNext(BaseBean<String> o) {
-                                    super.onNext(o);
-                                    new MaterialDialog.Builder(getContext())
-                                            .title(o.getData())
-                                            .positiveText("取消")
-                                            .build()
-                                            .show();
-                                    onComplete();
-                                }
 
-                            });
+                            Intent intent = new Intent(view.getContext(), SickerHome.class);
+                            startActivity(intent);
+//                            ZXingUtils.startCapture(view.getContext(), new MyObserver<BaseBean<String>>(SickbedF.this) {
+//                                @Override
+//                                public void onNext(BaseBean<String> o) {
+//                                    super.onNext(o);
+//                                    new MaterialDialog.Builder(getContext())
+//                                            .title(o.getData())
+//                                            .positiveText("取消")
+//                                            .build()
+//                                            .show();
+//                                    onComplete();
+//                                }
+//
+//                            });
                         });
 
                     }
 
                     @Override
-                    public boolean istype(KotlinBean.SickBedBean item, int position) {
-                        return item.getType() == 1;
+                    public boolean istype(SickBed item, int position) {
+                        return true;
                     }
                 }).setStateListener(new DefaultStateListener() {
                     @Override
@@ -137,20 +137,53 @@ public class SickbedF extends BaseFragment {
                 .setRefreshingListener(new SRecyclerView.OnRefreshListener() {
                     @Override
                     public void Refreshing() {
-                        srecyclerview.postDelayed(() -> {
-                            baseMutilAdapter.showState(SBaseMutilAdapter.SHOW_NOMORE, "无更多内容了");
-                            srecyclerview.notifyRefreshComplete();
-                        }, 1000);
-
+                        onRefresh();
                     }
                 });
-        if(firstLoad) {
-            firstLoad=false;
+        if (firstLoad) {
+            firstLoad = false;
             srecyclerview.setRefreshing();
-        }else{
+        } else {
             baseMutilAdapter.showState(SBaseMutilAdapter.SHOW_NOMORE, "无更多内容了");
         }
 
+    }
+
+    private void onRefresh() {
+        ApiController.getAllBeds().subscribe(new DataObserver<List<SickBed>>(this) {
+            @Override
+            public void OnNEXT(List<SickBed> sickBeds) {
+                System.out.println(sickBeds);
+                int lastid = -1;
+                list.addAll(sickBeds);
+                Collections.copy(list, sickBeds);
+                for (int i = 0; i < sickBeds.size(); i++) {
+                    SickBed sickBed = sickBeds.get(i);
+                    int roomid = sickBed.getRoomid();
+                    if (roomid != lastid) {
+                        list.add(list.indexOf(sickBed),new SickBed(sickBed.getFloorid(), sickBed.getBedid(), sickBed.getRoomid()));
+                        lastid = roomid;
+                    }
+                }
+                if (Constance.DEBUGTAG)
+                    Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "OnNEXT: " + list.size());
+                srecyclerview.notifyRefreshComplete();
+                baseMutilAdapter.setBeanList(list);
+                baseMutilAdapter.notifyDataSetChanged();
+                if (list.size() != 0) {
+                    baseMutilAdapter.showState(SBaseMutilAdapter.SHOW_NOMORE, "我是有底线的");
+                } else {
+                    baseMutilAdapter.showState(SBaseMutilAdapter.SHOW_EMPTY, "没有相关数据");
+                }
+            }
+
+            @Override
+            public void OnERROR(String error) {
+                if (Constance.DEBUGTAG)
+                    Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "OnERROR: " + error);
+
+            }
+        });
     }
 
     private void caculateSpanCount() {

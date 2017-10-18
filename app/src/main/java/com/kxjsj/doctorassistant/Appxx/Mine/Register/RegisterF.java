@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,22 +13,27 @@ import android.widget.TextView;
 import com.kxjsj.doctorassistant.Component.BaseFragment;
 import com.kxjsj.doctorassistant.Constant.Constance;
 import com.kxjsj.doctorassistant.Constant.Session;
+import com.kxjsj.doctorassistant.Net.ApiController;
 import com.kxjsj.doctorassistant.R;
 import com.kxjsj.doctorassistant.Rx.BaseBean;
+import com.kxjsj.doctorassistant.Rx.DataObserver;
 import com.kxjsj.doctorassistant.Rx.MyObserver;
 import com.kxjsj.doctorassistant.Rx.Utils.RxBus;
+import com.kxjsj.doctorassistant.Utils.EncryptUtils;
 import com.kxjsj.doctorassistant.Utils.InputUtils;
+import com.kxjsj.doctorassistant.Utils.K2JUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import io.reactivex.annotations.NonNull;
 
 /**
  * Created by vange on 2017/10/9.
  */
 
-public class SignF extends BaseFragment {
+public class RegisterF extends BaseFragment {
     @BindView(R.id.textView2)
     TextView textView2;
     @BindView(R.id.etpassword)
@@ -43,7 +49,7 @@ public class SignF extends BaseFragment {
     @Override
     protected void initView(@Nullable Bundle savedInstanceState) {
         RxBus.getDefault()
-                .toObservable(Constance.Rxbus.CLOST_INPUT,BaseBean.class)
+                .toObservable(Constance.Rxbus.CLOST_INPUT, BaseBean.class)
                 .subscribe(new MyObserver<BaseBean>(this) {
                     @Override
                     public void onNext(BaseBean baseBean) {
@@ -52,8 +58,8 @@ public class SignF extends BaseFragment {
                     }
                 });
 
-       if(SignActivity.type==0)
-           layoutAccount.setVisibility(View.VISIBLE);
+        if (RegisterActivity.type == 0)
+            layoutAccount.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -83,21 +89,38 @@ public class SignF extends BaseFragment {
 
     @OnClick(R.id.signnow)
     public void onViewClicked() {
-        if(!InputUtils.validatePassword(layoutPassword,etpassword.getText().toString()))
+        if (!InputUtils.validatePassword(layoutPassword, etpassword.getText().toString()))
             return;
 
-        if(SignActivity.type==0){
-            if(!InputUtils.validateAccount(layoutAccount,etpassword.getText().toString()))
+        String cardnum = etaccount.getText().toString();
+        if (RegisterActivity.type == 0) {
+            if (TextUtils.isEmpty(cardnum) || cardnum.length() > 6) {
+                K2JUtils.toast("请输入正确的就诊卡账号");
                 return;
+            }
         }
 
 
         InputUtils.hideKeyboard(etpassword);
 
+        ApiController.register(RegisterActivity.phone, RegisterActivity.type
+                , EncryptUtils.md5(etpassword.getText().toString()),cardnum)
+                .subscribe(new DataObserver<Session>(this) {
 
-        //TODO 注册
-        Session session=new Session();
-        RxBus.getDefault().post(new BaseBean<Session>(Constance.Rxbus.LOGIN_SUCCESS,session));
-        getActivity().finish();
+                    @Override
+                    public void OnNEXT(Session session) {
+                        K2JUtils.put("userinfo",session.toString());
+                        RxBus.getDefault().post(new BaseBean<Session>(Constance.Rxbus.LOGIN_SUCCESS, session));
+                        getActivity().finish();
+                    }
+
+                    @Override
+                    public void OnERROR(String error) {
+                     K2JUtils.toast(error);
+                    }
+                });
+
+
+
     }
 }
