@@ -63,7 +63,8 @@ public class App extends Application {
      */
     public static Session getUserInfo(){
         String userinfo=K2JUtils.get("userinfo","");
-        return GsonUtils.parse2Bean(userinfo,Session.class);
+        Session session = GsonUtils.parse2Bean(userinfo, Session.class);
+        return session==null?new Session():session;
     }
 
     /**

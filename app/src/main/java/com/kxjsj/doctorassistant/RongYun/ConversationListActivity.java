@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.kxjsj.doctorassistant.App;
 import com.kxjsj.doctorassistant.Component.BaseTitleActivity;
 import com.kxjsj.doctorassistant.Constant.Constance;
 import com.kxjsj.doctorassistant.R;
@@ -24,7 +25,7 @@ public class ConversationListActivity extends BaseTitleActivity implements RongY
     @Override
     protected void initView(Bundle savedInstanceState) {
         setTitle("会话列表");
-        RongYunInitialUtils.isReconnect(this,"9nAvAzspHZGaiOA6rHi9ar3H8LGDW6Uc/HBclMSvZCFle5Xi81v0ZOnVeCXbGGmnoV4CtMgswymwuYXE7/3U6Q==",this);
+        RongYunInitialUtils.isReconnect(this, App.getUserInfo().getRongtoken(),this);
     }
     /**
      * 加载 会话列表 ConversationListFragment

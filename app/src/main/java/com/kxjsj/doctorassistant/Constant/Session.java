@@ -11,7 +11,25 @@ public class Session {
     String username;
     String imgurl;
     String token;
+    String medicalcard;
     String rongtoken;
+    int type;
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public String getMedicalcard() {
+        return medicalcard;
+    }
+
+    public void setMedicalcard(String medicalcard) {
+        this.medicalcard = medicalcard;
+    }
 
     public String getUserid() {
         return userid;

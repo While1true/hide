@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import com.kxjsj.doctorassistant.App;
 import com.kxjsj.doctorassistant.Component.BaseTitleActivity;
 import com.kxjsj.doctorassistant.R;
 
@@ -42,7 +43,7 @@ public class ConversationActivity extends BaseTitleActivity implements RongYunIn
 
         getIntentDate(intent);
 
-        RongYunInitialUtils.isReconnect(this,"9nAvAzspHZGaiOA6rHi9ar3H8LGDW6Uc/HBclMSvZCFle5Xi81v0ZOnVeCXbGGmnoV4CtMgswymwuYXE7/3U6Q==",this);
+        RongYunInitialUtils.isReconnect(this, App.getUserInfo().getRongtoken(),this);
 
     }
     /**

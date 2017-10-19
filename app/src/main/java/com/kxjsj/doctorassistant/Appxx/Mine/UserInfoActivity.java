@@ -76,4 +76,9 @@ public class UserInfoActivity extends BaseTitleActivity {
                 break;
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }

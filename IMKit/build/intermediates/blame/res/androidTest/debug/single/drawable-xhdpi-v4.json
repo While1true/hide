@@ -480,12 +480,12 @@
         "source": "D:\\demo\\DoctorAssitant\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\rc_icon_admin_hover.png"
     },
     {
-        "merged": "D:\\demo\\DoctorAssitant\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\u1f4a2.png",
-        "source": "D:\\demo\\DoctorAssitant\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\u1f4a2.png"
-    },
-    {
         "merged": "D:\\demo\\DoctorAssitant\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\rc_cs_group_ok_pressed.png",
         "source": "D:\\demo\\DoctorAssitant\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\rc_cs_group_ok_pressed.png"
+    },
+    {
+        "merged": "D:\\demo\\DoctorAssitant\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\u1f4a2.png",
+        "source": "D:\\demo\\DoctorAssitant\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\u1f4a2.png"
     },
     {
         "merged": "D:\\demo\\DoctorAssitant\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\rc_receive_voice_three.png",
@@ -1168,12 +1168,12 @@
         "source": "D:\\demo\\DoctorAssitant\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\rc_btn_pub_service_follow_hover.png"
     },
     {
-        "merged": "D:\\demo\\DoctorAssitant\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\u270a.png",
-        "source": "D:\\demo\\DoctorAssitant\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\u270a.png"
-    },
-    {
         "merged": "D:\\demo\\DoctorAssitant\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\rc_ext_my_locator.png",
         "source": "D:\\demo\\DoctorAssitant\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\rc_ext_my_locator.png"
+    },
+    {
+        "merged": "D:\\demo\\DoctorAssitant\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\u270a.png",
+        "source": "D:\\demo\\DoctorAssitant\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\u270a.png"
     },
     {
         "merged": "D:\\demo\\DoctorAssitant\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\u1f3c0.png",

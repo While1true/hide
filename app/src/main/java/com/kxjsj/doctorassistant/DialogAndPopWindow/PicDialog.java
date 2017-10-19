@@ -1,6 +1,7 @@
 package com.kxjsj.doctorassistant.DialogAndPopWindow;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.content.FileProvider;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,13 +21,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
 import com.ck.hello.nestrefreshlib.View.Adpater.Base.SimpleViewHolder;
 import com.ck.hello.nestrefreshlib.View.Adpater.SBaseAdapter;
-import com.ck.hello.nestrefreshlib.View.Adpater.SBaseMutilAdapter;
-import com.ck.hello.nestrefreshlib.View.RefreshViews.SRecyclerView;
 import com.kxjsj.doctorassistant.Component.BaseBottomSheetDialog;
 import com.kxjsj.doctorassistant.Constant.Constance;
 import com.kxjsj.doctorassistant.Glide.MyOptions;
@@ -37,6 +36,7 @@ import com.kxjsj.doctorassistant.Rx.Utils.RxBus;
 import com.kxjsj.doctorassistant.Screen.OrentionUtils;
 import com.kxjsj.doctorassistant.Utils.K2JUtils;
 import com.tbruyelle.rxpermissions2.RxPermissions;
+import com.zhy.base.fileprovider.FileProvider7;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -64,6 +64,7 @@ public class PicDialog extends BaseBottomSheetDialog {
     Unbinder unbinder;
     private SBaseAdapter adapter;
     private String filename;
+    View view;
 
     @Override
     protected int getLayoutId() {
@@ -72,6 +73,7 @@ public class PicDialog extends BaseBottomSheetDialog {
 
     @Override
     protected void initView(View view, Bundle savedInstanceState) {
+        this.view=view;
         setData(null);
         getRecent20().subscribe(new MyObserver<List<String>>(this) {
             @Override
@@ -92,6 +94,7 @@ public class PicDialog extends BaseBottomSheetDialog {
         LinearLayoutManager manager = new LinearLayoutManager(getContext(),
                 LinearLayoutManager.HORIZONTAL, false);
         GridLayoutManager manager2=new GridLayoutManager(getContext(),2);
+
         recyclerview.setLayoutManager(OrentionUtils.isPortrait(getContext())?manager:manager2);
         adapter = new SBaseAdapter<String>(strings, R.layout.imageview) {
             @Override
@@ -104,6 +107,7 @@ public class PicDialog extends BaseBottomSheetDialog {
                         .into((ImageView) holder.getView(R.id.imageview));
                 holder.itemView.setOnClickListener(v -> {
                     RxBus.getDefault().post(new BaseBean(Constance.Rxbus.PIC, item));
+                    dismiss();
                 });
             }
         };
@@ -154,6 +158,13 @@ public class PicDialog extends BaseBottomSheetDialog {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        BottomSheetBehavior.from(view.getRootView().findViewById(android.support.design.R.id.design_bottom_sheet)).setState(BottomSheetBehavior.STATE_EXPANDED);
+
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
@@ -187,6 +198,9 @@ public class PicDialog extends BaseBottomSheetDialog {
         }
     }
 
+    /**
+     * 打开相机拍照
+     */
     private void takePhoto() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getContext().getPackageManager()) != null) {
@@ -194,12 +208,7 @@ public class PicDialog extends BaseBottomSheetDialog {
             filename = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.CHINA)
                     .format(new Date()) + ".png";
             File file = new File(Environment.getExternalStorageDirectory(), filename);
-            Uri fileUri = null;
-            if (Build.VERSION.SDK_INT >= 24) {
-                fileUri = FileProvider.getUriForFile(getContext(), "com.zhy.android7.fileprovider", file);
-            } else {
-                fileUri = Uri.fromFile(file);
-            }
+            Uri fileUri =FileProvider7.getUriForFile(getContext(),file);
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
             startActivityForResult(takePictureIntent, 110);
         }
@@ -208,8 +217,6 @@ public class PicDialog extends BaseBottomSheetDialog {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (Constance.DEBUGTAG)
-            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", requestCode+"onActivityResult: "+resultCode+data.getData());
         /**
          * 来自照相机
          */
@@ -221,7 +228,8 @@ public class PicDialog extends BaseBottomSheetDialog {
             }
             RxBus.getDefault().post(new BaseBean<String>(Constance.Rxbus.PIC, filename));
             if (Constance.DEBUGTAG)
-                Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onActivityResult1: " + filename);
+                Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onActivityResult1: " + Environment.getExternalStorageDirectory()+filename);
+            dismiss();
         }
         /**
          * 来自相册
@@ -231,6 +239,7 @@ public class PicDialog extends BaseBottomSheetDialog {
                 Uri uri = data.getData();
                 String file = getFilePathFromContentUri(uri,getContext().getContentResolver());
                 RxBus.getDefault().post(new BaseBean<String>(Constance.Rxbus.PIC, file));
+                dismiss();
                 if (Constance.DEBUGTAG)
                     Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onActivityResult2: " + file);
 
@@ -239,8 +248,18 @@ public class PicDialog extends BaseBottomSheetDialog {
         }
     }
 
+    /**
+     * 打开相册
+     */
     private void chosePic() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        Intent intent = new Intent();
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("image/*");
+        if(Build.VERSION.SDK_INT<19){
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+        }else{
+            intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
+        }
         try {
             startActivityForResult(intent, 120);
         } catch (Exception e) {
@@ -248,6 +267,12 @@ public class PicDialog extends BaseBottomSheetDialog {
         }
     }
 
+    /**
+     * 根据uri获取路径
+     * @param selectedVideoUri
+     * @param contentResolver
+     * @return
+     */
     public static String getFilePathFromContentUri(Uri selectedVideoUri,
                                                    ContentResolver contentResolver) {
         String filePath;

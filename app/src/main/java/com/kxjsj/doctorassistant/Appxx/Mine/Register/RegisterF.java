@@ -1,15 +1,19 @@
 package com.kxjsj.doctorassistant.Appxx.Mine.Register;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.kxjsj.doctorassistant.Appxx.Doctor.RadioActivityD;
+import com.kxjsj.doctorassistant.Appxx.Sicker.RadioActivity;
 import com.kxjsj.doctorassistant.Component.BaseFragment;
 import com.kxjsj.doctorassistant.Constant.Constance;
 import com.kxjsj.doctorassistant.Constant.Session;
@@ -19,6 +23,7 @@ import com.kxjsj.doctorassistant.Rx.BaseBean;
 import com.kxjsj.doctorassistant.Rx.DataObserver;
 import com.kxjsj.doctorassistant.Rx.MyObserver;
 import com.kxjsj.doctorassistant.Rx.Utils.RxBus;
+import com.kxjsj.doctorassistant.Utils.ActivityUtils;
 import com.kxjsj.doctorassistant.Utils.EncryptUtils;
 import com.kxjsj.doctorassistant.Utils.InputUtils;
 import com.kxjsj.doctorassistant.Utils.K2JUtils;
@@ -94,7 +99,7 @@ public class RegisterF extends BaseFragment {
 
         String cardnum = etaccount.getText().toString();
         if (RegisterActivity.type == 0) {
-            if (TextUtils.isEmpty(cardnum) || cardnum.length() > 6) {
+            if (TextUtils.isEmpty(cardnum) || cardnum.length() < 6) {
                 K2JUtils.toast("请输入正确的就诊卡账号");
                 return;
             }
@@ -109,9 +114,18 @@ public class RegisterF extends BaseFragment {
 
                     @Override
                     public void OnNEXT(Session session) {
+                        if (Constance.DEBUGTAG)
+                            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "OnNEXT: "+session.toString());
+                        session.setType(RegisterActivity.type);
                         K2JUtils.put("userinfo",session.toString());
-                        RxBus.getDefault().post(new BaseBean<Session>(Constance.Rxbus.LOGIN_SUCCESS, session));
-                        getActivity().finish();
+//                        RxBus.getDefault().post(new BaseBean<Session>(Constance.Rxbus.LOGIN_SUCCESS, session));
+                        if(RegisterActivity.type==0){
+                            startActivity(new Intent(getContext(), RadioActivity.class));
+                        }else{
+                            startActivity(new Intent(getContext(), RadioActivityD.class));
+                        }
+                        ActivityUtils.getInstance().removeAll();
+
                     }
 
                     @Override

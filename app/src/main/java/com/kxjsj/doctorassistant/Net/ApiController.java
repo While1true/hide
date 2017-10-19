@@ -50,4 +50,17 @@ public class ApiController {
                 .compose(RxSchedulers.compose());
     }
 
+    /**
+     *
+     * @param userid 手机
+     * @param type 0：病人 1：医生
+     * @param password 密码md5加密
+     * @return
+     */
+    public static Observable login(String userid, int type, String password){
+        return RetrofitHttpManger.create(Api.class)
+                .login(userid,password,type)
+                .compose(RxSchedulers.compose());
+    }
+
 }

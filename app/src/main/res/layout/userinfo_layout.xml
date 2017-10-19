@@ -32,7 +32,7 @@
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginLeft="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="24dp"
         app:layout_constraintTop_toBottomOf="@+id/textview1" />
     <com.kxjsj.doctorassistant.View.SettingView
         android:background="@drawable/stoken_background_selector"
@@ -50,7 +50,7 @@
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginLeft="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="24dp"
         app:layout_constraintTop_toBottomOf="@+id/img" />
     <com.kxjsj.doctorassistant.View.SettingView
         android:background="@drawable/stoken_background_selector"
@@ -68,7 +68,7 @@
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginLeft="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="24dp"
         app:layout_constraintTop_toBottomOf="@+id/nickname" />
     <com.kxjsj.doctorassistant.View.SettingView
         android:background="@drawable/stoken_background_selector"
@@ -86,7 +86,7 @@
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginLeft="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="24dp"
         app:layout_constraintTop_toBottomOf="@+id/phone" />
 
     <TextView
@@ -115,6 +115,6 @@
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginLeft="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="24dp"
         app:layout_constraintTop_toBottomOf="@+id/textView8" />
 </android.support.constraint.ConstraintLayout>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<com.kxjsj.doctorassistant.View.SettingView
+    android:id="@+id/toggle"
+    app:titletext="推送开关"
+    app:showSwitch="true"
+    android:background="@drawable/stoken_background_selector"
+    android:clickable="true"
+    android:paddingBottom="5dp"
+    android:paddingTop="5dp"
+    android:layout_width="584dp"
+    android:paddingRight="15dp"
+    android:paddingLeft="15dp"
+    android:layout_height="wrap_content"
+    app:layout_constraintTop_toTopOf="parent"
+    android:layout_marginTop="32dp"
+    android:layout_marginRight="24dp"
+    app:layout_constraintRight_toRightOf="parent"
+    android:layout_marginLeft="24dp"
+    app:layout_constraintLeft_toLeftOf="parent"></com.kxjsj.doctorassistant.View.SettingView>
+</android.support.constraint.ConstraintLayout>

@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import com.kxjsj.doctorassistant.Rx.RxLifeUtils;
+import com.kxjsj.doctorassistant.Utils.ActivityUtils;
 import com.umeng.analytics.MobclickAgent;
 
 /**
@@ -15,6 +16,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActivityUtils.getInstance().put(this);
         setContentView(getContentLayoutId());
         initView(savedInstanceState);
     }
@@ -35,6 +37,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         RxLifeUtils.getInstance().remove(this);
+        ActivityUtils.getInstance().remove(this);
     }
 
     @Override

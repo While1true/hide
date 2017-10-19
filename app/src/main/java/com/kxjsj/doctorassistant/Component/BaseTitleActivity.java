@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.kxjsj.doctorassistant.R;
 import com.kxjsj.doctorassistant.Rx.RxLifeUtils;
+import com.kxjsj.doctorassistant.Utils.ActivityUtils;
 import com.kxjsj.doctorassistant.View.IndicateImageView;
 import com.umeng.analytics.MobclickAgent;
 
@@ -27,6 +28,7 @@ public abstract class BaseTitleActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActivityUtils.getInstance().put(this);
         setContentView(R.layout.titlebar_layout);
         LinearLayout content = findViewById(R.id.root);
         toolbar = findViewById(R.id.toolbar);
@@ -96,6 +98,7 @@ public abstract class BaseTitleActivity extends AppCompatActivity {
         iv_menu=null;
         tipTextView=null;
         RxLifeUtils.getInstance().remove(this);
+        ActivityUtils.getInstance().remove(this);
     }
 
     @Override

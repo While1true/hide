@@ -41,4 +41,9 @@ public interface Api {
     @POST("login/register")
     Observable<BaseBean<Session>>register(@Field("userid") String userid, @Field("type")int type
             , @Field("password") String password, @Field("medicalcard") String medicalcard);
+
+    @FormUrlEncoded
+    @POST("login/login")
+    Observable<BaseBean<Session>>login(@Field("userid") String userid
+            , @Field("password") String password, @Field("type")int type);
 }

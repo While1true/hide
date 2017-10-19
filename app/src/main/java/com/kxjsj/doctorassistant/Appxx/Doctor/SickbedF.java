@@ -47,10 +47,7 @@ import butterknife.Unbinder;
 /**
  * setsetRetainInstance(true)
  * ondestory不会调用
- * initView中view不用重新初始化
- * 由于横竖屏个数要改一下，就通知更新
- * Srecyclerview中onDetachFromWindow销毁了一部分View 所以要重新初始化头布局
- * <p>
+ *
  * 控件不懂使用的参考我的简书页
  * **************  http://www.jianshu.com/u/07d24a532308  *******************
  */
@@ -105,19 +102,6 @@ public class SickbedF extends BaseFragment {
 
                             Intent intent = new Intent(view.getContext(), SickerHome.class);
                             startActivity(intent);
-//                            ZXingUtils.startCapture(view.getContext(), new MyObserver<BaseBean<String>>(SickbedF.this) {
-//                                @Override
-//                                public void onNext(BaseBean<String> o) {
-//                                    super.onNext(o);
-//                                    new MaterialDialog.Builder(getContext())
-//                                            .title(o.getData())
-//                                            .positiveText("取消")
-//                                            .build()
-//                                            .show();
-//                                    onComplete();
-//                                }
-//
-//                            });
                         });
 
                     }

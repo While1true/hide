@@ -4,12 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.kxjsj.doctorassistant.Appxx.Mine.Login.LoginActivity;
 import com.kxjsj.doctorassistant.Appxx.Sicker.RadioActivity;
 import com.kxjsj.doctorassistant.Appxx.Doctor.RadioActivityD;
+import com.kxjsj.doctorassistant.Constant.Session;
 import com.kxjsj.doctorassistant.Rx.RxLifeUtils;
 import com.kxjsj.doctorassistant.Utils.MyToast;
 
@@ -20,31 +22,29 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         MyToast.Companion.init();
 
-//        startActivity(new Intent(this, LoginActivity.class));
-        new MaterialDialog.Builder(this)
-                .title("选择跳转")
-                .positiveText("Sicker")
-                .neutralText("登录")
-                .negativeText("Doctor")
-                .onNeutral((dialog, which) -> {
-                    startActivity(new Intent(MainActivity.this,LoginActivity.class));
-                })
-                .onPositive((dialog, which) -> {
-                    Sicker(null);
-                }).onNegative((dialog, which) -> {
-            Doctor(null);
-        }).build().show();
-
+        Session userInfo = App.getUserInfo();
+        String token = userInfo.getToken();
+        if(!TextUtils.isEmpty(token)){
+            if(userInfo.getType()==0){
+                Sicker();
+            }else{
+                Doctor();
+            }
+        }else{
+            startActivity(new Intent(this, LoginActivity.class));
+            overridePendingTransition(0, 0);
+            finish();
+        }
 
     }
 
-    public void Sicker(View v) {
+    public void Sicker() {
         startActivity(new Intent(this, RadioActivity.class));
         overridePendingTransition(0, 0);
         finish();
     }
 
-    public void Doctor(View v) {
+    public void Doctor() {
         startActivity(new Intent(this, RadioActivityD.class));
         overridePendingTransition(0, 0);
         finish();

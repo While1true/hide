@@ -32,7 +32,9 @@ public class RegisterActivity extends BaseTitleActivity {
     /**
      * 0:病人 1:医生
      */
-    public static int type=0;
+    public static int type = 0;
+    private AuthPhoneF authPhoneF;
+    private RegisterF registerF;
 
     @Override
     protected int getContentLayoutId() {
@@ -41,24 +43,35 @@ public class RegisterActivity extends BaseTitleActivity {
 
     @Override
     protected void onNavigationClicked() {
-        RxBus.getDefault().post(new BaseBean<String>(Constance.Rxbus.CLOST_INPUT,""));
+        RxBus.getDefault().post(new BaseBean<String>(Constance.Rxbus.CLOST_INPUT, ""));
         super.onNavigationClicked();
     }
 
     @Override
     protected void initView(Bundle savedInstanceState) {
+
+        if (savedInstanceState != null) {
+            authPhoneF = (AuthPhoneF) getSupportFragmentManager().getFragment(savedInstanceState, "authPhoneF");
+            registerF = (RegisterF) getSupportFragmentManager().getFragment(savedInstanceState, "registerF");
+        }
+
+        if (authPhoneF == null)
+            authPhoneF = new AuthPhoneF();
+
+        if (registerF == null)
+            registerF = new RegisterF();
         /**
          * 获取用户选择的注册类型
          */
         Intent intent = getIntent();
-        if(intent!=null){
-            type=intent.getIntExtra("type",0);
+        if (intent != null) {
+            type = intent.getIntExtra("type", 0);
         }
         /**
          * 屏幕旋转恢复记录的类型
          */
-        if(savedInstanceState!=null){
-            type=savedInstanceState.getInt("type");
+        if (savedInstanceState != null) {
+            type = savedInstanceState.getInt("type");
         }
 
 
@@ -67,9 +80,9 @@ public class RegisterActivity extends BaseTitleActivity {
         vp.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
-                if(position==0)
-                    return new AuthPhoneF();
-                return new RegisterF();
+                if (position == 0)
+                    return authPhoneF;
+                return registerF;
             }
 
             @Override
@@ -97,7 +110,9 @@ public class RegisterActivity extends BaseTitleActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt("type",type);
+        outState.putInt("type", type);
+        getSupportFragmentManager().putFragment(outState,"authPhoneF",authPhoneF);
+        getSupportFragmentManager().putFragment(outState,"registerF",registerF);
     }
 
     @Override

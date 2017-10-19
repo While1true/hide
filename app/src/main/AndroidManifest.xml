@@ -53,7 +53,6 @@
         <activity
             android:name=".Appxx.Mine.Register.RegisterActivity"
             android:windowSoftInputMode="stateHidden|adjustPan"
-            android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
             android:name=".Appxx.Mine.Register.ChoseRegisterActivity"
@@ -73,16 +72,15 @@
         <activity
             android:name=".Appxx.Mine.Login.AuthActivity"
             android:windowSoftInputMode="stateHidden|adjustPan"
-            android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
             android:name=".Appxx.Mine.Login.ChangePassActivity"
             android:windowSoftInputMode="stateHidden|adjustPan"
-            android:screenOrientation="portrait"
             android:launchMode="singleTask" />
-        <activity android:name=".Appxx.Mine.Login.LoginActivity"/>
+        <activity android:name=".Appxx.Mine.Login.LoginActivity" android:launchMode="singleTask"/>
 
         <activity android:name=".Appxx.Mine.UserInfoActivity"/>
+        <activity android:name=".Appxx.Mine.Push.PushActivity"/>
 
 
 
