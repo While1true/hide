@@ -108,12 +108,12 @@
         "source": "D:\\demo\\DoctorAssitant\\IMKit\\src\\main\\res\\drawable-xhdpi\\u1f349.png"
     },
     {
-        "merged": "D:\\demo\\DoctorAssitant\\IMKit\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\rc_conversation_newmsg.png",
-        "source": "D:\\demo\\DoctorAssitant\\IMKit\\src\\main\\res\\drawable-xhdpi\\rc_conversation_newmsg.png"
-    },
-    {
         "merged": "D:\\demo\\DoctorAssitant\\IMKit\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\u1f62b.png",
         "source": "D:\\demo\\DoctorAssitant\\IMKit\\src\\main\\res\\drawable-xhdpi\\u1f62b.png"
+    },
+    {
+        "merged": "D:\\demo\\DoctorAssitant\\IMKit\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\rc_conversation_newmsg.png",
+        "source": "D:\\demo\\DoctorAssitant\\IMKit\\src\\main\\res\\drawable-xhdpi\\rc_conversation_newmsg.png"
     },
     {
         "merged": "D:\\demo\\DoctorAssitant\\IMKit\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\rc_unread_msg_arrow.png",
@@ -1256,12 +1256,12 @@
         "source": "D:\\demo\\DoctorAssitant\\IMKit\\src\\main\\res\\drawable-xhdpi\\u1f60a.png"
     },
     {
-        "merged": "D:\\demo\\DoctorAssitant\\IMKit\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\rc_audio_toggle_hover.png",
-        "source": "D:\\demo\\DoctorAssitant\\IMKit\\src\\main\\res\\drawable-xhdpi\\rc_audio_toggle_hover.png"
-    },
-    {
         "merged": "D:\\demo\\DoctorAssitant\\IMKit\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\rc_ext_indicator.png",
         "source": "D:\\demo\\DoctorAssitant\\IMKit\\src\\main\\res\\drawable-xhdpi\\rc_ext_indicator.png"
+    },
+    {
+        "merged": "D:\\demo\\DoctorAssitant\\IMKit\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\rc_audio_toggle_hover.png",
+        "source": "D:\\demo\\DoctorAssitant\\IMKit\\src\\main\\res\\drawable-xhdpi\\rc_audio_toggle_hover.png"
     },
     {
         "merged": "D:\\demo\\DoctorAssitant\\IMKit\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\rc_icon_rt_message_right.png",

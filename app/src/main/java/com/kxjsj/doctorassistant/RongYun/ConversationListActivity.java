@@ -25,7 +25,7 @@ public class ConversationListActivity extends BaseTitleActivity implements RongY
     @Override
     protected void initView(Bundle savedInstanceState) {
         setTitle("会话列表");
-        RongYunInitialUtils.isReconnect(this, App.getUserInfo().getRongtoken(),this);
+        RongYunInitialUtils.isReconnect(this, App.getUserInfo().getRongToken(),this);
     }
     /**
      * 加载 会话列表 ConversationListFragment

@@ -71,7 +71,7 @@ public class App extends Application {
      * 获取token
      * @return
      */
-    public String getToken(){
+    public static String getToken(){
         return getUserInfo().getToken();
     }
 

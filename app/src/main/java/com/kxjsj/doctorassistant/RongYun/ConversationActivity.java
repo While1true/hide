@@ -43,7 +43,7 @@ public class ConversationActivity extends BaseTitleActivity implements RongYunIn
 
         getIntentDate(intent);
 
-        RongYunInitialUtils.isReconnect(this, App.getUserInfo().getRongtoken(),this);
+        RongYunInitialUtils.isReconnect(this, App.getUserInfo().getRongToken(),this);
 
     }
     /**

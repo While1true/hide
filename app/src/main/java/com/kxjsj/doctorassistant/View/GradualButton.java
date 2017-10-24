@@ -3,17 +3,11 @@ package com.kxjsj.doctorassistant.View;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
 
-import com.kxjsj.doctorassistant.Constant.Constance;
 
 /**
  * Created by vange on 2017/10/12.
@@ -33,25 +27,27 @@ public class GradualButton extends Button {
     }
 
     public GradualButton(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        this(context, attrs, defStyleAttr, 0);
-    }
-
-    public GradualButton(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
+        super(context, attrs, defStyleAttr);
         setGravity(Gravity.CENTER);
         setClickable(true);
         setSoundEffectsEnabled(true);
     }
 
-    public void start(int startColor, int endColor) {
+    public void start(int startColor, int endColor,long during) {
         if (objectAnimator == null) {
             objectAnimator = ObjectAnimator.ofInt(this, "textColor", startColor, endColor);
             objectAnimator.setEvaluator(new HsvEvaluator());
-            objectAnimator.setDuration(1000);
+            objectAnimator.setDuration(during);
             objectAnimator.setRepeatCount(-1);
             objectAnimator.setRepeatMode(ValueAnimator.REVERSE);
+        }else{
+            objectAnimator.cancel();
         }
         objectAnimator.start();
+
+    }
+    public void start(int startColor, int endColor) {
+        start(startColor,endColor,1000);
 
     }
 

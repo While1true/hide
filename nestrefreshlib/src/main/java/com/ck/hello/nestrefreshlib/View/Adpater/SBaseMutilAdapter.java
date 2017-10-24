@@ -5,10 +5,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ck.hello.nestrefreshlib.View.Adpater.Base.BaseAdapterRecord;
-import com.ck.hello.nestrefreshlib.View.Adpater.Base.BaseStateListener;
+import com.ck.hello.nestrefreshlib.View.Adpater.Interface.BaseStateListener;
 import com.ck.hello.nestrefreshlib.View.Adpater.Base.Recorder;
 import com.ck.hello.nestrefreshlib.View.Adpater.Base.SimpleViewHolder;
-import com.ck.hello.nestrefreshlib.View.Adpater.Base.StateHandlerInterface;
+import com.ck.hello.nestrefreshlib.View.Adpater.Interface.StateHandlerInterface;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +28,10 @@ import java.util.List;
 
 /**
  * @param <T> data的泛型
- * @param  Object 传给状态布局的泛型
+ * @aramp   传给状态布局的泛型
  *            如果StateHandler写死就不用管E
  */
+@Deprecated
 public class SBaseMutilAdapter<T> extends BaseAdapterRecord<T, Object> {
     /**
      * 设置数据构造
@@ -108,6 +109,7 @@ public class SBaseMutilAdapter<T> extends BaseAdapterRecord<T, Object> {
         return TYPE_ITEM;
     }
 
+    @Deprecated
     public static abstract class ITEMHOLDER<T> {
         private int layout;
         /**

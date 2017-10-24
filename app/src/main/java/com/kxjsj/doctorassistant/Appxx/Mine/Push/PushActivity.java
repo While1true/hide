@@ -1,7 +1,6 @@
 package com.kxjsj.doctorassistant.Appxx.Mine.Push;
 
 import android.os.Bundle;
-import android.widget.CompoundButton;
 
 import com.kxjsj.doctorassistant.Component.BaseTitleActivity;
 import com.kxjsj.doctorassistant.R;

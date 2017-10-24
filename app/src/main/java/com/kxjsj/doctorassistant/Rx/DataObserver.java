@@ -1,6 +1,9 @@
 package com.kxjsj.doctorassistant.Rx;
 
+import com.kxjsj.doctorassistant.App;
 import com.kxjsj.doctorassistant.JavaBean.KotlinBean;
+import com.kxjsj.doctorassistant.Utils.K2JUtils;
+import com.kxjsj.doctorassistant.Utils.PublicUtils;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
@@ -29,8 +32,10 @@ public abstract class DataObserver<T> implements Observer<KotlinBean.BaseBean<T>
     public void onNext(KotlinBean.BaseBean<T> t) {
         if (t.getError_code()==200) {
             OnNEXT(t.getData());
-        }else{
+        }else if(t.getError_code()==100){
             OnERROR(t.getMessage());
+        }else{
+            OnLOGIN();
         }
     }
 
@@ -45,8 +50,12 @@ public abstract class DataObserver<T> implements Observer<KotlinBean.BaseBean<T>
             d.isDisposed();
     }
 
-    public abstract void OnNEXT(T t);
-    public abstract void OnERROR(String error);
+    public abstract void OnNEXT(T bean);
+    public void OnERROR(String error){
+        K2JUtils.toast(error);
+    }
+    public void OnLOGIN(){
+        PublicUtils.loginOut(App.app);}
 
 }
 

@@ -15,7 +15,6 @@ import com.kxjsj.doctorassistant.Rx.Utils.RxBus;
 import com.kxjsj.doctorassistant.Utils.K2JUtils;
 import com.kxjsj.doctorassistant.View.NoScrollViewPager;
 
-import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,8 +54,13 @@ public class RegisterActivity extends BaseTitleActivity {
             registerF = (RegisterF) getSupportFragmentManager().getFragment(savedInstanceState, "registerF");
         }
 
-        if (authPhoneF == null)
+        if (authPhoneF == null) {
             authPhoneF = new AuthPhoneF();
+            /**
+             * 注册需要验证手机号是否已经注册，免得验证完短信才说不能注册
+             */
+            authPhoneF.setAuthifaccountexist(true);
+        }
 
         if (registerF == null)
             registerF = new RegisterF();

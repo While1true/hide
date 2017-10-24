@@ -2,7 +2,6 @@ package com.kxjsj.doctorassistant.Appxx.Mine.Login;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
@@ -13,7 +12,6 @@ import android.widget.RadioGroup;
 
 import com.kxjsj.doctorassistant.Appxx.Doctor.RadioActivityD;
 import com.kxjsj.doctorassistant.Appxx.Mine.Register.ChoseRegisterActivity;
-import com.kxjsj.doctorassistant.Appxx.Mine.Register.RegisterActivity;
 import com.kxjsj.doctorassistant.Appxx.Sicker.RadioActivity;
 import com.kxjsj.doctorassistant.Component.BaseTitleActivity;
 import com.kxjsj.doctorassistant.Constant.Constance;
@@ -28,7 +26,6 @@ import com.kxjsj.doctorassistant.Utils.RegularUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.annotations.NonNull;
 
 /**
  * Created by vange on 2017/10/13.

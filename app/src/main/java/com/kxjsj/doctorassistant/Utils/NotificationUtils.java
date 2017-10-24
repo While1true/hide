@@ -7,10 +7,8 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 
-import com.kxjsj.doctorassistant.Net.RetrofitHttpManger;
 import com.kxjsj.doctorassistant.R;
 
-import okhttp3.RequestBody;
 
 /**
  * Created by vange on 2017/9/21.

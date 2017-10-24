@@ -1,6 +1,7 @@
 package com.kxjsj.doctorassistant.JavaBean
 
 import java.io.File
+import java.io.Serializable
 
 /**
  * Created by vange on 2017/9/28.
@@ -10,7 +11,7 @@ object KotlinBean {
     /**
      * baseDataBean
      */
-    data class DataBean constructor(var type: Int = 0,var content : String)
+    data class DataBean constructor(var type: Int = 0,var content : String,var message : String)
 
     /**
      * baeBean
@@ -30,7 +31,7 @@ object KotlinBean {
     /**
      * 医生个人页数据
      */
-    data class DoctorInfo constructor(var name: String)
+    data class DoctorInfo constructor(var name: String):Serializable
 
     /**
      * 下载进度封装

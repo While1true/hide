@@ -9,10 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ck.hello.nestrefreshlib.View.Adpater.Base.SimpleViewHolder;
-import com.ck.hello.nestrefreshlib.View.Adpater.DefaultStateListener;
+import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.DefaultStateListener;
 import com.ck.hello.nestrefreshlib.View.Adpater.SBaseMutilAdapter;
 import com.ck.hello.nestrefreshlib.View.RefreshViews.SRecyclerView;
-import com.kxjsj.doctorassistant.Appxx.Mine.DoctorHome;
 import com.kxjsj.doctorassistant.Appxx.Mine.SickerHome;
 import com.kxjsj.doctorassistant.Component.BaseFragment;
 import com.kxjsj.doctorassistant.JavaBean.KotlinBean.Doctor;

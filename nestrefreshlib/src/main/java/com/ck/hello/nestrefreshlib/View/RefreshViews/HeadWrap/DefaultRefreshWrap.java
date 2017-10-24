@@ -33,7 +33,6 @@ public class DefaultRefreshWrap extends RefreshWrapBase {
     public DefaultRefreshWrap(WrapInterface parent, boolean header) {
         super(parent, header);
     }
-
     /**
      * 高度
      *
@@ -74,8 +73,8 @@ public class DefaultRefreshWrap extends RefreshWrapBase {
     public void onComplete() {
         if (animation != null)
             animation.cancel();
-        if (headTitle != null)
-            headTitle.setText(header ? pulldown[3] : pullup[3]);
+        if(headTitle!=null)
+        headTitle.setText(header ? pulldown[3] : pullup[3]);
     }
 
     @Override
@@ -90,8 +89,8 @@ public class DefaultRefreshWrap extends RefreshWrapBase {
     public void OnDetachFromWindow() {
         progress = null;
         headTitle = null;
-        if (animation != null)
-            animation.cancel();
+        if(animation!=null)
+        animation.cancel();
         animation = null;
     }
 

@@ -20,7 +20,6 @@ public class BaseBean<E> implements Serializable {
         this.code = code;
         this.data = data;
     }
-
     public boolean isSuccess() {
         return code == 0;
     }

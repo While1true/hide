@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,12 +61,25 @@ public class AuthPhoneF extends BaseFragment implements MessageUtils.MssListener
     private MessageUtils.MyMssHandler handler;
     private MaterialDialog dialog;
 
+    /**
+     * 是否验证手机号是否已注册
+     * 默认只验证手机号是否是本机
+     * 注册时要true
+     */
+    public boolean authifaccountexist = false;
+
+    public void setAuthifaccountexist(boolean authifaccountexist) {
+        this.authifaccountexist = authifaccountexist;
+    }
+
     @Override
     protected void initView(@Nullable Bundle savedInstanceState) {
+        if (savedInstanceState != null)
+            authifaccountexist = savedInstanceState.getBoolean("authifaccountexist");
         handler = new MessageUtils.MyMssHandler(this);
         MessageUtils.registListener(handler);
         etcode.setOnEditorActionListener((v, actionId, event) -> {
-            if(EditorInfo.IME_ACTION_DONE==actionId){
+            if (EditorInfo.IME_ACTION_DONE == actionId) {
                 doAuth();
                 return true;
             }
@@ -73,7 +87,7 @@ public class AuthPhoneF extends BaseFragment implements MessageUtils.MssListener
         });
 
         RxBus.getDefault()
-                .toObservable(Constance.Rxbus.CLOST_INPUT,BaseBean.class)
+                .toObservable(Constance.Rxbus.CLOST_INPUT, BaseBean.class)
                 .subscribe(new MyObserver<BaseBean>(this) {
                     @Override
                     public void onNext(BaseBean baseBean) {
@@ -118,25 +132,43 @@ public class AuthPhoneF extends BaseFragment implements MessageUtils.MssListener
                 break;
             case R.id.sendcode:
                 if (InputUtils.validateAccount(etphonel, etphone.getText().toString())) {
-                    ApiController.authPhone(etphone.getText().toString(), RegisterActivity.type).subscribe(new DataObserver(this) {
-                        @Override
-                        public void OnNEXT(Object o) {
-                            etphone.setEnabled(false);
-                            sendcode.setText("正在请求");
-                            sendcode.setEnabled(false);
-                            showdialog("正在请求");
-                            MessageUtils.sendMessage(etphone.getText().toString());
-                        }
+                    showdialog("正在请求");
+                    if (authifaccountexist) {
+                        ApiController.authPhone(etphone.getText().toString(), RegisterActivity.type).subscribe(new DataObserver(this) {
+                            @Override
+                            public void OnNEXT(Object o) {
+                                if (Constance.DEBUGTAG)
+                                    Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "OnNEXT: " + o);
+                                /**
+                                 * 是医生时返回真正的type 1：医生 2：护士
+                                 */
+                                if (o != null)
+                                    RegisterActivity.type = (int) Float.parseFloat(o.toString().trim());
+                                doSendMessage();
+                            }
 
-                        @Override
-                        public void OnERROR(String error) {
-                        K2JUtils.toast(error);
-                        }
-                    });
+                            @Override
+                            public void OnERROR(String error) {
+                                if (dialog != null)
+                                    dialog.dismiss();
+                                K2JUtils.toast(error);
+                            }
+                        });
 
+
+                    } else {
+                        doSendMessage();
+                    }
                 }
                 break;
         }
+    }
+
+    private void doSendMessage() {
+        etphone.setEnabled(false);
+        sendcode.setText("正在请求");
+        sendcode.setEnabled(false);
+        MessageUtils.sendMessage(etphone.getText().toString());
     }
 
     private void doAuth() {
@@ -168,7 +200,7 @@ public class AuthPhoneF extends BaseFragment implements MessageUtils.MssListener
     @Override
     public void onSendSmsError(String msg) {
         etphonel.post(() -> {
-            if(dialog!=null)
+            if (dialog != null)
                 dialog.dismiss();
             K2JUtils.toast(msg, 1);
             sendcode.setEnabled(true);
@@ -179,7 +211,7 @@ public class AuthPhoneF extends BaseFragment implements MessageUtils.MssListener
     @Override
     public void onSendSmsSuccess() {
         etphonel.post(() -> {
-            if(dialog!=null)
+            if (dialog != null)
                 dialog.dismiss();
             etcodel.setVisibility(View.VISIBLE);
             etcodel.requestFocus();
@@ -210,14 +242,21 @@ public class AuthPhoneF extends BaseFragment implements MessageUtils.MssListener
 
     @Override
     public void onAuthSuccess(HashMap<String, Object> datas) {
-        if(dialog!=null)
+        if (dialog != null)
             dialog.dismiss();
         RxBus.getDefault().post(new BaseBean<String>(Constance.Rxbus.SIGNNEXT, etphone.getText().toString()));
 
 
     }
+
     @Override
     public void onReceiverSupportCountries(ArrayList<HashMap<String, Object>> countries) {
 
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean("authifaccountexist", authifaccountexist);
     }
 }

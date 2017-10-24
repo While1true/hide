@@ -4,13 +4,21 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.widget.Button;
+import android.widget.RadioGroup;
 
 import com.kxjsj.doctorassistant.Component.BaseTitleActivity;
+import com.kxjsj.doctorassistant.Net.ApiController;
 import com.kxjsj.doctorassistant.R;
+import com.kxjsj.doctorassistant.Rx.DataObserver;
+import com.kxjsj.doctorassistant.Rx.MyObserver;
+import com.kxjsj.doctorassistant.Utils.EncryptUtils;
+import com.kxjsj.doctorassistant.Utils.K2JUtils;
+import com.kxjsj.doctorassistant.Utils.RegularUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.annotations.NonNull;
 
 /**
  * Created by vange on 2017/10/13.
@@ -25,6 +33,9 @@ public class ChangePassActivity extends BaseTitleActivity {
     TextInputLayout textInputLayout;
     @BindView(R.id.bt)
     Button bt;
+    @BindView(R.id.group)
+    RadioGroup group;
+    private String phone;
 
     @Override
     protected int getContentLayoutId() {
@@ -34,7 +45,10 @@ public class ChangePassActivity extends BaseTitleActivity {
     @Override
     protected void initView(Bundle savedInstanceState) {
         setTitle("修改密码");
-        String phone=getIntent().getStringExtra("phone");
+        phone = getIntent().getStringExtra("phone");
+        if (savedInstanceState != null) {
+            phone = savedInstanceState.getString("phone");
+        }
     }
 
 
@@ -45,7 +59,26 @@ public class ChangePassActivity extends BaseTitleActivity {
         ButterKnife.bind(this);
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("phone", phone);
+    }
+
     @OnClick(R.id.bt)
     public void onViewClicked() {
+        ApiController.modifypassword(phone, EncryptUtils.md5(et.getText().toString()),
+                group.getCheckedRadioButtonId() == R.id.user ? 0 : 1)
+                .subscribe(new DataObserver(this) {
+                    @Override
+                    public void OnNEXT(Object o) {
+                        finish();
+                    }
+
+                    @Override
+                    public void OnERROR(String error) {
+                        K2JUtils.toast(error);
+                    }
+                });
     }
 }

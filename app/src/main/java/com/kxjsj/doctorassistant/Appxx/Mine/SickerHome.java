@@ -1,9 +1,7 @@
 package com.kxjsj.doctorassistant.Appxx.Mine;
 
-import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.widget.TextView;
@@ -14,8 +12,12 @@ import com.ck.hello.nestrefreshlib.View.RefreshViews.SRecyclerView;
 import com.kxjsj.doctorassistant.Component.BaseTitleActivity;
 import com.kxjsj.doctorassistant.Constant.Constance;
 import com.kxjsj.doctorassistant.Holder.MyHolder;
+import com.kxjsj.doctorassistant.JavaBean.Patient;
+import com.kxjsj.doctorassistant.Net.ApiController;
 import com.kxjsj.doctorassistant.R;
-import com.kxjsj.doctorassistant.Screen.AdjustUtil;
+import com.kxjsj.doctorassistant.RongYun.ConversationUtils;
+import com.kxjsj.doctorassistant.Rx.DataObserver;
+import com.kxjsj.doctorassistant.Utils.K2JUtils;
 import com.kxjsj.doctorassistant.View.GradualButton;
 
 import java.util.ArrayList;
@@ -35,6 +37,7 @@ public class SickerHome extends BaseTitleActivity {
     private int[] dres = {R.drawable.ic_checkreport, R.drawable.ic_medicine};
     private SBaseMutilAdapter adapter;
     private boolean isfirst = true;
+    Patient bean;
 
     @Override
     protected int getContentLayoutId() {
@@ -55,9 +58,20 @@ public class SickerHome extends BaseTitleActivity {
                 .addType(R.layout.sickerinfo, new MyHolder() {
                     @Override
                     public void onBind(SimpleViewHolder holder, String item, int position) {
+                        holder.setText(R.id.number,bean.getPatientNo());
+                        holder.setText(R.id.name,bean.getPname());
+                        holder.setText(R.id.bennumber,bean.getroomId());
+//                        holder.setText(R.id.instruction,bean.getRemark());
 
-                        holder.setButtonText(R.id.callhelp, "事项提醒");
-                        holder.setButtonText(R.id.help, "交流沟通");
+                        holder.setText(R.id.callhelp, "事项提醒");
+                        holder.setText(R.id.help, "交流沟通");
+                        holder.setOnClickListener(R.id.callhelp, v -> {
+                            ConversationUtils.startChartSingle(SickerHome.this, bean.getPname(), bean.getphoneNumber());
+                        });
+                        holder.setOnClickListener(R.id.help, v -> {
+                            ConversationUtils.startChartSingle(SickerHome.this,bean.getPname(), bean.getphoneNumber());
+
+                        });
                         startButtonAnimator(holder);
                     }
 
@@ -84,12 +98,12 @@ public class SickerHome extends BaseTitleActivity {
                 .addType(R.layout.title_layout, new MyHolder() {
                     @Override
                     public void onBind(SimpleViewHolder holder, String item, int position) {
-                        holder.setText(R.id.title,"提醒记录");
+                        holder.setText(R.id.title, "提醒记录");
                     }
 
                     @Override
                     public boolean istype(String item, int position) {
-                        return position==infos.length+1;
+                        return position == infos.length + 1;
                     }
                 })
                 .addType(R.layout.doctor_answer_item, new MyHolder() {
@@ -110,14 +124,11 @@ public class SickerHome extends BaseTitleActivity {
                 .setRefreshingListener(new SRecyclerView.OnRefreshListener() {
                     @Override
                     public void Refreshing() {
-                        srecyclerview.postDelayed(() -> {
-                            adapter.showNomore();
-                            srecyclerview.notifyRefreshComplete();
-                        }, 500);
+                        doNet();
                     }
                 });
-        if(savedInstanceState!=null)
-            isfirst=savedInstanceState.getBoolean("isfirst",true);
+        if (savedInstanceState != null)
+            isfirst = savedInstanceState.getBoolean("isfirst", true);
         if (isfirst) {
             isfirst = false;
             srecyclerview.setRefreshing();
@@ -127,17 +138,38 @@ public class SickerHome extends BaseTitleActivity {
 
     }
 
+    private void doNet() {
+        ApiController.getBedInfo("12580")
+                .subscribe(new DataObserver<Patient>(this) {
+                    @Override
+                    public void OnNEXT(Patient beanz) {
+                        if (Constance.DEBUGTAG)
+                            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "OnNEXT: " + bean);
+                        bean = beanz;
+                        adapter.showNomore();
+                        srecyclerview.notifyRefreshComplete();
+                    }
+
+                    @Override
+                    public void OnERROR(String error) {
+                        srecyclerview.notifyRefreshComplete();
+                        adapter.ShowError();
+                        K2JUtils.toast(error);
+                    }
+                });
+    }
+
     private void startButtonAnimator(SimpleViewHolder holder) {
         GradualButton askButton = holder.getView(R.id.callhelp);
-        askButton.start(askButton.getCurrentTextColor(), getResources().getColor(R.color.colorPrimary));
+        askButton.start(0xff535353, getResources().getColor(R.color.colorPrimary));
 
         GradualButton communicateButton = holder.getView(R.id.help);
-        communicateButton.start(communicateButton.getCurrentTextColor(), getResources().getColor(R.color.navi_checked));
+        communicateButton.start(0xff535353, getResources().getColor(R.color.navi_checked));
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean("isfirst",isfirst);
+        outState.putBoolean("isfirst", isfirst);
     }
 }

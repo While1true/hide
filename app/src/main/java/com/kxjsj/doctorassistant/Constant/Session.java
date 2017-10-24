@@ -9,11 +9,20 @@ import com.kxjsj.doctorassistant.Utils.GsonUtils;
 public class Session {
     String userid;
     String username;
-    String imgurl;
+    String imgUrl;
     String token;
     String medicalcard;
-    String rongtoken;
+    String rongToken;
+    String department;
     int type;
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
 
     public int getType() {
         return type;
@@ -47,13 +56,6 @@ public class Session {
         this.username = username;
     }
 
-    public String getImgurl() {
-        return imgurl;
-    }
-
-    public void setImgurl(String imgurl) {
-        this.imgurl = imgurl;
-    }
 
     public String getToken() {
         return token;
@@ -63,12 +65,20 @@ public class Session {
         this.token = token;
     }
 
-    public String getRongtoken() {
-        return rongtoken;
+    public String getImgUrl() {
+        return imgUrl;
     }
 
-    public void setRongtoken(String rongtoken) {
-        this.rongtoken = rongtoken;
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    public String getRongToken() {
+        return rongToken;
+    }
+
+    public void setRongToken(String rongToken) {
+        this.rongToken = rongToken;
     }
 
     @Override

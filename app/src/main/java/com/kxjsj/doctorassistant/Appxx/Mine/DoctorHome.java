@@ -1,6 +1,7 @@
 package com.kxjsj.doctorassistant.Appxx.Mine;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,12 +11,14 @@ import android.util.Log;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.ck.hello.nestrefreshlib.View.Adpater.Base.SimpleViewHolder;
-import com.ck.hello.nestrefreshlib.View.Adpater.DefaultStateListener;
-import com.ck.hello.nestrefreshlib.View.Adpater.SBaseMutilAdapter;
+import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.DefaultStateListener;
+import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.PositionHolder;
+import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.SAdapter;
 import com.ck.hello.nestrefreshlib.View.RefreshViews.SRecyclerView;
 import com.kxjsj.doctorassistant.Component.BaseTitleActivity;
 import com.kxjsj.doctorassistant.Constant.Constance;
-import com.kxjsj.doctorassistant.JavaBean.KotlinBean.*;
+import com.kxjsj.doctorassistant.Glide.GlideLoader;
+import com.kxjsj.doctorassistant.JavaBean.DoctorBean;
 import com.kxjsj.doctorassistant.R;
 import com.kxjsj.doctorassistant.RongYun.ConversationUtils;
 import com.kxjsj.doctorassistant.Screen.AdjustUtil;
@@ -24,7 +27,6 @@ import com.kxjsj.doctorassistant.Utils.K2JUtils;
 import com.kxjsj.doctorassistant.View.GradualButton;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,13 +41,13 @@ public class DoctorHome extends BaseTitleActivity {
      */
     @BindView(R.id.srecyclerview)
     SRecyclerView srecyclerview;
-    private SBaseMutilAdapter sBaseMutilAdapter;
+    private SAdapter sBaseMutilAdapter;
 
     /**
      * 数据包
      */
-    private List<DoctorInfo> datas;
-
+    private ArrayList<String> datas;
+    DoctorBean.ContentBean bean;
     @Override
     protected int getContentLayoutId() {
 
@@ -54,54 +56,63 @@ public class DoctorHome extends BaseTitleActivity {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-        if (Constance.DEBUGTAG)
-            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "initView: Oncreat");
-        ButterKnife.bind(this);
-        datas = new ArrayList<>(50);
-        for (int i = 0; i < 50; i++) {
-            datas.add(new DoctorInfo(i + ""));
+        Intent intent = getIntent();
+        if(savedInstanceState!=null){
+            bean= savedInstanceState.getParcelable("data");
+            setTitle(bean.getName()+"的个人主页");
+            datas= (ArrayList<String>) savedInstanceState.getSerializable("bean");
         }
-        sBaseMutilAdapter = new SBaseMutilAdapter(datas)
-                .addType(R.layout.doctor_info, new SBaseMutilAdapter.ITEMHOLDER<DoctorInfo>() {
+        if(intent!=null&&bean==null){
+            bean=intent.getParcelableExtra("data");
+        }
+
+        ButterKnife.bind(this);
+        sBaseMutilAdapter = new SAdapter(30)
+                .addType(R.layout.doctor_info, new PositionHolder() {
                     @Override
-                    public void onBind(SimpleViewHolder holder, DoctorInfo item, int position) {
+                    public void onBind(SimpleViewHolder holder, int position) {
+
+                        GlideLoader.loadRound(holder.getView(R.id.iv_doctor),bean.getUserimg());
+                        holder.setText(R.id.introduction,bean.getRemark());
 
                         startButtonAnimator(holder);
-
-                        holder.setOnClickListener(R.id.ask, view -> askQuestion(item));
-                        holder.setOnClickListener(R.id.communicate, view ->
-                                ConversationUtils.startChartSingle(DoctorHome.this, position + "", "XX情况咨询"));
+                        holder.setOnClickListener(R.id.ask, v -> {
+                            askQuestion(bean.getUserid());
+                        });
+                        holder.setOnClickListener(R.id.communicate, view -> ConversationUtils.startChartSingle(DoctorHome.this,bean.getDepartment()+"/"+bean.getName(),bean.getUserid()));
                     }
 
                     @Override
-                    public boolean istype(DoctorInfo item, int position) {
-                        return position == 0 && OrentionUtils.isPortrait(DoctorHome.this);
+                    public boolean istype(int position) {
+                        return position==0&&OrentionUtils.isPortrait(DoctorHome.this);
                     }
                 })
-                .addType(R.layout.doctor_info_land, new SBaseMutilAdapter.ITEMHOLDER<DoctorInfo>() {
+                .addType(R.layout.doctor_info_land, new PositionHolder() {
                     @Override
-                    public void onBind(SimpleViewHolder holder, DoctorInfo item, int position) {
+                    public void onBind(SimpleViewHolder holder, int position) {
+                        GlideLoader.loadRound(holder.getView(R.id.iv_doctor),bean.getUserimg());
+                        holder.setText(R.id.introduction,bean.getRemark());
 
                         startButtonAnimator(holder);
-
-                        holder.setOnClickListener(R.id.ask, view -> askQuestion(item));
-                        holder.setOnClickListener(R.id.communicate, view ->
-                                ConversationUtils.startChartSingle(DoctorHome.this, position + "", "XX情况咨询"));
+                        holder.setOnClickListener(R.id.ask, v -> {
+                            ConversationUtils.startChartSingle(DoctorHome.this,bean.getDepartment()+"/"+bean.getName(),bean.getUserid());
+                        });
+                        holder.setOnClickListener(R.id.communicate, view -> askQuestion(bean.getUserid()));
                     }
 
                     @Override
-                    public boolean istype(DoctorInfo item, int position) {
-                        return position == 0 && !OrentionUtils.isPortrait(DoctorHome.this);
+                    public boolean istype(int position) {
+                        return position==0&&!OrentionUtils.isPortrait(DoctorHome.this);
                     }
                 })
-                .addType(R.layout.doctor_answer_item, new SBaseMutilAdapter.ITEMHOLDER<DoctorInfo>() {
+                .addType(R.layout.doctor_answer_item, new PositionHolder() {
                     @Override
-                    public void onBind(SimpleViewHolder holder, DoctorInfo item, int position) {
+                    public void onBind(SimpleViewHolder holder, int position) {
 
                     }
 
                     @Override
-                    public boolean istype(DoctorInfo item, int position) {
+                    public boolean istype(int position) {
                         return true;
                     }
                 }).setStateListener(new DefaultStateListener() {
@@ -114,11 +125,8 @@ public class DoctorHome extends BaseTitleActivity {
                 .setRefreshingListener(new SRecyclerView.OnRefreshListener() {
                     @Override
                     public void Refreshing() {
-                        srecyclerview.postDelayed(() -> {
                             loadData();
-                            sBaseMutilAdapter.showState(SBaseMutilAdapter.SHOW_NOMORE, "无更多内容了");
-                            srecyclerview.notifyRefreshComplete();
-                        }, 1000);
+
                     }
                 }).setAdapter(new LinearLayoutManager(this), sBaseMutilAdapter)
                 .setRefreshing();
@@ -126,18 +134,18 @@ public class DoctorHome extends BaseTitleActivity {
 
     private void startButtonAnimator(SimpleViewHolder holder) {
         GradualButton askButton = holder.getView(R.id.ask);
-        askButton.start(askButton.getCurrentTextColor(), getResources().getColor(R.color.colorPrimary));
+        askButton.start(0xff535353, getResources().getColor(R.color.colorPrimary));
 
         GradualButton communicateButton = holder.getView(R.id.communicate);
-        communicateButton.start(communicateButton.getCurrentTextColor(), getResources().getColor(R.color.navi_checked));
+        communicateButton.start(0xff535353, getResources().getColor(R.color.navi_checked));
     }
 
     /**
      * 提交留言问题
      *
-     * @param item
+     * @param userid
      */
-    private void askQuestion(DoctorInfo item) {
+    private void askQuestion(String userid) {
 
         new MaterialDialog.Builder(this)
                 .title("留言提问")
@@ -174,6 +182,12 @@ public class DoctorHome extends BaseTitleActivity {
      */
     private void loadData() {
 
+
+
+
+        sBaseMutilAdapter.showState(SAdapter.SHOW_NOMORE, "无更多内容了");
+        srecyclerview.notifyRefreshComplete();
+
     }
 
     @Override
@@ -201,8 +215,8 @@ public class DoctorHome extends BaseTitleActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (Constance.DEBUGTAG)
-            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onSaveInstanceState: ");
+        outState.putParcelable("data",bean);
+        outState.putSerializable("bean",datas);
     }
 
 }

@@ -11,6 +11,7 @@ import com.kxjsj.doctorassistant.Component.BaseFragment
 import com.kxjsj.doctorassistant.R
 import com.kxjsj.doctorassistant.Utils.ActivityUtils
 import com.kxjsj.doctorassistant.Utils.K2JUtils
+import com.kxjsj.doctorassistant.Utils.PublicUtils
 import com.kxjsj.doctorassistant.View.GradualButton
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.hospital.*
@@ -32,8 +33,7 @@ class MineF : BaseFragment(),View.OnClickListener {
             R.id.about -> ""
             R.id.loginOut ->{
                 K2JUtils.put("userinfo","")
-                ActivityUtils.getInstance().removeAll()
-                startActivity(Intent(context,LoginActivity::class.java))
+                PublicUtils.loginOut(context)
             }
         }
     }

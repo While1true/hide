@@ -42,8 +42,6 @@ import com.ck.hello.nestrefreshlib.View.RefreshViews.HeadWrap.WrapInterface;
  * <p>
  * 功能包括 下拉刷新  上啦加载 只预估数值实现自定义添加在布局  overscroll itemtouchhelper
  * 出列快速滑动时的处理不是很完美，但能用
- * 控件不懂使用的参考我的简书页
- * **************  http://www.jianshu.com/u/07d24a532308  *******************
  */
 
 public class SRecyclerView extends LinearLayout implements NestedScrollingParent, WrapInterface {
@@ -75,10 +73,17 @@ public class SRecyclerView extends LinearLayout implements NestedScrollingParent
 
     private int maxTime = 200;
 
+    private int maxFastOverScroll = dp2px(100);
+
     private boolean canheader = true, canfooter = false;
     private ValueAnimator animator;
     //超出距离是否加载
     private boolean canLoadingHeader = true, canLoadingFooter = false;
+
+
+    String[] pulldown = {"下拉刷新", "释放刷新", "正在刷新", "刷新完成"};
+    String[] pullup = {"上拉加载", "释放加载", "正在加载", "加载完成"};
+
 
     //执行模拟值，但实际不移动
 //    private boolean onlypreData;
@@ -94,6 +99,7 @@ public class SRecyclerView extends LinearLayout implements NestedScrollingParent
         super.onDetachedFromWindow();
         if (animator != null) {
             animator.cancel();
+            animator = null;
         }
 //        headerRefreshWrap.OnDetachFromWindow();
 //        footerRefreshWrap.OnDetachFromWindow();

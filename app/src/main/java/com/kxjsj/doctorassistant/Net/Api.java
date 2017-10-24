@@ -4,9 +4,13 @@ package com.kxjsj.doctorassistant.Net;
 
 
 import com.kxjsj.doctorassistant.Constant.Session;
+import com.kxjsj.doctorassistant.JavaBean.DoctorBean;
 import com.kxjsj.doctorassistant.JavaBean.KotlinBean.BaseBean;
+import com.kxjsj.doctorassistant.JavaBean.Patient;
+import com.kxjsj.doctorassistant.JavaBean.PatientHome;
 import com.kxjsj.doctorassistant.JavaBean.SickBed;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -46,4 +50,26 @@ public interface Api {
     @POST("login/login")
     Observable<BaseBean<Session>>login(@Field("userid") String userid
             , @Field("password") String password, @Field("type")int type);
+
+    @FormUrlEncoded
+    @POST("login/modifyPassword")
+    Observable<BaseBean>modifypassword(@Field("userid") String userid
+            , @Field("password") String password, @Field("type")int type);
+
+    @GET("patient/getPatient")
+    Observable<BaseBean<Patient>>getBedInfo(@Query("patientNo") String patientNo);
+
+    @POST("login/bindXiaomi")
+    @FormUrlEncoded
+    Observable<BaseBean> bindXiaomi(@Field("userid")String userid,@Field("id")String xiaomiId,@Field("token")String token);
+
+    @GET("doctor/getAllDoctor")
+    Observable<BaseBean<ArrayList<DoctorBean>>>getAllDoctor(@Query("token")String token);
+
+    @GET("patient/getDepartment")
+    Observable<BaseBean<ArrayList<String>>>getDepartment();
+
+    @GET("patient/getPatientByDepartment")
+    Observable<BaseBean<ArrayList<PatientHome>>>getPatientByDepartment(@Query("token")String token, @Query("department")String department);
+
 }

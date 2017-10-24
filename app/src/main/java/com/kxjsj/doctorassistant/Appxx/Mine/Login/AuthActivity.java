@@ -25,6 +25,7 @@ public class AuthActivity extends BaseTitleActivity {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
+        setTitle("验证手机号");
         AuthPhoneF authPhoneF = new AuthPhoneF();
         getSupportFragmentManager().beginTransaction().replace(R.id.content, authPhoneF).commit();
 
@@ -39,8 +40,10 @@ public class AuthActivity extends BaseTitleActivity {
                         Intent intent = new Intent(AuthActivity.this, ChangePassActivity.class);
                         intent.putExtra("phone", phone);
                         startActivity(intent);
+                        finish();
                     }
                 });
 
     }
+
 }

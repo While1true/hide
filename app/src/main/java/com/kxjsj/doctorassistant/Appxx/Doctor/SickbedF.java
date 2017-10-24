@@ -12,27 +12,21 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.ck.hello.nestrefreshlib.View.Adpater.Base.SimpleViewHolder;
-import com.ck.hello.nestrefreshlib.View.Adpater.DefaultStateListener;
+import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.DefaultStateListener;
 import com.ck.hello.nestrefreshlib.View.Adpater.SBaseMutilAdapter;
 import com.ck.hello.nestrefreshlib.View.RefreshViews.SRecyclerView;
 import com.kxjsj.doctorassistant.Appxx.Mine.SickerHome;
 import com.kxjsj.doctorassistant.Component.BaseFragment;
 import com.kxjsj.doctorassistant.Constant.Constance;
-import com.kxjsj.doctorassistant.JavaBean.KotlinBean;
 import com.kxjsj.doctorassistant.JavaBean.SickBed;
 import com.kxjsj.doctorassistant.Net.ApiController;
 import com.kxjsj.doctorassistant.R;
-import com.kxjsj.doctorassistant.Rx.BaseBean;
 import com.kxjsj.doctorassistant.Rx.DataObserver;
-import com.kxjsj.doctorassistant.Rx.MyObserver;
 import com.kxjsj.doctorassistant.Screen.OrentionUtils;
 import com.kxjsj.doctorassistant.Utils.K2JUtils;
-import com.kxjsj.doctorassistant.Utils.ZXingUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -73,7 +67,7 @@ public class SickbedF extends BaseFragment {
 
                     @Override
                     public void onBind(SimpleViewHolder holder, SickBed item, int position) {
-                        holder.setText(R.id.title, item.getFloorid() + "楼"+item.getRoomid()+"房间" + item.getBedid() +"床");
+                        holder.setText(R.id.title, item.getFloorid() + "楼"+item.getRoomid()+"房间");
                     }
 
                     @Override

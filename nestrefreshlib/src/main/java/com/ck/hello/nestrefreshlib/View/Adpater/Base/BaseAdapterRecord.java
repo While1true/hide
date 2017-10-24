@@ -8,12 +8,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
+import com.ck.hello.nestrefreshlib.View.Adpater.Interface.BaseStateListener;
+import com.ck.hello.nestrefreshlib.View.Adpater.Interface.ShowStateInterface;
+import com.ck.hello.nestrefreshlib.View.Adpater.Interface.StateHandlerInterface;
+
 import java.util.List;
 
 /**
  * Created by ck on 2017/9/10.
  */
-
+@Deprecated
 public abstract class BaseAdapterRecord<T, E> extends RecyclerView.Adapter implements ShowStateInterface<E> {
     //全局id记录者
     protected static Recorder globalrecorder;
@@ -182,12 +186,13 @@ public abstract class BaseAdapterRecord<T, E> extends RecyclerView.Adapter imple
         super.onAttachedToRecyclerView(recyclerView);
         RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
         if (layoutManager instanceof GridLayoutManager) {
-         final GridLayoutManager manager = (GridLayoutManager) layoutManager;
+            GridLayoutManager manager = (GridLayoutManager) layoutManager;
+            final int spanCount = manager.getSpanCount();
             manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
                     int itemViewType = getItemViewType(position);
-                    return setIfGridLayoutManagerSpan(itemViewType,position,manager.getSpanCount()) ;
+                    return setIfGridLayoutManagerSpan(itemViewType,position,spanCount) ;
                 }
             });
         }
