@@ -74,6 +74,7 @@ public class PicDialog extends BaseBottomSheetDialog {
     @Override
     protected void initView(View view, Bundle savedInstanceState) {
         this.view=view;
+        setTitle("选择图片");
         setData(null);
         getRecent20().subscribe(new MyObserver<List<String>>(this) {
             @Override
@@ -170,12 +171,9 @@ public class PicDialog extends BaseBottomSheetDialog {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.pic, R.id.camera,R.id.close})
+    @OnClick({R.id.pic, R.id.camera})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.close:
-                dismiss();
-                break;
             case R.id.pic:
                 chosePic();
                 break;

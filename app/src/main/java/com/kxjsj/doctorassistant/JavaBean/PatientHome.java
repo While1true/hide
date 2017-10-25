@@ -1,10 +1,13 @@
 package com.kxjsj.doctorassistant.JavaBean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by vange on 2017/10/23.
  */
 
-public class PatientHome {
+public class PatientHome implements Parcelable {
 
 
     /**
@@ -23,17 +26,17 @@ public class PatientHome {
      */
 
     private String adress;
-    private long birthday;
+    private String birthday;
     private String department;
     private String diagnose;
     private String identity;
-    private long intime;
+    private String intime;
     private String page;
     private String patientNo;
     private String phoneNumber;
     private String pname;
     private String psex;
-    private long userid;
+    private String userid;
 
     public String getAdress() {
         return adress;
@@ -43,11 +46,11 @@ public class PatientHome {
         this.adress = adress;
     }
 
-    public long getBirthday() {
+    public String getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(long birthday) {
+    public void setBirthday(String birthday) {
         this.birthday = birthday;
     }
 
@@ -75,11 +78,11 @@ public class PatientHome {
         this.identity = identity;
     }
 
-    public long getIntime() {
+    public String getIntime() {
         return intime;
     }
 
-    public void setIntime(long intime) {
+    public void setIntime(String intime) {
         this.intime = intime;
     }
 
@@ -123,11 +126,62 @@ public class PatientHome {
         this.psex = psex;
     }
 
-    public long getUserid() {
+    public String getUserid() {
         return userid;
     }
 
-    public void setUserid(long userid) {
+    public void setUserid(String userid) {
         this.userid = userid;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.adress);
+        dest.writeString(this.birthday);
+        dest.writeString(this.department);
+        dest.writeString(this.diagnose);
+        dest.writeString(this.identity);
+        dest.writeString(this.intime);
+        dest.writeString(this.page);
+        dest.writeString(this.patientNo);
+        dest.writeString(this.phoneNumber);
+        dest.writeString(this.pname);
+        dest.writeString(this.psex);
+        dest.writeString(this.userid);
+    }
+
+    public PatientHome() {
+    }
+
+    protected PatientHome(Parcel in) {
+        this.adress = in.readString();
+        this.birthday = in.readString();
+        this.department = in.readString();
+        this.diagnose = in.readString();
+        this.identity = in.readString();
+        this.intime = in.readString();
+        this.page = in.readString();
+        this.patientNo = in.readString();
+        this.phoneNumber = in.readString();
+        this.pname = in.readString();
+        this.psex = in.readString();
+        this.userid = in.readString();
+    }
+
+    public static final Parcelable.Creator<PatientHome> CREATOR = new Parcelable.Creator<PatientHome>() {
+        @Override
+        public PatientHome createFromParcel(Parcel source) {
+            return new PatientHome(source);
+        }
+
+        @Override
+        public PatientHome[] newArray(int size) {
+            return new PatientHome[size];
+        }
+    };
 }

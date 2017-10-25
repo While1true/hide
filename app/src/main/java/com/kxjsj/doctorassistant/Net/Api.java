@@ -59,10 +59,6 @@ public interface Api {
     @GET("patient/getPatient")
     Observable<BaseBean<Patient>>getBedInfo(@Query("patientNo") String patientNo);
 
-    @POST("login/bindXiaomi")
-    @FormUrlEncoded
-    Observable<BaseBean> bindXiaomi(@Field("userid")String userid,@Field("id")String xiaomiId,@Field("token")String token);
-
     @GET("doctor/getAllDoctor")
     Observable<BaseBean<ArrayList<DoctorBean>>>getAllDoctor(@Query("token")String token);
 
@@ -71,5 +67,14 @@ public interface Api {
 
     @GET("patient/getPatientByDepartment")
     Observable<BaseBean<ArrayList<PatientHome>>>getPatientByDepartment(@Query("token")String token, @Query("department")String department);
+
+    @FormUrlEncoded
+    @POST("login/bindXiaomi")
+    Observable<BaseBean>bindXiaomiId(@Field("userid")String userid,@Field("id")String xiaomiID
+    ,@Field("token")String token,@Field("type") int type);
+
+    @FormUrlEncoded
+    @POST("login/getUserInfo")
+    Observable<BaseBean>getUserInfo(@Field("userid")String userid,@Field("token")String token,@Field("type") int type);
 
 }

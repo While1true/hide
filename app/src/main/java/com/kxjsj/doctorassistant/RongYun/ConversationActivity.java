@@ -53,6 +53,7 @@ public class ConversationActivity extends BaseTitleActivity implements RongYunIn
 
         mTargetId = intent.getData().getQueryParameter("targetId");
         mTargetIds = intent.getData().getQueryParameter("targetIds");
+        String title = intent.getData().getQueryParameter("title");
         //intent.getData().getLastPathSegment();//获得当前会话类型
         mConversationType = Conversation.ConversationType.valueOf(intent.getData().getLastPathSegment().toUpperCase(Locale.getDefault()));
         setTitle(mTargetId);

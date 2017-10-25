@@ -14,6 +14,7 @@ import com.kxjsj.doctorassistant.Appxx.Doctor.RadioActivityD;
 import com.kxjsj.doctorassistant.Constant.Session;
 import com.kxjsj.doctorassistant.Rx.RxLifeUtils;
 import com.kxjsj.doctorassistant.Utils.MyToast;
+import com.kxjsj.doctorassistant.View.IndicateImageView;
 
 
 public class MainActivity extends AppCompatActivity {

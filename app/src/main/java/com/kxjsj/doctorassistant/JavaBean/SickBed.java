@@ -27,7 +27,7 @@ public class SickBed {
     private int floorid;
     private int id;
     private int isfree;
-    private int patient_no;
+    private String patientNo;
     private int roomid;
     private int status;
 
@@ -63,12 +63,12 @@ public class SickBed {
         this.isfree = isfree;
     }
 
-    public int getPatient_no() {
-        return patient_no;
+    public String getPatientNo() {
+        return patientNo;
     }
 
-    public void setPatient_no(int patient_no) {
-        this.patient_no = patient_no;
+    public void setPatientNo(String patientNo) {
+        this.patientNo = patientNo;
     }
 
     public int getRoomid() {

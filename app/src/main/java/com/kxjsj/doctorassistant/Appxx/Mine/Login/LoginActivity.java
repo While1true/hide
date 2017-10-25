@@ -1,6 +1,7 @@
 package com.kxjsj.doctorassistant.Appxx.Mine.Login;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -26,6 +27,8 @@ import com.kxjsj.doctorassistant.Utils.RegularUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.rong.imkit.RongIM;
+import io.rong.imlib.model.UserInfo;
 
 /**
  * Created by vange on 2017/10/13.
@@ -107,6 +110,24 @@ public class LoginActivity extends BaseTitleActivity {
                     public void OnNEXT(Session o) {
                        o.setType(checked);
                         K2JUtils.put("userinfo",o.toString());
+                        if (!TextUtils.isEmpty(K2JUtils.get("xiaomiId","")))
+                        ApiController.bindXiaomiId(o.getUserid(),K2JUtils.get("xiaomiId",""),o.getToken(),o.getType())
+                        .subscribe(new DataObserver(LoginActivity.this) {
+                            @Override
+                            public void OnNEXT(Object bean) {
+                                if (Constance.DEBUGTAG)
+                                    Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "OnNEXT: 绑定小米成功");
+                            }
+
+                            @Override
+                            public void OnERROR(String error) {
+                                if (Constance.DEBUGTAG)
+                                    Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "OnERROR: "+error);
+                                super.OnERROR(error);
+                            }
+                        });
+                        
+                        RongIM.getInstance().refreshUserInfoCache(new UserInfo(o.getUserid(), o.getUsername(), Uri.parse(o.getImgUrl())));
                         if (Constance.DEBUGTAG)
                             Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "OnNEXT: "+o.toString());
                         if(checked==0){

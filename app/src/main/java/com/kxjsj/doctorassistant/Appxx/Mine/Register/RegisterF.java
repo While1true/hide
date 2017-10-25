@@ -1,6 +1,7 @@
 package com.kxjsj.doctorassistant.Appxx.Mine.Register;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
@@ -33,6 +34,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import io.reactivex.annotations.NonNull;
+import io.rong.imkit.RongIM;
+import io.rong.imlib.model.UserInfo;
 
 /**
  * Created by vange on 2017/10/9.
@@ -118,6 +121,7 @@ public class RegisterF extends BaseFragment {
                             Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "OnNEXT: "+session.toString());
                         session.setType(RegisterActivity.type);
                         K2JUtils.put("userinfo",session.toString());
+                        RongIM.getInstance().refreshUserInfoCache(new UserInfo(session.getUserid(), session.getUsername(), Uri.parse(session.getImgUrl())));
 //                        RxBus.getDefault().post(new BaseBean<Session>(Constance.Rxbus.LOGIN_SUCCESS, session));
                         if(RegisterActivity.type==0){
                             startActivity(new Intent(getContext(), RadioActivity.class));

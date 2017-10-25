@@ -9,8 +9,16 @@ import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 
+import com.kxjsj.doctorassistant.App;
 import com.kxjsj.doctorassistant.Constant.Constance;
+import com.kxjsj.doctorassistant.JavaBean.KotlinBean;
+import com.kxjsj.doctorassistant.Mi.MiPushUtils;
+import com.kxjsj.doctorassistant.Net.ApiController;
+import com.kxjsj.doctorassistant.Rx.DataObserver;
+import com.xiaomi.mipush.sdk.MiPushClient;
 
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
 import io.rong.imkit.RongIM;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
@@ -26,17 +34,18 @@ public class RongYunInitialUtils {
     public static void init(Application application) {
         if (Constance.DEBUGTAG)
             Log.i(Constance.DEBUG + "--"  + "--", "init: ----");
-        /**
-         * miAppId
-         * miAppKey
-         */
-        RongPushClient.registerMiPush(application, "2882303761517618970", "5841761810970");
+        MiPushUtils.init(application);
         /**
          *
          * OnCreate 会被多个进程重入，这段保护代码，确保只有您需要使用 RongIM 的进程和 Push 进程执行了 init。
          * io.rong.push 为融云 push 进程名称，不可修改。
          */
         if (application.getApplicationInfo().packageName.equals(getCurProcessName(application))) {
+            /**
+             * miAppId
+             * miAppKey
+             */
+            RongPushClient.registerMiPush(application, "2882303761517618970", "5841761810970");
             /**
              * IMKit SDK调用第一步 初始化
              */
@@ -114,7 +123,14 @@ public class RongYunInitialUtils {
              * 刷新用户缓存数据。
              *RongIM.getInstance().refreshUserInfoCache(new UserInfo("userId", "啊明", Uri.parse("http://rongcloud-web.qiniudn.com/docs_demo_rongcloud_logo.png")));
              */
-            RongIM.setUserInfoProvider(s -> new UserInfo(s, "你好", Uri.parse("https://www.baidu.com/img/bd_logo1.png")), true);
+            RongIM.setUserInfoProvider(s -> {
+                ApiController.getUserInfo(s, App.getToken(),App.getUserInfo().getType()==0?1:0)
+                        .subscribe(baseBean -> {
+                            if (Constance.DEBUGTAG)
+                                Log.i(Constance.DEBUG + "--" +  "--", "init: "+baseBean.toString());
+                        });
+               return new UserInfo(s, s, Uri.parse("https://www.baidu.com/img/bd_logo1.png"));
+            }, true);
         }
     }
 

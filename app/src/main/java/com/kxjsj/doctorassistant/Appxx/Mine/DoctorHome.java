@@ -79,7 +79,7 @@ public class DoctorHome extends BaseTitleActivity {
                         holder.setOnClickListener(R.id.ask, v -> {
                             askQuestion(bean.getUserid());
                         });
-                        holder.setOnClickListener(R.id.communicate, view -> ConversationUtils.startChartSingle(DoctorHome.this,bean.getDepartment()+"/"+bean.getName(),bean.getUserid()));
+                        holder.setOnClickListener(R.id.communicate, view -> ConversationUtils.startChartSingle(DoctorHome.this,bean.getUserid(),bean.getDepartment()+"/"+bean.getName()));
                     }
 
                     @Override
@@ -95,9 +95,11 @@ public class DoctorHome extends BaseTitleActivity {
 
                         startButtonAnimator(holder);
                         holder.setOnClickListener(R.id.ask, v -> {
-                            ConversationUtils.startChartSingle(DoctorHome.this,bean.getDepartment()+"/"+bean.getName(),bean.getUserid());
+                            askQuestion(bean.getUserid());
                         });
-                        holder.setOnClickListener(R.id.communicate, view -> askQuestion(bean.getUserid()));
+                        holder.setOnClickListener(R.id.communicate, view ->   {
+                            ConversationUtils.startChartSingle(DoctorHome.this,bean.getUserid(),bean.getDepartment()+"/"+bean.getName());
+                        });
                     }
 
                     @Override

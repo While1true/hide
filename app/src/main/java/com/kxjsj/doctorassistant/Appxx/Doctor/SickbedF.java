@@ -86,15 +86,17 @@ public class SickbedF extends BaseFragment {
                         TextView tv = holder.getView(R.id.tv);
                         if (item.getIsfree() == 0) {
                             iv.setImageResource(R.drawable.ic_avaliable);
-                            tv.setText("病号" + item.getPatient_no());
+                            tv.setText("病号" + item.getPatientNo());
                         } else {
                             iv.setImageResource(R.drawable.ic_lived);
                             tv.setText(item.getFloorid() + "楼" + item.getBedid() + item.getRoomid());
                         }
 
                         holder.itemView.setOnClickListener(view -> {
-
+                            if (Constance.DEBUGTAG)
+                                Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onBind: "+item.getPatientNo());
                             Intent intent = new Intent(view.getContext(), SickerHome.class);
+                            intent.putExtra("patientNo",item.getPatientNo());
                             startActivity(intent);
                         });
 
@@ -133,6 +135,7 @@ public class SickbedF extends BaseFragment {
             public void OnNEXT(List<SickBed> sickBeds) {
                 System.out.println(sickBeds);
                 int lastid = -1;
+                list.clear();
                 list.addAll(sickBeds);
                 Collections.copy(list, sickBeds);
                 for (int i = 0; i < sickBeds.size(); i++) {

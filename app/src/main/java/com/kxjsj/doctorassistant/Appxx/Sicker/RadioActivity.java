@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RadioGroup;
 
+import com.kxjsj.doctorassistant.App;
 import com.kxjsj.doctorassistant.Appxx.MineF;
 import com.kxjsj.doctorassistant.Component.BaseTitleActivity;
 import com.kxjsj.doctorassistant.Constant.Constance;
@@ -56,13 +57,6 @@ public class RadioActivity extends BaseTitleActivity implements RadioGroup.OnChe
         if (Constance.DEBUGTAG)
             Log.i(Constance.DEBUG, "initView: ------" + (savedInstanceState == null));
         initial(savedInstanceState);
-        RongIM.getInstance().addUnReadMessageCountChangedObserver(this
-
-                , Conversation.ConversationType.CHATROOM,
-                Conversation.ConversationType.NONE,
-                Conversation.ConversationType.SYSTEM,
-                Conversation.ConversationType.PRIVATE,
-                Conversation.ConversationType.GROUP);
 
         rgGroup.setOnCheckedChangeListener(this);
         rgGroup.check(checkedID);
@@ -131,8 +125,9 @@ public class RadioActivity extends BaseTitleActivity implements RadioGroup.OnChe
          * 请求权限
          */
         requestPermission();
-
-        RongIM.connect("R3MgS7AhFNxrhpDztEpoplFxw0DW8w3nZrGY+2LJ4XXkSJIiJ+BLdqkUWbaMjOQlxaJYgGxwsjlPZAoHyx/J+w==", new RongIMClient.ConnectCallback() {
+        if (Constance.DEBUGTAG)
+            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--ss", "initial: "+App.getUserInfo().getRongToken());
+        RongIM.connect(App.getUserInfo().getRongToken(), new RongIMClient.ConnectCallback() {
             @Override
             public void onTokenIncorrect() {
                 if (Constance.DEBUGTAG)
@@ -141,6 +136,13 @@ public class RadioActivity extends BaseTitleActivity implements RadioGroup.OnChe
 
             @Override
             public void onSuccess(String s) {
+                RongIM.getInstance().addUnReadMessageCountChangedObserver(RadioActivity.this
+
+                        , Conversation.ConversationType.CHATROOM,
+                        Conversation.ConversationType.NONE,
+                        Conversation.ConversationType.SYSTEM,
+                        Conversation.ConversationType.PRIVATE,
+                        Conversation.ConversationType.GROUP);
                 if (Constance.DEBUGTAG)
                     Log.i(Constance.DEBUG, "onSuccess: ");
             }
@@ -148,7 +150,7 @@ public class RadioActivity extends BaseTitleActivity implements RadioGroup.OnChe
             @Override
             public void onError(RongIMClient.ErrorCode errorCode) {
                 if (Constance.DEBUGTAG)
-                    Log.i(Constance.DEBUG, "onError: ");
+                    Log.i(Constance.DEBUG, "onError: "+errorCode.getMessage()+errorCode.getValue());
             }
         });
     }
@@ -296,6 +298,6 @@ public class RadioActivity extends BaseTitleActivity implements RadioGroup.OnChe
 
     @Override
     public void onCountChanged(int i) {
-        tipTextView.setIndicate(i);
+        tipTextView.post(() -> tipTextView.setIndicate(i));
     }
 }

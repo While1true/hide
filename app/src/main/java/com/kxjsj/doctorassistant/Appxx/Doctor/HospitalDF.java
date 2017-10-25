@@ -87,7 +87,11 @@ public class HospitalDF extends BaseFragment {
                         holder.setTextColor(R.id.question, getResources().getColor(position < 6 ? R.color.colorecRed : R.color.navi_checked));
                         holder.setText(R.id.answer, position < 6 ? "待处理" : item);
 
-                        holder.itemView.setOnClickListener(view -> startActivity(new Intent(view.getContext(), SickerHome.class)));
+                        holder.itemView.setOnClickListener(view -> {
+//                            Intent intent = new Intent(view.getContext(), SickerHome.class);
+//                            intent.putExtra("")
+//                            startActivity(intent);
+                        });
                         holder.itemView.setOnLongClickListener(v -> {
                             new MaterialDialog.Builder(v.getContext())
                                     .title("标记为已处理")

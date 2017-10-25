@@ -8,8 +8,10 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 
+import com.kxjsj.doctorassistant.Constant.Constance;
 import com.kxjsj.doctorassistant.R;
 
 
@@ -53,8 +55,10 @@ public class IndicateImageView extends android.support.v7.widget.AppCompatImageV
 
     RectF rect = new RectF();
     @Override
-    public void onDrawForeground(Canvas canvas) {
-        super.onDrawForeground(canvas);
+    public void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        if (Constance.DEBUGTAG)
+            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onDrawForeground: "+indicate+"--"+indicateColor);
         /**
          * 等于0不画
          */
@@ -119,6 +123,8 @@ public class IndicateImageView extends android.support.v7.widget.AppCompatImageV
     }
 
     public void setIndicate(int indicate) {
+        if (Constance.DEBUGTAG)
+            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "setIndicate: "+indicate);
         this.indicate = indicate;
         invalidate();
     }

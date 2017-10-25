@@ -7,11 +7,11 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.ck.hello.nestrefreshlib.View.Adpater.Base.SimpleViewHolder;
-import com.ck.hello.nestrefreshlib.View.Adpater.SBaseMutilAdapter;
+import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.PositionHolder;
+import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.SAdapter;
 import com.ck.hello.nestrefreshlib.View.RefreshViews.SRecyclerView;
 import com.kxjsj.doctorassistant.Component.BaseTitleActivity;
 import com.kxjsj.doctorassistant.Constant.Constance;
-import com.kxjsj.doctorassistant.Holder.MyHolder;
 import com.kxjsj.doctorassistant.JavaBean.Patient;
 import com.kxjsj.doctorassistant.Net.ApiController;
 import com.kxjsj.doctorassistant.R;
@@ -20,7 +20,6 @@ import com.kxjsj.doctorassistant.Rx.DataObserver;
 import com.kxjsj.doctorassistant.Utils.K2JUtils;
 import com.kxjsj.doctorassistant.View.GradualButton;
 
-import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,9 +34,11 @@ public class SickerHome extends BaseTitleActivity {
 
     private String[] infos = {"检查报告", "用药信息"};
     private int[] dres = {R.drawable.ic_checkreport, R.drawable.ic_medicine};
-    private SBaseMutilAdapter adapter;
+    private SAdapter adapter;
     private boolean isfirst = true;
     Patient bean;
+
+    String patientNo;
 
     @Override
     protected int getContentLayoutId() {
@@ -46,18 +47,19 @@ public class SickerHome extends BaseTitleActivity {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-        setTitle("SickerHome");
+        setTitle(patientNo);
         ButterKnife.bind(this);
+        if(getIntent()!=null)
+            patientNo=getIntent().getStringExtra("patientNo");
+        if(savedInstanceState!=null&&patientNo==null)
+            patientNo=savedInstanceState.getString("patientNo");
 
         LinearLayoutManager manager = new LinearLayoutManager(this);
-        ArrayList list = new ArrayList(18);
-        for (int i = 0; i < 18; i++) {
-            list.add(i + "");
-        }
-        adapter = new SBaseMutilAdapter(list)
-                .addType(R.layout.sickerinfo, new MyHolder() {
+
+        adapter = new SAdapter()
+                .addType(R.layout.sickerinfo, new PositionHolder() {
                     @Override
-                    public void onBind(SimpleViewHolder holder, String item, int position) {
+                    public void onBind(SimpleViewHolder holder, int position) {
                         holder.setText(R.id.number,bean.getPatientNo());
                         holder.setText(R.id.name,bean.getPname());
                         holder.setText(R.id.bennumber,bean.getroomId());
@@ -66,23 +68,23 @@ public class SickerHome extends BaseTitleActivity {
                         holder.setText(R.id.callhelp, "事项提醒");
                         holder.setText(R.id.help, "交流沟通");
                         holder.setOnClickListener(R.id.callhelp, v -> {
-                            ConversationUtils.startChartSingle(SickerHome.this, bean.getPname(), bean.getphoneNumber());
+
                         });
                         holder.setOnClickListener(R.id.help, v -> {
-                            ConversationUtils.startChartSingle(SickerHome.this,bean.getPname(), bean.getphoneNumber());
+                            ConversationUtils.startChartSingle(SickerHome.this, bean.getphoneNumber(),bean.getPname());
 
                         });
                         startButtonAnimator(holder);
                     }
 
                     @Override
-                    public boolean istype(String item, int position) {
-                        return position == 0;
+                    public boolean istype(int position) {
+                        return position==0;
                     }
                 })
-                .addType(R.layout.label_layout, new MyHolder() {
+                .addType(R.layout.label_layout, new PositionHolder() {
                     @Override
-                    public void onBind(SimpleViewHolder holder, String item, int position) {
+                    public void onBind(SimpleViewHolder holder, int position) {
                         Drawable drawable = getResources().getDrawable(dres[position - 1]);
                         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
                         TextView tv = holder.getView(R.id.bt);
@@ -91,31 +93,31 @@ public class SickerHome extends BaseTitleActivity {
                     }
 
                     @Override
-                    public boolean istype(String item, int position) {
-                        return position < infos.length + 1;
+                    public boolean istype(int position) {
+                        return position<infos.length+1;
                     }
                 })
-                .addType(R.layout.title_layout, new MyHolder() {
+                .addType(R.layout.title_layout, new PositionHolder() {
                     @Override
-                    public void onBind(SimpleViewHolder holder, String item, int position) {
+                    public void onBind(SimpleViewHolder holder, int position) {
                         holder.setText(R.id.title, "提醒记录");
                     }
 
                     @Override
-                    public boolean istype(String item, int position) {
-                        return position == infos.length + 1;
+                    public boolean istype(int position) {
+                        return position==infos.length+1;
                     }
                 })
-                .addType(R.layout.doctor_answer_item, new MyHolder() {
+                .addType(R.layout.doctor_answer_item, new PositionHolder() {
                     @Override
-                    public void onBind(SimpleViewHolder holder, String item, int position) {
+                    public void onBind(SimpleViewHolder holder, int position) {
                         holder.setText(R.id.question, "提醒--10/12 8:41");
                         holder.setTextColor(R.id.question, getResources().getColor(R.color.navi_checked));
                         holder.setText(R.id.answer, "已知悉，正在准备换药");
                     }
 
                     @Override
-                    public boolean istype(String item, int position) {
+                    public boolean istype(int position) {
                         return true;
                     }
                 });
@@ -124,7 +126,7 @@ public class SickerHome extends BaseTitleActivity {
                 .setRefreshingListener(new SRecyclerView.OnRefreshListener() {
                     @Override
                     public void Refreshing() {
-                        doNet();
+                        doNet(patientNo);
                     }
                 });
         if (savedInstanceState != null)
@@ -138,14 +140,15 @@ public class SickerHome extends BaseTitleActivity {
 
     }
 
-    private void doNet() {
-        ApiController.getBedInfo("12580")
+    private void doNet(String painentNo) {
+        ApiController.getBedInfo(painentNo)
                 .subscribe(new DataObserver<Patient>(this) {
                     @Override
                     public void OnNEXT(Patient beanz) {
                         if (Constance.DEBUGTAG)
                             Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "OnNEXT: " + bean);
                         bean = beanz;
+                        adapter.setCount(20);
                         adapter.showNomore();
                         srecyclerview.notifyRefreshComplete();
                     }
@@ -171,5 +174,7 @@ public class SickerHome extends BaseTitleActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean("isfirst", isfirst);
+        if(bean!=null)
+        outState.putString("patientNo", patientNo);
     }
 }

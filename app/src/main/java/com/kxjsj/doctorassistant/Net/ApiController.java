@@ -89,25 +89,12 @@ public class ApiController {
 
     /**
      * 获取病床信息
-     * @param painentid
+     * @param painentNo
      * @return
      */
-    public static Observable getBedInfo(String painentid){
+    public static Observable getBedInfo(String painentNo){
         return InstanceHolder.api
-                .getBedInfo(painentid)
-                .compose(RxSchedulers.compose());
-    }
-
-    /**
-     * 绑定小米Id
-     * @param userid
-     * @param xiaomiId
-     * @param token
-     * @return
-     */
-    public static Observable bindXiaomi(String userid,String xiaomiId,String token){
-        return InstanceHolder.api
-                .bindXiaomi(userid,xiaomiId,token)
+                .getBedInfo(painentNo)
                 .compose(RxSchedulers.compose());
     }
 
@@ -130,9 +117,31 @@ public class ApiController {
     /**
      * 获取科室类目下的病人
      */
-    public static Observable<KotlinBean.BaseBean<ArrayList<PatientHome>>>getAgetPatientByDepartment(String token, String department){
+    public static Observable<KotlinBean.BaseBean<ArrayList<PatientHome>>>getPatientByDepartment(String token, String department){
         return InstanceHolder.api
                 .getPatientByDepartment(token,department)
                 .compose(RxSchedulers.compose());
+    }
+
+    /**
+     * 绑定小米id
+     */
+    public static Observable<KotlinBean.BaseBean>bindXiaomiId(String userid,String xiaomiID, String token,int type){
+        return InstanceHolder.api
+                .bindXiaomiId(userid,xiaomiID,token,type)
+                .compose(RxSchedulers.compose());
+    }
+
+    /**
+     * 根据id获取用户图像
+     * @param userid
+     * @param token
+     * @param type
+     * @return
+     */
+    public static Observable<KotlinBean.BaseBean>getUserInfo(String userid,String token,int type){
+        return InstanceHolder.api
+                .getUserInfo(userid,token,type);
+//                .compose(RxSchedulers.compose());
     }
 }

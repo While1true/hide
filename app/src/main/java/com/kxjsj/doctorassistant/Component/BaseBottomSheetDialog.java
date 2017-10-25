@@ -7,7 +7,11 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.kxjsj.doctorassistant.R;
 import com.kxjsj.doctorassistant.Rx.RxLifeUtils;
 import com.kxjsj.doctorassistant.Utils.InputUtils;
 
@@ -18,28 +22,46 @@ import com.kxjsj.doctorassistant.Utils.InputUtils;
 
 public abstract class BaseBottomSheetDialog extends BottomSheetDialogFragment {
 
+    private TextView title;
+    private ImageView close;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(getLayoutId(),container,false);
+
+        View parent = inflater.inflate(R.layout.dialog_base_layout, container, false);
+        title = parent.findViewById(R.id.title);
+        close = parent.findViewById(R.id.close);
+        close.setOnClickListener(view ->dismiss());
+        LinearLayout content = parent.findViewById(R.id.content);
+        View child = inflater.inflate(getLayoutId(), content, false);
+        content.addView(child);
+        return parent;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        initView(view,savedInstanceState);
+        initView(view, savedInstanceState);
     }
 
-    protected  abstract int getLayoutId();
+    protected abstract int getLayoutId();
 
-    protected abstract void initView(View view,Bundle savedInstanceState);
+    protected abstract void initView(View view, Bundle savedInstanceState);
+
+    public void setTitle(CharSequence charSequence) {
+        if (title != null) {
+            title.setText(charSequence);
+        }
+    }
 
 
     /**
      * show
+     *
      * @param manager
      */
-    public BaseBottomSheetDialog show(FragmentManager manager){
-        show(manager,getClass().getSimpleName());
+    public BaseBottomSheetDialog show(FragmentManager manager) {
+        show(manager, getClass().getSimpleName());
         return this;
     }
 

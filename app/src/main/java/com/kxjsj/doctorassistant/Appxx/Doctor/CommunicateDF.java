@@ -4,23 +4,29 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.ck.hello.nestrefreshlib.View.Adpater.Base.SimpleViewHolder;
 import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.DefaultStateListener;
-import com.ck.hello.nestrefreshlib.View.Adpater.SBaseMutilAdapter;
+import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.PositionHolder;
+import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.SAdapter;
 import com.ck.hello.nestrefreshlib.View.RefreshViews.SRecyclerView;
+import com.kxjsj.doctorassistant.App;
 import com.kxjsj.doctorassistant.Appxx.Mine.SickerHome;
 import com.kxjsj.doctorassistant.Component.BaseFragment;
-import com.kxjsj.doctorassistant.JavaBean.KotlinBean.Doctor;
+import com.kxjsj.doctorassistant.Constant.Constance;
+import com.kxjsj.doctorassistant.DialogAndPopWindow.DepartmentDialog;
+import com.kxjsj.doctorassistant.JavaBean.PatientHome;
+import com.kxjsj.doctorassistant.Net.ApiController;
 import com.kxjsj.doctorassistant.R;
+import com.kxjsj.doctorassistant.Rx.DataObserver;
 import com.kxjsj.doctorassistant.Screen.OrentionUtils;
-import com.kxjsj.doctorassistant.Utils.K2JUtils;
+import com.kxjsj.doctorassistant.View.GradualButton;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,27 +38,55 @@ import butterknife.Unbinder;
 
 public class CommunicateDF extends BaseFragment {
     int spancount;
+    @BindView(R.id.department)
+    GradualButton department;
     @BindView(R.id.srecyclerview)
     SRecyclerView srecyclerview;
     Unbinder unbinder;
-    private SBaseMutilAdapter baseMutilAdapter;
+    private SAdapter adapter;
     private GridLayoutManager manager;
+    String departmentStr;
+    ArrayList<PatientHome> beans;
+    private DepartmentDialog departmentDialog;
 
     @Override
     protected void initView(Bundle savedInstanceState) {
         setRetainInstance(true);
+        department.start(getResources().getColor(R.color.navi_unchecked), getResources().getColor(R.color.colorPrimary));
+        department.setOnClickListener(view -> {
+            if (departmentDialog == null) {
+                departmentDialog = new DepartmentDialog();
+                departmentDialog.setCallBack(obj -> {
+                    if (Constance.DEBUGTAG)
+                        Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "initView: "+obj.toString());
+                    departmentStr= (String) obj;
+                    srecyclerview.setRefreshing();
+                    loadData(departmentStr);
+                });
+            }
+            departmentDialog.show(getActivity().getSupportFragmentManager());
+        });
+        if (savedInstanceState != null) {
+            departmentStr = savedInstanceState.getString("department");
+            beans = savedInstanceState.getParcelableArrayList("bean");
+        }
+        if(departmentStr==null){
+            departmentStr=App.getUserInfo().getDepartment();
+        }
         if (!firstLoad) {
             loadLazy();
         }
     }
 
     /**
-     * 调到医生主页
+     * 调到病人主页
      *
      * @param bean
      */
-    private void go2SickHome(Doctor bean) {
-        startActivity(new Intent(getContext(), SickerHome.class));
+    private void go2SickHome(PatientHome bean) {
+        Intent intent = new Intent(getContext(), SickerHome.class);
+        intent.putExtra("patientNo", bean.getPatientNo());
+        startActivity(intent);
     }
 
     private void caculateSpanCount() {
@@ -64,77 +98,94 @@ public class CommunicateDF extends BaseFragment {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.srecyclerview;
+        return R.layout.hosptial_doctor_layout;
     }
 
     @Override
     protected void loadLazy() {
         caculateSpanCount();
 
-        List<Doctor> list = new ArrayList<>(100);
-        for (int i = 0; i < 100; i++) {
-            if (i % 10 == 0) {
-                Doctor bean1 = new Doctor(0, "xxx科" + (i / 10) + "病人", "共10人");
-                list.add(bean1);
-            }
-            Doctor bean = new Doctor(1, "xxx科" + (i / 10) + "病人", "xxx" + i % 10 + "病人");
-            list.add(bean);
-        }
-
-
         manager = new GridLayoutManager(getContext(), spancount);
-        baseMutilAdapter = new SBaseMutilAdapter(list)
-                .addType(R.layout.title_layout, new SBaseMutilAdapter.ITEMHOLDER<Doctor>() {
-
+        adapter = new SAdapter(beans)
+                .addType(R.layout.title_layout, new PositionHolder() {
                     @Override
-                    public void onBind(SimpleViewHolder holder, Doctor item, int position) {
-                        holder.setText(R.id.title, item.getTitle());
+                    public void onBind(SimpleViewHolder holder, int position) {
+                        holder.setText(R.id.title, departmentStr + "病人");
                     }
 
                     @Override
-                    public boolean istype(Doctor item, int position) {
-                        return item.getType() == 0;
-                    }
-
-                    @Override
-                    protected int gridSpanSize(Doctor item, int position) {
+                    public int gridSpanSize(int position) {
                         return manager.getSpanCount();
                     }
-                }).addType(R.layout.doctor, new SBaseMutilAdapter.ITEMHOLDER<Doctor>() {
+
                     @Override
-                    public void onBind(SimpleViewHolder holder, Doctor item, int position) {
-                        holder.itemView.setOnClickListener(view -> go2SickHome(item));
-                        holder.setText(R.id.doctor, item.getName());
+                    public boolean istype(int position) {
+                        return position == 0;
+                    }
+                }).addType(R.layout.doctor, new PositionHolder() {
+                    @Override
+                    public void onBind(SimpleViewHolder holder, int position) {
+                        holder.itemView.setOnClickListener(view -> go2SickHome(beans.get(position - 1)));
+                        holder.setText(R.id.doctor, beans.get(position - 1).getPname() + "\n" + beans.get(position - 1).getPhoneNumber());
                     }
 
                     @Override
-                    public boolean istype(Doctor item, int position) {
-                        return item.getType() == 1;
+                    public boolean istype(int position) {
+                        return true;
                     }
                 }).setStateListener(new DefaultStateListener() {
                     @Override
                     public void netError(Context context) {
-                        K2JUtils.toast("cuole", 1);
+                        loadData(departmentStr);
                     }
                 });
         srecyclerview.addDefaultHeaderFooter()
-                .setAdapter(manager, baseMutilAdapter)
+                .setAdapter(manager, adapter)
                 .setRefreshingListener(new SRecyclerView.OnRefreshListener() {
                     @Override
                     public void Refreshing() {
-                        srecyclerview.postDelayed(() -> {
-                            baseMutilAdapter.showState(SBaseMutilAdapter.SHOW_NOMORE, "无更多内容了");
-                            srecyclerview.notifyRefreshComplete();
-                        }, 1000);
-
+                            loadData(departmentStr);
                     }
                 });
-        if(firstLoad) {
+        if (firstLoad) {
             srecyclerview.setRefreshing();
-        }else{
-            baseMutilAdapter.showState(SBaseMutilAdapter.SHOW_NOMORE, "无更多内容了");
+        } else {
+            adapter.showState(SAdapter.SHOW_NOMORE, "无更多内容了");
         }
 
+    }
+
+    private void loadData(String department) {
+        ApiController.getPatientByDepartment(App.getToken(), department)
+                .subscribe(new DataObserver<ArrayList<PatientHome>>(this) {
+                    @Override
+                    public void OnNEXT(ArrayList<PatientHome> bean) {
+                        srecyclerview.notifyRefreshComplete();
+                        beans = bean;
+                        if(bean.size()==0)
+                            adapter.showState(SAdapter.SHOW_EMPTY, "无更多内容了");
+                        else{
+                            adapter.setCount(bean.size() + 1);
+                            adapter.showState(SAdapter.SHOW_NOMORE, "无更多内容了");
+                        }
+                    }
+
+                    @Override
+                    public void OnERROR(String error) {
+                        super.OnERROR(error);
+                        srecyclerview.notifyRefreshComplete();
+                        adapter.ShowError();
+                    }
+                });
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (beans != null)
+            outState.putParcelableArrayList("bean", beans);
+        if (departmentStr != null)
+            outState.putString("department", departmentStr);
     }
 
     @Override

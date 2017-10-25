@@ -227,7 +227,15 @@
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
             </intent-filter>
         </receiver>
-
+        <provider
+        android:name=".Mi.MyRongProvider"
+        android:authorities="com.kxjsj.doctorassistant.FileProvider"
+        android:grantUriPermissions="true"
+        android:exported="false">
+        <meta-data
+        android:name="android.support.FILE_PROVIDER_PATHS"
+        android:resource="@xml/rc_file_path"/>
+        </provider>
         <provider
             android:name=".Mi.MyProvider"
             android:authorities="com.kxjsj.doctorassistant.selfupdate.fileprovider"
