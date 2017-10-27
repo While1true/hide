@@ -158,12 +158,7 @@ public class PicDialog extends BaseBottomSheetDialog {
         return rootView;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        BottomSheetBehavior.from(view.getRootView().findViewById(android.support.design.R.id.design_bottom_sheet)).setState(BottomSheetBehavior.STATE_EXPANDED);
 
-    }
 
     @Override
     public void onDestroyView() {

@@ -24,6 +24,7 @@ public abstract class DataObserver<T> implements Observer<KotlinBean.BaseBean<T>
     @Override
     public void onSubscribe(Disposable d) {
         this.d = d;
+        if(null!=tag)
         RxLifeUtils.getInstance().add(tag, d);
     }
 

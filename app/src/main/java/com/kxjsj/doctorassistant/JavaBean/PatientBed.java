@@ -5,7 +5,7 @@ import java.io.Serializable;
 import com.kxjsj.doctorassistant.Utils.GsonUtils;
 
 
-public class Patient implements Serializable {
+public class PatientBed implements Serializable {
     private String patientNo;
 
     private String pname;

@@ -5,8 +5,9 @@ package com.kxjsj.doctorassistant.Net;
 
 import com.kxjsj.doctorassistant.Constant.Session;
 import com.kxjsj.doctorassistant.JavaBean.DoctorBean;
+import com.kxjsj.doctorassistant.JavaBean.KotlinBean;
 import com.kxjsj.doctorassistant.JavaBean.KotlinBean.BaseBean;
-import com.kxjsj.doctorassistant.JavaBean.Patient;
+import com.kxjsj.doctorassistant.JavaBean.PatientBed;
 import com.kxjsj.doctorassistant.JavaBean.PatientHome;
 import com.kxjsj.doctorassistant.JavaBean.SickBed;
 
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -36,45 +38,49 @@ public interface Api {
 
     /**
      * 判断该手机号是否注册
+     *
      * @return
      */
     @GET("login/authphone")
-    Observable<BaseBean> authPhone(@Query("userid")String userid,@Query("type") int type);
+    Observable<BaseBean> authPhone(@Query("userid") String userid, @Query("type") int type);
 
     @FormUrlEncoded
     @POST("login/register")
-    Observable<BaseBean<Session>>register(@Field("userid") String userid, @Field("type")int type
+    Observable<BaseBean<Session>> register(@Field("userid") String userid, @Field("type") int type
             , @Field("password") String password, @Field("medicalcard") String medicalcard);
 
     @FormUrlEncoded
     @POST("login/login")
-    Observable<BaseBean<Session>>login(@Field("userid") String userid
-            , @Field("password") String password, @Field("type")int type);
+    Observable<BaseBean<Session>> login(@Field("userid") String userid
+            , @Field("password") String password, @Field("type") int type);
 
     @FormUrlEncoded
     @POST("login/modifyPassword")
-    Observable<BaseBean>modifypassword(@Field("userid") String userid
-            , @Field("password") String password, @Field("type")int type);
+    Observable<BaseBean> modifypassword(@Field("userid") String userid
+            , @Field("password") String password, @Field("type") int type);
 
     @GET("patient/getPatient")
-    Observable<BaseBean<Patient>>getBedInfo(@Query("patientNo") String patientNo);
+    Observable<BaseBean<PatientBed>> getBedInfo(@Query("patientNo") String patientNo);
 
     @GET("doctor/getAllDoctor")
-    Observable<BaseBean<ArrayList<DoctorBean>>>getAllDoctor(@Query("token")String token);
+    Observable<BaseBean<ArrayList<DoctorBean>>> getAllDoctor(@Query("token") String token);
 
     @GET("patient/getDepartment")
-    Observable<BaseBean<ArrayList<String>>>getDepartment();
+    Observable<BaseBean<ArrayList<String>>> getDepartment();
 
     @GET("patient/getPatientByDepartment")
-    Observable<BaseBean<ArrayList<PatientHome>>>getPatientByDepartment(@Query("token")String token, @Query("department")String department);
+    Observable<BaseBean<ArrayList<PatientHome>>> getPatientByDepartment(@Query("token") String token, @Query("department") String department);
 
     @FormUrlEncoded
     @POST("login/bindXiaomi")
-    Observable<BaseBean>bindXiaomiId(@Field("userid")String userid,@Field("id")String xiaomiID
-    ,@Field("token")String token,@Field("type") int type);
+    Observable<BaseBean> bindXiaomiId(@Field("userid") String userid, @Field("id") String xiaomiID
+            , @Field("token") String token, @Field("type") int type);
 
     @FormUrlEncoded
     @POST("login/getUserInfo")
-    Observable<BaseBean>getUserInfo(@Field("userid")String userid,@Field("token")String token,@Field("type") int type);
+    Observable<BaseBean<KotlinBean.UserInfoBean>> getUserInfo(@Field("userid") String userid, @Field("token") String token, @Field("type") int type);
 
+
+    @POST("push/pushToUser")
+    Observable<BaseBean> pushToUser(@Body KotlinBean.PushBean bean);
 }

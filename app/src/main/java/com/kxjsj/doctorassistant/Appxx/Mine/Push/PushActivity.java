@@ -26,18 +26,12 @@ public class PushActivity extends BaseTitleActivity {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
+        ButterKnife.bind(this);
         toggle.getaSwitch().setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
             } else {
 
             }
         });
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
     }
 }

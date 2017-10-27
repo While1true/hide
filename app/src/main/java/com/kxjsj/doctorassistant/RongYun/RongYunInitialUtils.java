@@ -11,6 +11,7 @@ import android.view.View;
 
 import com.kxjsj.doctorassistant.App;
 import com.kxjsj.doctorassistant.Constant.Constance;
+import com.kxjsj.doctorassistant.Constant.Session;
 import com.kxjsj.doctorassistant.JavaBean.KotlinBean;
 import com.kxjsj.doctorassistant.Mi.MiPushUtils;
 import com.kxjsj.doctorassistant.Net.ApiController;
@@ -124,12 +125,19 @@ public class RongYunInitialUtils {
              *RongIM.getInstance().refreshUserInfoCache(new UserInfo("userId", "啊明", Uri.parse("http://rongcloud-web.qiniudn.com/docs_demo_rongcloud_logo.png")));
              */
             RongIM.setUserInfoProvider(s -> {
-                ApiController.getUserInfo(s, App.getToken(),App.getUserInfo().getType()==0?1:0)
-                        .subscribe(baseBean -> {
-                            if (Constance.DEBUGTAG)
-                                Log.i(Constance.DEBUG + "--" +  "--", "init: "+baseBean.toString());
+                Session userInfo = App.getUserInfo();
+                ApiController.getUserInfo(s, userInfo.getToken(),s.equals(userInfo.getUserid())? userInfo.getType():(userInfo.getType()==0?1:0))
+                        .subscribe(new DataObserver<KotlinBean.UserInfoBean>(null) {
+                            @Override
+                            public void OnNEXT(KotlinBean.UserInfoBean bean) {
+                                if (Constance.DEBUGTAG)
+                                    Log.i(Constance.DEBUG + "--" + "--图像", Thread.currentThread().getName() + "init: " + bean.toString());
+                                RongIM.getInstance().refreshUserInfoCache(new UserInfo(bean.getUserid(), bean.getUserName(), Uri.parse(bean.getImgUrl())));
+                            }
                         });
-               return new UserInfo(s, s, Uri.parse("https://www.baidu.com/img/bd_logo1.png"));
+                if (Constance.DEBUGTAG)
+                    Log.i(Constance.DEBUG + "--" + "图像--", "init: "+Thread.currentThread().getName());
+               return null;
             }, true);
         }
     }

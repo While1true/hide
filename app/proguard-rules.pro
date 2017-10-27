@@ -94,3 +94,6 @@ public static final int *;
 -keep class com.alipay.tscenter.** { *; }
 -keep class com.ta.utdid2.** { *;}
 -keep class com.ut.device.** { *;}
+
+-keep class com.kxjsj.doctorassistant.JavaBean.**{*;}
+-keep class com.kxjsj.doctorassistant.Constant.**{*;}

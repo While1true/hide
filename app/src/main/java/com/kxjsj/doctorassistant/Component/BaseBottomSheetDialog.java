@@ -2,6 +2,7 @@ package com.kxjsj.doctorassistant.Component;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
@@ -24,6 +25,7 @@ public abstract class BaseBottomSheetDialog extends BottomSheetDialogFragment {
 
     private TextView title;
     private ImageView close;
+    private LinearLayout view;
 
     @Nullable
     @Override
@@ -33,9 +35,9 @@ public abstract class BaseBottomSheetDialog extends BottomSheetDialogFragment {
         title = parent.findViewById(R.id.title);
         close = parent.findViewById(R.id.close);
         close.setOnClickListener(view ->dismiss());
-        LinearLayout content = parent.findViewById(R.id.content);
-        View child = inflater.inflate(getLayoutId(), content, false);
-        content.addView(child);
+        view = parent.findViewById(R.id.content);
+        View child = inflater.inflate(getLayoutId(), view, false);
+        view.addView(child);
         return parent;
     }
 
@@ -64,7 +66,12 @@ public abstract class BaseBottomSheetDialog extends BottomSheetDialogFragment {
         show(manager, getClass().getSimpleName());
         return this;
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        BottomSheetBehavior.from(view.getRootView().findViewById(android.support.design.R.id.design_bottom_sheet)).setState(BottomSheetBehavior.STATE_EXPANDED);
 
+    }
     @Override
     public void dismiss() {
         InputUtils.hideKeyboard(getDialog());

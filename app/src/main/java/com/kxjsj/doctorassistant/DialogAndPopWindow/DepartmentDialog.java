@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.ck.hello.nestrefreshlib.View.Adpater.Base.SimpleViewHolder;
 import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.DefaultStateListener;
+import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.PositionHolder;
 import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.SAdapter;
 import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.StringHolder;
 import com.ck.hello.nestrefreshlib.View.RefreshViews.SRecyclerView;

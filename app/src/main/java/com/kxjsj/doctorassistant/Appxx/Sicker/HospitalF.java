@@ -10,7 +10,9 @@ import android.widget.TextView;
 
 import com.ck.hello.nestrefreshlib.View.RefreshViews.SScrollview;
 import com.kxjsj.doctorassistant.Component.BaseFragment;
+import com.kxjsj.doctorassistant.DialogAndPopWindow.InputDialog;
 import com.kxjsj.doctorassistant.R;
+import com.kxjsj.doctorassistant.RongYun.ConversationUtils;
 import com.kxjsj.doctorassistant.View.GradualButton;
 import com.kxjsj.doctorassistant.View.MoveTextview;
 
@@ -62,11 +64,12 @@ public class HospitalF extends BaseFragment {
     TextView date;
     @BindView(R.id.level)
     TextView level;
+    private InputDialog inputDialog;
 
     @Override
     protected void initView(@Nullable Bundle savedInstanceState) {
         setRetainInstance(true);
-        seemore.start(seemore.getCurrentTextColor(), getResources().getColor(R.color.colorecRed),2000);
+        seemore.start(seemore.getCurrentTextColor(), getResources().getColor(R.color.colorecRed), 2000);
         buttoncallhelp.start(buttoncallhelp.getCurrentTextColor(), 0xff4070);
         buttonhelp.start(buttonhelp.getCurrentTextColor(), 0x4FB7DD);
         sscrollview.addDefaultHeaderFooter()
@@ -107,7 +110,7 @@ public class HospitalF extends BaseFragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.ll, R.id.id, R.id.checkinfo, R.id.medicalinfo, R.id.money, R.id.checke_price, R.id.roominfo})
+    @OnClick({R.id.ll, R.id.id, R.id.checkinfo, R.id.medicalinfo, R.id.money, R.id.checke_price, R.id.roominfo,R.id.callhelp,R.id.help})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll:
@@ -124,6 +127,21 @@ public class HospitalF extends BaseFragment {
                 break;
             case R.id.roominfo:
                 break;
+            case R.id.callhelp:
+//                ConversationUtils.sendMessage();
+                break;
+            case R.id.help:
+                showInputDialog();
+                break;
         }
     }
+
+    private void showInputDialog() {
+        if (inputDialog == null) {
+            inputDialog = new InputDialog();
+            inputDialog.setToUserid("12580");
+        }
+        inputDialog.show(getActivity().getSupportFragmentManager());
+    }
+
 }

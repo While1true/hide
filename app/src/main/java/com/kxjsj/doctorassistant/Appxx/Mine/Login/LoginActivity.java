@@ -24,6 +24,8 @@ import com.kxjsj.doctorassistant.Utils.EncryptUtils;
 import com.kxjsj.doctorassistant.Utils.K2JUtils;
 import com.kxjsj.doctorassistant.Utils.RegularUtils;
 
+import java.net.URLDecoder;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;

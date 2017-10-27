@@ -73,4 +73,6 @@ public class MiPushReceiver extends MiMessageReceiver {
         if (Constance.DEBUGTAG)
             Log.i(Constance.DEBUG, "onReceivePassThroughMessage: " + mMessage);
     }
+
+
 }

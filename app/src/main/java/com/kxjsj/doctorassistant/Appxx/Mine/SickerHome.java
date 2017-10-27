@@ -12,7 +12,7 @@ import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.SAdapter;
 import com.ck.hello.nestrefreshlib.View.RefreshViews.SRecyclerView;
 import com.kxjsj.doctorassistant.Component.BaseTitleActivity;
 import com.kxjsj.doctorassistant.Constant.Constance;
-import com.kxjsj.doctorassistant.JavaBean.Patient;
+import com.kxjsj.doctorassistant.JavaBean.PatientBed;
 import com.kxjsj.doctorassistant.Net.ApiController;
 import com.kxjsj.doctorassistant.R;
 import com.kxjsj.doctorassistant.RongYun.ConversationUtils;
@@ -36,7 +36,7 @@ public class SickerHome extends BaseTitleActivity {
     private int[] dres = {R.drawable.ic_checkreport, R.drawable.ic_medicine};
     private SAdapter adapter;
     private boolean isfirst = true;
-    Patient bean;
+    PatientBed bean;
 
     String patientNo;
 
@@ -142,9 +142,9 @@ public class SickerHome extends BaseTitleActivity {
 
     private void doNet(String painentNo) {
         ApiController.getBedInfo(painentNo)
-                .subscribe(new DataObserver<Patient>(this) {
+                .subscribe(new DataObserver<PatientBed>(this) {
                     @Override
-                    public void OnNEXT(Patient beanz) {
+                    public void OnNEXT(PatientBed beanz) {
                         if (Constance.DEBUGTAG)
                             Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "OnNEXT: " + bean);
                         bean = beanz;

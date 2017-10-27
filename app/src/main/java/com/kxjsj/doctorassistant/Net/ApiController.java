@@ -139,9 +139,20 @@ public class ApiController {
      * @param type
      * @return
      */
-    public static Observable<KotlinBean.BaseBean>getUserInfo(String userid,String token,int type){
+    public static Observable<KotlinBean.BaseBean<KotlinBean.UserInfoBean>>getUserInfo(String userid,String token,int type){
         return InstanceHolder.api
                 .getUserInfo(userid,token,type);
 //                .compose(RxSchedulers.compose());
+    }
+
+    /**
+     * 发送push请求
+     * @param params
+     * @return
+     */
+    public static Observable<KotlinBean.BaseBean>pushToUser(KotlinBean.PushBean params){
+        return InstanceHolder.api
+                .pushToUser(params)
+                .compose(RxSchedulers.compose());
     }
 }
