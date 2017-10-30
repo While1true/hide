@@ -50,9 +50,10 @@ object KotlinBean {
             var userid : String,
             var token : String,
             var fromid : String,
-            var content : String,
+            var content : String?,
             var type : Int,
-            var message_type :Int
+            var message_type :Int,
+            var reply :String
     )
 
 }

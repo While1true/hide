@@ -11,7 +11,6 @@ import com.kxjsj.doctorassistant.Screen.AdjustUtil;
 import com.kxjsj.doctorassistant.MobSMS.MessageUtils;
 import com.kxjsj.doctorassistant.Utils.GsonUtils;
 import com.kxjsj.doctorassistant.Utils.K2JUtils;
-import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 
 
 /**
@@ -53,7 +52,7 @@ public class App extends Application {
     private void init() {
         RongYunInitialUtils.init(this);
         MessageUtils.init(this);
-        ZXingLibrary.initDisplayOpinion(this);
+//        ZXingLibrary.initDisplayOpinion(this);
     }
 
 

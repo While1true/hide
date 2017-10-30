@@ -533,7 +533,6 @@ public final class R {
         public static final int catalog_listview = 0x7f0a00f0;
         public static final int catalog_window = 0x7f0a00ef;
         public static final int checkbox = 0x7f0a00fd;
-        public static final int circle = 0x7f0a0037;
         public static final int description = 0x7f0a00b6;
         public static final int enter = 0x7f0a00b7;
         public static final int evaluate_text = 0x7f0a00cd;
@@ -773,7 +772,6 @@ public final class R {
         public static final int select_check = 0x7f0a00ed;
         public static final int selected = 0x7f0a00f9;
         public static final int send = 0x7f0a00e8;
-        public static final int square = 0x7f0a0038;
         public static final int text = 0x7f0a00ec;
         public static final int textview2 = 0x7f0a00b2;
         public static final int toolbar_bottom = 0x7f0a00e9;
@@ -1196,11 +1194,11 @@ public final class R {
     }
     public static final class styleable {
         public static final int[] AsyncImageView = { 0x7f010000, 0x7f010001, 0x7f010002, 0x7f010003, 0x7f010004 };
-        public static final int AsyncImageView_RCCornerRadius = 1;
-        public static final int AsyncImageView_RCDefDrawable = 4;
-        public static final int AsyncImageView_RCMask = 2;
         public static final int AsyncImageView_RCMinShortSideSize = 0;
+        public static final int AsyncImageView_RCCornerRadius = 1;
+        public static final int AsyncImageView_RCMask = 2;
         public static final int AsyncImageView_RCShape = 3;
+        public static final int AsyncImageView_RCDefDrawable = 4;
         public static final int[] RongExtension = { 0x7f010005 };
         public static final int RongExtension_RCStyle = 0;
     }

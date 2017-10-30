@@ -481,6 +481,9 @@ public class SScrollview extends LinearLayout implements NestedScrollingParent, 
     }
 
     public void notifyRefreshComplete() {
+        if (animator != null) {
+            animator.cancel();
+        }
         long current = System.currentTimeMillis() - beginRefreshing;
         footerRefreshWrap.onComplete();
         headerRefreshWrap.onComplete();
@@ -490,7 +493,7 @@ public class SScrollview extends LinearLayout implements NestedScrollingParent, 
                 isLoading = false;
                 smoothScroll(scrolls / pullRate, 0, scrolls >= 0 ? SCROLLTYPE.PULLUP : SCROLLTYPE.PULLDOWN);
             }
-        }, current > 500 ? 100 : 500);
+        }, current > 500 ? 100 : 550);
     }
 
     @Override

@@ -80,7 +80,10 @@ public interface Api {
     @POST("login/getUserInfo")
     Observable<BaseBean<KotlinBean.UserInfoBean>> getUserInfo(@Field("userid") String userid, @Field("token") String token, @Field("type") int type);
 
-
+    @FormUrlEncoded
     @POST("push/pushToUser")
-    Observable<BaseBean> pushToUser(@Body KotlinBean.PushBean bean);
+    Observable<BaseBean> pushToUser( @Field("userid")String userid ,@Field("token")String token, @Field("fromid")String fromid,
+                                     @Field("content")String content ,
+                                     @Field("type")int type ,
+                                     @Field("message_type")int message_type );
 }

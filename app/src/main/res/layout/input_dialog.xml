@@ -13,6 +13,7 @@
         android:gravity="left|top"
         android:hint="请输入内容"
         app:counterEnabled="true"
+        app:hintTextAppearance="@style/textstyle"
         app:counterMaxLength="100"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -42,7 +43,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline13"
-        app:layout_constraintTop_toBottomOf="@+id/layout_input" />
+        app:layout_constraintTop_toBottomOf="@+id/layout_input"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="8dp" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline13"

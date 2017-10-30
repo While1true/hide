@@ -1,1 +1,1 @@
-include ':app', ':nestrefreshlib', ':IMLib', ':IMKit', ':lib-zxing'
+include ':app', ':nestrefreshlib', ':IMLib', ':IMKit'

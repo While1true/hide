@@ -83,12 +83,13 @@ public class InputDialog extends BaseBottomSheetDialog {
             return;
         }
         Session userInfo = App.getUserInfo();
-        ApiController.pushToUser(new KotlinBean.PushBean(
+        ApiController.pushToUser(
                 toUserid,userInfo.getToken(),userInfo.getUserid(),
-                inputStr,userInfo.getType()==0?1:0,0))
+                inputStr,userInfo.getType()==0?1:0,0)
                 .subscribe(new DataObserver(this) {
                     @Override
                     public void OnNEXT(Object bean) {
+                        K2JUtils.toast("发送成功");
                         etInput.setText("");
                         InputUtils.hideKeyboard(etInput);
                         dismiss();

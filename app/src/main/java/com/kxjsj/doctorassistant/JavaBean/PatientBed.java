@@ -33,6 +33,83 @@ public class PatientBed implements Serializable {
     private String remark;
 
     private String balance;
+    private String intime,docname,docid,nurname,nurid;
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getFloorId() {
+        return floorId;
+    }
+
+    public void setFloorId(String floorId) {
+        this.floorId = floorId;
+    }
+
+    public String getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(String roomId) {
+        this.roomId = roomId;
+    }
+
+    public String getBedId() {
+        return bedId;
+    }
+
+    public void setBedId(String bedId) {
+        this.bedId = bedId;
+    }
+
+    public String getIntime() {
+        return intime;
+    }
+
+    public void setIntime(String intime) {
+        this.intime = intime;
+    }
+
+    public String getDocname() {
+        return docname;
+    }
+
+    public void setDocname(String docname) {
+        this.docname = docname;
+    }
+
+    public String getDocid() {
+        return docid;
+    }
+
+    public void setDocid(String docid) {
+        this.docid = docid;
+    }
+
+    public String getNurname() {
+        return nurname;
+    }
+
+    public void setNurname(String nurname) {
+        this.nurname = nurname;
+    }
+
+    public String getNurid() {
+        return nurid;
+    }
+
+    public void setNurid(String nurid) {
+        this.nurid = nurid;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
 
     private static final long serialVersionUID = 1L;
 

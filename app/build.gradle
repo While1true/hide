@@ -10,7 +10,7 @@ android {
         applicationId "com.kxjsj.doctorassistant"
         minSdkVersion 15
         targetSdkVersion 22
-//        multiDexEnabled = true
+        multiDexEnabled = true
         versionCode 1
         versionName "1.0"
         flavorDimensions "debug"

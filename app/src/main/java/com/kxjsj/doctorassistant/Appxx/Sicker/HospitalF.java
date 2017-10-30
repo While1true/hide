@@ -2,6 +2,7 @@ package com.kxjsj.doctorassistant.Appxx.Sicker;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 import com.ck.hello.nestrefreshlib.View.RefreshViews.SScrollview;
 import com.kxjsj.doctorassistant.App;
 import com.kxjsj.doctorassistant.Component.BaseFragment;
+import com.kxjsj.doctorassistant.Constant.Constance;
 import com.kxjsj.doctorassistant.Constant.Session;
 import com.kxjsj.doctorassistant.DialogAndPopWindow.InputDialog;
 import com.kxjsj.doctorassistant.JavaBean.KotlinBean;
@@ -184,19 +186,23 @@ public class HospitalF extends BaseFragment {
             case R.id.roominfo:
                 break;
             case R.id.callhelp:
+                if(beans==null)
+                    return;
                 Session userInfo = App.getUserInfo();
-                ApiController.pushToUser(new KotlinBean.PushBean(
-                        "12580",userInfo.getToken(),userInfo.getUserid(),
-                        null,userInfo.getType()==0?1:0,1))
+                ApiController.pushToUser(
+                        beans.getDocid(),userInfo.getToken(),userInfo.getUserid(),
+                        null,userInfo.getType()==0?1:0,1)
                         .subscribe(new DataObserver(this) {
                             @Override
                             public void OnNEXT(Object bean) {
-
+                             K2JUtils.toast("发送成功");
                             }
                         });
 //                ConversationUtils.sendMessage();
                 break;
             case R.id.help:
+                if(beans==null)
+                    return;
                 showInputDialog();
                 break;
         }
@@ -205,7 +211,7 @@ public class HospitalF extends BaseFragment {
     private void showInputDialog() {
         if (inputDialog == null) {
             inputDialog = new InputDialog();
-            inputDialog.setToUserid("12580");
+            inputDialog.setToUserid(beans.getDocid());
         }
         inputDialog.show(getActivity().getSupportFragmentManager());
     }
