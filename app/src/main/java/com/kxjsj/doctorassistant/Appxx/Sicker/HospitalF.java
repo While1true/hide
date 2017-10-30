@@ -127,6 +127,9 @@ public class HospitalF extends BaseFragment {
         bennumber.setText(bean.getroomId());
         instruction.setText(bean.getRemark());
         roominfo.setText(bean.getroomId());
+        nurse.setText(bean.getNurname());
+        level.setText("¥"+bean.getBalance());
+        date.setText("¥"+bean.getIntime());
 //                      date.setText(bean.get);
 //                      level.setText();
 //                      nurse.setText();
