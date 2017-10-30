@@ -7,12 +7,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ck.hello.nestrefreshlib.View.RefreshViews.SScrollview;
+import com.kxjsj.doctorassistant.App;
 import com.kxjsj.doctorassistant.Component.BaseFragment;
+import com.kxjsj.doctorassistant.Constant.Session;
 import com.kxjsj.doctorassistant.DialogAndPopWindow.InputDialog;
+import com.kxjsj.doctorassistant.JavaBean.KotlinBean;
+import com.kxjsj.doctorassistant.JavaBean.PatientBed;
+import com.kxjsj.doctorassistant.Net.ApiController;
 import com.kxjsj.doctorassistant.R;
 import com.kxjsj.doctorassistant.RongYun.ConversationUtils;
+import com.kxjsj.doctorassistant.Rx.DataObserver;
+import com.kxjsj.doctorassistant.Utils.InputUtils;
+import com.kxjsj.doctorassistant.Utils.K2JUtils;
 import com.kxjsj.doctorassistant.View.GradualButton;
 import com.kxjsj.doctorassistant.View.MoveTextview;
 
@@ -66,6 +75,7 @@ public class HospitalF extends BaseFragment {
     TextView level;
     private InputDialog inputDialog;
 
+    PatientBed beans;
     @Override
     protected void initView(@Nullable Bundle savedInstanceState) {
         setRetainInstance(true);
@@ -76,14 +86,51 @@ public class HospitalF extends BaseFragment {
                 .setRefreshingListener(new SScrollview.OnRefreshListener() {
                     @Override
                     public void Refreshing() {
-                        sscrollview.postDelayed(() -> {
-                            sscrollview.notifyRefreshComplete();
-                        }, 500);
+                    doNet();
                     }
                 });
-        if (firstLoad)
+        if(savedInstanceState!=null){
+            beans= (PatientBed) savedInstanceState.getSerializable("beans");
+        }
+        if(beans!=null)
+            updateUi(beans);
+        if (firstLoad||beans==null)
             sscrollview.setRefreshing();
 
+    }
+
+    private void doNet() {
+        ApiController.getBedInfo(
+                App.getUserInfo().getPatientNo())
+                .subscribe(new DataObserver<PatientBed>(this) {
+                    @Override
+                    public void OnNEXT(PatientBed bean) {
+                        if(bean==null){
+                            K2JUtils.toast("获取信息失败");
+                        }
+                        beans=bean;
+                        updateUi(bean);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        sscrollview.notifyRefreshComplete();
+                    }
+                });
+
+    }
+
+    private void updateUi(PatientBed bean) {
+        number.setText(bean.getPatientNo());
+        name.setText(bean.getPname());
+        bennumber.setText(bean.getroomId());
+        instruction.setText(bean.getRemark());
+        roominfo.setText(bean.getroomId());
+//                      date.setText(bean.get);
+//                      level.setText();
+//                      nurse.setText();
+        sscrollview.notifyRefreshComplete();
     }
 
     @Override
@@ -110,6 +157,12 @@ public class HospitalF extends BaseFragment {
         unbinder.unbind();
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("beans",beans);
+    }
+
     @OnClick({R.id.ll, R.id.id, R.id.checkinfo, R.id.medicalinfo, R.id.money, R.id.checke_price, R.id.roominfo,R.id.callhelp,R.id.help})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -128,6 +181,16 @@ public class HospitalF extends BaseFragment {
             case R.id.roominfo:
                 break;
             case R.id.callhelp:
+                Session userInfo = App.getUserInfo();
+                ApiController.pushToUser(new KotlinBean.PushBean(
+                        "12580",userInfo.getToken(),userInfo.getUserid(),
+                        null,userInfo.getType()==0?1:0,1))
+                        .subscribe(new DataObserver(this) {
+                            @Override
+                            public void OnNEXT(Object bean) {
+
+                            }
+                        });
 //                ConversationUtils.sendMessage();
                 break;
             case R.id.help:

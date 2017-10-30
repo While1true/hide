@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 <com.kxjsj.doctorassistant.View.SettingView
     android:id="@+id/toggle"
-    app:titletext="推送开关"
+    app:titletext="推送通知开关"
     app:showSwitch="true"
     android:background="@drawable/stoken_background_selector"
     android:clickable="true"

@@ -3,6 +3,7 @@ package com.kxjsj.doctorassistant.Net;
 
 import com.kxjsj.doctorassistant.JavaBean.DoctorBean;
 import com.kxjsj.doctorassistant.JavaBean.KotlinBean;
+import com.kxjsj.doctorassistant.JavaBean.PatientBed;
 import com.kxjsj.doctorassistant.JavaBean.PatientHome;
 import com.kxjsj.doctorassistant.Rx.RxSchedulers;
 
@@ -92,7 +93,7 @@ public class ApiController {
      * @param painentNo
      * @return
      */
-    public static Observable getBedInfo(String painentNo){
+    public static Observable<KotlinBean.BaseBean<PatientBed>> getBedInfo(String painentNo){
         return InstanceHolder.api
                 .getBedInfo(painentNo)
                 .compose(RxSchedulers.compose());

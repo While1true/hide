@@ -63,7 +63,7 @@ public class SickerHome extends BaseTitleActivity {
                         holder.setText(R.id.number,bean.getPatientNo());
                         holder.setText(R.id.name,bean.getPname());
                         holder.setText(R.id.bennumber,bean.getroomId());
-//                        holder.setText(R.id.instruction,bean.getRemark());
+                        holder.setText(R.id.instruction,bean.getRemark());
 
                         holder.setText(R.id.callhelp, "事项提醒");
                         holder.setText(R.id.help, "交流沟通");

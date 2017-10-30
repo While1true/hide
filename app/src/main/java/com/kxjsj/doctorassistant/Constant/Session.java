@@ -11,7 +11,7 @@ public class Session {
     String username;
     String imgUrl;
     String token;
-    String medicalcard;
+    String patientNo;
     String rongToken;
     String department;
     int type;
@@ -32,12 +32,12 @@ public class Session {
         this.type = type;
     }
 
-    public String getMedicalcard() {
-        return medicalcard;
+    public String getPatientNo() {
+        return patientNo;
     }
 
-    public void setMedicalcard(String medicalcard) {
-        this.medicalcard = medicalcard;
+    public void setPatientNo(String patientNo) {
+        this.patientNo = patientNo;
     }
 
     public String getUserid() {
