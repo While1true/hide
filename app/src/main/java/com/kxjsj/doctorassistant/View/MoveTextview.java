@@ -31,9 +31,17 @@ public class MoveTextview extends TextView {
     }
 
     private void start() {
+        start(null);
+    }
+
+    public void start(CharSequence charSequence){
         int measuredWidth = getMeasuredWidth();
         TextPaint paint = getPaint();
-        String string = getText().toString();
+        String string =null;
+        if(null==charSequence)
+            string= getText().toString();
+        else
+            string= charSequence.toString();
         float measureText = paint.measureText(string);
         /**
          * 前后增加空格达到跑马灯走动字数

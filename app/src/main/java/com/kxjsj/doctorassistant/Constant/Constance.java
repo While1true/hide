@@ -39,6 +39,16 @@ public class Constance {
          * 选择了照片
          */
         public static final int PIC=4;
+
+        /**
+         * 呼叫
+         */
+        public static final int CALLHELP=5;
+
+        /**
+         * 留言
+         */
+        public static final int COMMENT=6;
     }
 
 }

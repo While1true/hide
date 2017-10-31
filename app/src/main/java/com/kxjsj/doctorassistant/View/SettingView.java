@@ -25,7 +25,7 @@ import com.kxjsj.doctorassistant.R;
 
 
 /**
- *
+ *有什么属性才会添加相应控件，内存小，功能大
  * @author ck
  * @date 2017/10/18
  */

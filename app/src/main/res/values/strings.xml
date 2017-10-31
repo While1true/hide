@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">DoctorAssitant</string>
+    <string name="leftmoney">余额</string>
+    <string name="charge">充值</string>
+    <string name="medicalcard">就诊卡</string>
+    <string name="phone">手机号</string>
+    <string name="nickname">更改昵称</string>
+    <string name="changephoto">更换头像</string>
+    <string name="changepassword">密码修改</string>
+    <string name="idinfo">身份信息</string>
+    <string name="more">详细</string>
 </resources>

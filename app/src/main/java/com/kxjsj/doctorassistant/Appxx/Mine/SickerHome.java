@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import com.ck.hello.nestrefreshlib.View.Adpater.Base.SimpleViewHolder;
@@ -12,6 +13,7 @@ import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.SAdapter;
 import com.ck.hello.nestrefreshlib.View.RefreshViews.SRecyclerView;
 import com.kxjsj.doctorassistant.Component.BaseTitleActivity;
 import com.kxjsj.doctorassistant.Constant.Constance;
+import com.kxjsj.doctorassistant.DialogAndPopWindow.InputDialog;
 import com.kxjsj.doctorassistant.JavaBean.PatientBed;
 import com.kxjsj.doctorassistant.Net.ApiController;
 import com.kxjsj.doctorassistant.R;
@@ -39,6 +41,7 @@ public class SickerHome extends BaseTitleActivity {
     PatientBed bean;
 
     String patientNo;
+    private InputDialog inputDialog;
 
     @Override
     protected int getContentLayoutId() {
@@ -69,8 +72,8 @@ public class SickerHome extends BaseTitleActivity {
                         holder.setText(R.id.nurse,bean.getNurname());
                         holder.setText(R.id.callhelp, "事项提醒");
                         holder.setText(R.id.help, "交流沟通");
-                        holder.setOnClickListener(R.id.callhelp, v -> {
-
+                        holder.setOnClickListener(R.id.callhelp, (View v) -> {
+                                showDialog();
                         });
                         holder.setOnClickListener(R.id.help, v -> {
                             ConversationUtils.startChartSingle(SickerHome.this, bean.getphoneNumber(),bean.getPname());
@@ -140,6 +143,16 @@ public class SickerHome extends BaseTitleActivity {
             adapter.showNomore();
         }
 
+    }
+
+    private void showDialog() {
+        if(bean==null)
+            return;
+        if (inputDialog == null) {
+            inputDialog = new InputDialog();
+            inputDialog.setToUserid(bean.getPatientId());
+        }
+        inputDialog.show(getSupportFragmentManager());
     }
 
     private void doNet(String painentNo) {

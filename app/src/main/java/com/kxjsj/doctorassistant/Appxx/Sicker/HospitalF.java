@@ -1,5 +1,6 @@
 package com.kxjsj.doctorassistant.Appxx.Sicker;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -12,6 +13,11 @@ import android.widget.Toast;
 
 import com.ck.hello.nestrefreshlib.View.RefreshViews.SScrollview;
 import com.kxjsj.doctorassistant.App;
+import com.kxjsj.doctorassistant.Appxx.Mine.UserInfoActivity;
+import com.kxjsj.doctorassistant.Appxx.Mine.Wallet.WalletActivity;
+import com.kxjsj.doctorassistant.Appxx.Sicker.Hospital.IDInfoActivity;
+import com.kxjsj.doctorassistant.Appxx.Sicker.Hospital.RemindActivity;
+import com.kxjsj.doctorassistant.Appxx.Sicker.Hospital.SelfPayActivity;
 import com.kxjsj.doctorassistant.Component.BaseFragment;
 import com.kxjsj.doctorassistant.Constant.Constance;
 import com.kxjsj.doctorassistant.Constant.Session;
@@ -21,7 +27,11 @@ import com.kxjsj.doctorassistant.JavaBean.PatientBed;
 import com.kxjsj.doctorassistant.Net.ApiController;
 import com.kxjsj.doctorassistant.R;
 import com.kxjsj.doctorassistant.RongYun.ConversationUtils;
+import com.kxjsj.doctorassistant.Rx.BaseBean;
 import com.kxjsj.doctorassistant.Rx.DataObserver;
+import com.kxjsj.doctorassistant.Rx.MyObserver;
+import com.kxjsj.doctorassistant.Rx.RxSchedulers;
+import com.kxjsj.doctorassistant.Rx.Utils.RxBus;
 import com.kxjsj.doctorassistant.Utils.InputUtils;
 import com.kxjsj.doctorassistant.Utils.K2JUtils;
 import com.kxjsj.doctorassistant.View.GradualButton;
@@ -31,6 +41,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 /**
  * Created by vange on 2017/9/28.
@@ -99,6 +110,20 @@ public class HospitalF extends BaseFragment {
         if (firstLoad||beans==null)
             sscrollview.setRefreshing();
 
+        RxBus.getDefault().toObservable(
+                Constance.Rxbus.CALLHELP, BaseBean.class)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MyObserver<BaseBean>(this) {
+                    @Override
+                    public void onNext(BaseBean baseBean) {
+                        super.onNext(baseBean);
+                        if (Constance.DEBUGTAG)
+                            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onNext: "+baseBean);
+                       KotlinBean.PushBean bean= (KotlinBean.PushBean) baseBean.getData();
+                        movetext.start(bean.getFromName()+": "+bean.getContent());
+                    }
+                });
+
     }
 
     private void doNet() {
@@ -128,10 +153,9 @@ public class HospitalF extends BaseFragment {
         name.setText(bean.getPname());
         bennumber.setText(bean.getroomId());
         instruction.setText(bean.getRemark());
-        roominfo.setText(bean.getroomId());
         nurse.setText(bean.getNurname());
         level.setText("¥"+bean.getBalance());
-        date.setText("¥"+bean.getIntime());
+        date.setText(bean.getIntime());
 //                      date.setText(bean.get);
 //                      level.setText();
 //                      nurse.setText();
@@ -168,18 +192,26 @@ public class HospitalF extends BaseFragment {
         outState.putSerializable("beans",beans);
     }
 
-    @OnClick({R.id.ll, R.id.id, R.id.checkinfo, R.id.medicalinfo, R.id.money, R.id.checke_price, R.id.roominfo,R.id.callhelp,R.id.help})
+    @OnClick({R.id.ll,R.id.seemore, R.id.id, R.id.checkinfo, R.id.medicalinfo, R.id.money, R.id.checke_price, R.id.roominfo,R.id.callhelp,R.id.help})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.seemore:
             case R.id.ll:
+                startActivity(new Intent(getContext(), RemindActivity.class));
                 break;
             case R.id.id:
+//                if(beans==null)
+//                    return;
+                Intent intent = new Intent(getContext(), IDInfoActivity.class);
+                intent.putExtra("bean",beans);
+                startActivity(intent);
                 break;
             case R.id.checkinfo:
                 break;
             case R.id.medicalinfo:
                 break;
             case R.id.money:
+                startActivity(new Intent(getContext(), SelfPayActivity.class));
                 break;
             case R.id.checke_price:
                 break;
@@ -191,7 +223,7 @@ public class HospitalF extends BaseFragment {
                 Session userInfo = App.getUserInfo();
                 ApiController.pushToUser(
                         beans.getDocid(),userInfo.getToken(),userInfo.getUserid(),
-                        null,userInfo.getType()==0?1:0,1)
+                        "请求紧急呼叫",userInfo.getType()==0?1:0,1)
                         .subscribe(new DataObserver(this) {
                             @Override
                             public void OnNEXT(Object bean) {

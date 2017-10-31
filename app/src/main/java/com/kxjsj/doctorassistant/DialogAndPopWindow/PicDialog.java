@@ -24,6 +24,8 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.ck.hello.nestrefreshlib.View.Adpater.Base.SimpleViewHolder;
+import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.PositionHolder;
+import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.SAdapter;
 import com.ck.hello.nestrefreshlib.View.Adpater.SBaseAdapter;
 import com.kxjsj.doctorassistant.Component.BaseBottomSheetDialog;
 import com.kxjsj.doctorassistant.Constant.Constance;
@@ -62,7 +64,7 @@ public class PicDialog extends BaseBottomSheetDialog {
     @BindView(R.id.recyclerview)
     RecyclerView recyclerview;
     Unbinder unbinder;
-    private SBaseAdapter adapter;
+    private SAdapter adapter;
     private String filename;
     View view;
 
@@ -86,32 +88,44 @@ public class PicDialog extends BaseBottomSheetDialog {
                     adapter.notifyDataSetChanged();
                 }
             }
+
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                recyclerview.setVisibility(View.GONE);
+                adapter.notifyDataSetChanged();
+            }
         });
 
 
     }
 
-    private void setData(final List<String> strings) {
+    private void setData(List<String> strings) {
         LinearLayoutManager manager = new LinearLayoutManager(getContext(),
                 LinearLayoutManager.HORIZONTAL, false);
         GridLayoutManager manager2=new GridLayoutManager(getContext(),2);
-
         recyclerview.setLayoutManager(OrentionUtils.isPortrait(getContext())?manager:manager2);
-        adapter = new SBaseAdapter<String>(strings, R.layout.imageview) {
+        adapter = new SAdapter()
+        .addType(R.layout.imageview, new PositionHolder() {
             @Override
-            protected void onBindView(SimpleViewHolder holder, String item, int position) {
+            public void onBind(SimpleViewHolder holder, int position) {
                 Glide.with(getContext())
-                        .load(item)
+                        .load(strings.get(position))
                         .apply(MyOptions.getCircleRequestOptions())
                         .transition(MyOptions.getTransitionCrossFade())
 
                         .into((ImageView) holder.getView(R.id.imageview));
                 holder.itemView.setOnClickListener(v -> {
-                    RxBus.getDefault().post(new BaseBean(Constance.Rxbus.PIC, item));
+                    RxBus.getDefault().post(new BaseBean(Constance.Rxbus.PIC, strings.get(position)));
                     dismiss();
                 });
             }
-        };
+
+            @Override
+            public boolean istype(int position) {
+                return true;
+            }
+        });
         recyclerview.setAdapter(adapter);
     }
 

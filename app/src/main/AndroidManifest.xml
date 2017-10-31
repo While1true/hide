@@ -59,11 +59,11 @@
             android:windowSoftInputMode="stateHidden|adjustPan"
             android:launchMode="singleTask" />
 
-        <activity
-            android:name=".Utils.ZXingUtils$MyCaptureActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:launchMode="singleTask"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <!--<activity-->
+            <!--android:name=".Utils.ZXingUtils$MyCaptureActivity"-->
+            <!--android:configChanges="orientation|screenSize|keyboardHidden"-->
+            <!--android:launchMode="singleTask"-->
+            <!--android:windowSoftInputMode="stateHidden|adjustPan" />-->
         <activity
             android:name=".Appxx.Mine.SickerHome"
             android:configChanges="orientation|keyboardHidden"
@@ -81,6 +81,10 @@
 
         <activity android:name=".Appxx.Mine.UserInfoActivity"/>
         <activity android:name=".Appxx.Mine.Push.PushActivity"/>
+        <activity android:name=".Appxx.Sicker.Hospital.RemindActivity"/>
+        <activity android:name=".Appxx.Sicker.Hospital.IDInfoActivity"/>
+        <activity android:name=".Appxx.Mine.Wallet.WalletActivity"/>
+        <activity android:name=".Appxx.Sicker.Hospital.SelfPayActivity"/>
 
 
 

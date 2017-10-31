@@ -72,7 +72,7 @@
         android:id="@+id/money"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="用药信息"
+        android:text="自助缴费"
         android:paddingBottom="15dp"
         android:drawableTop="@drawable/ic_money_detail"
         android:textSize="@dimen/titlesize"

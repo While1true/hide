@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.AppCompatButton;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.widget.Button;
@@ -13,7 +14,7 @@ import android.widget.Button;
  * Created by vange on 2017/10/12.
  */
 
-public class GradualButton extends Button {
+public class GradualButton extends AppCompatButton {
 
 
     private ObjectAnimator objectAnimator;

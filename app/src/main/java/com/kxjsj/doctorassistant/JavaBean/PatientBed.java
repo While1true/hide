@@ -8,6 +8,8 @@ import com.kxjsj.doctorassistant.Utils.GsonUtils;
 public class PatientBed implements Serializable {
     private String patientNo;
 
+    private String patientId;
+
     private String pname;
 
     private String psex;
@@ -35,13 +37,14 @@ public class PatientBed implements Serializable {
     private String balance;
     private String intime,docname,docid,nurname,nurid;
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getPatientId() {
+        return patientId;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setPatientId(String patientId) {
+        this.patientId = patientId;
     }
+
 
     public String getFloorId() {
         return floorId;

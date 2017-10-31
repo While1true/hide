@@ -41,7 +41,7 @@ object KotlinBean {
     /**
      * 获取用户基本信息
      */
-    data class UserInfoBean constructor(var name : String,var userid : String,var imgUrl :String, var userName : String,var medicalCard :String)
+    data class UserInfoBean constructor(var name : String,var userid : String,var imgUrl :String, var userName : String,var patientNo :String)
 
     /**
      * 推送bean
@@ -50,6 +50,7 @@ object KotlinBean {
             var userid : String,
             var token : String,
             var fromid : String,
+            var fromName : String,
             var content : String?,
             var type : Int,
             var message_type :Int,

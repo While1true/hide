@@ -1,12 +1,19 @@
 package com.kxjsj.doctorassistant.Mi;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.kxjsj.doctorassistant.Appxx.Doctor.RadioActivityD;
+import com.kxjsj.doctorassistant.Appxx.Sicker.RadioActivity;
 import com.kxjsj.doctorassistant.Constant.Constance;
-import com.kxjsj.doctorassistant.Net.ApiController;
+import com.kxjsj.doctorassistant.JavaBean.KotlinBean;
+import com.kxjsj.doctorassistant.Rx.BaseBean;
+import com.kxjsj.doctorassistant.Rx.Utils.RxBus;
+import com.kxjsj.doctorassistant.Utils.GsonUtils;
 import com.kxjsj.doctorassistant.Utils.K2JUtils;
+import com.kxjsj.doctorassistant.Utils.NotificationUtils;
 import com.xiaomi.mipush.sdk.ErrorCode;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import com.xiaomi.mipush.sdk.MiPushCommandMessage;
@@ -62,6 +69,7 @@ public class MiPushReceiver extends MiMessageReceiver {
 
     @Override
     public void onReceivePassThroughMessage(Context context, MiPushMessage message) {
+        String description = message.getDescription();
         String mMessage = message.getContent();
         if (!TextUtils.isEmpty(message.getTopic())) {
             String mTopic = message.getTopic();
@@ -70,8 +78,31 @@ public class MiPushReceiver extends MiMessageReceiver {
         } else if (!TextUtils.isEmpty(message.getUserAccount())) {
             String mUserAccount = message.getUserAccount();
         }
+        /**
+         * 0:紧急呼叫 1：留言
+         */
+        if("0".equals(description)) {
+            KotlinBean.PushBean pushBean = GsonUtils.parse2Bean(mMessage, KotlinBean.PushBean.class);
+            if(pushBean!=null) {
+                RxBus.getDefault().post(new BaseBean<>(Constance.Rxbus.CALLHELP, pushBean));
+                showPush(context, pushBean);
+            }
+        }else if("1".equals(description)){
+            KotlinBean.PushBean pushBean = GsonUtils.parse2Bean(mMessage, KotlinBean.PushBean.class);
+            if(pushBean!=null) {
+                RxBus.getDefault().post(new BaseBean<>(Constance.Rxbus.COMMENT, pushBean));
+                showPush(context, pushBean);
+            }
+        }
         if (Constance.DEBUGTAG)
             Log.i(Constance.DEBUG, "onReceivePassThroughMessage: " + mMessage);
+    }
+
+    private void showPush(Context context, KotlinBean.PushBean pushBean) {
+        boolean showPush = K2JUtils.get("showPush", true);
+        if(showPush)
+        NotificationUtils.CreatNotification(context,
+                "医院助手",pushBean.getContent(),pushBean.getType()==0?new Intent(context, RadioActivity.class):new Intent(context, RadioActivityD.class));
     }
 
 
