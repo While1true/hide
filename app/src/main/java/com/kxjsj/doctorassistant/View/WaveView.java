@@ -35,9 +35,10 @@ public class WaveView extends View {
     private static final String TAG = "WaveView";
     private static final int DEFAULT_HEIGHT = 60;
     private Paint wavePaint;
+    int originlwave=dp2px(10);
     //振幅
-    private float waveAmplifier = dp2px(6);
-    private float waveAmplifier2 = dp2px(6);
+    private float waveAmplifier = originlwave;
+    private float waveAmplifier2 = originlwave;
     //开始角度
     private float wavePhase = 40;
     //频率
@@ -166,6 +167,7 @@ public class WaveView extends View {
         viewWidth = w;
         viewCenterY = 2 * viewHeight / 3;
         waveAmplifier = (waveAmplifier * 2 > viewHeight) ? (viewHeight / 2) : waveAmplifier;
+        waveAmplifier2=waveAmplifier;
         waveAnim();
     }
 
@@ -222,8 +224,8 @@ public class WaveView extends View {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 Float aFloat = Float.valueOf(animation.getAnimatedValue().toString());
-                waveAmplifier = 10f + 10 * aFloat;
-                waveAmplifier2 = 20f + 10 * (1f - aFloat);
+                waveAmplifier =originlwave + originlwave * aFloat;
+                waveAmplifier2 = 2*originlwave + originlwave * (1f - aFloat);
 
             }
         });

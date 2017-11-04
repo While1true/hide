@@ -1,1 +1,2 @@
-include ':app', ':nestrefreshlib', ':IMLib', ':IMKit'
+include ':app', ':IMLib', ':IMKit', ':nestrefreshlib1'
+project(':nestrefreshlib1').projectDir = new File('nestrefreshlib')

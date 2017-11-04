@@ -85,6 +85,7 @@
         <activity android:name=".Appxx.Sicker.Hospital.IDInfoActivity"/>
         <activity android:name=".Appxx.Mine.Wallet.WalletActivity"/>
         <activity android:name=".Appxx.Sicker.Hospital.SelfPayActivity"/>
+        <activity android:name=".Appxx.Sicker.Hospital.MedicalInfo"/>
 
 
 

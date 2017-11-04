@@ -48,13 +48,15 @@ object KotlinBean {
      */
     data class PushBean constructor(
             var userid : String,
+            var id : String,
             var token : String,
             var fromid : String,
             var fromName : String,
             var content : String?,
             var type : Int,
             var message_type :Int,
+            var creatorTime :String,
             var reply :String
-    )
+    ):Serializable
 
 }

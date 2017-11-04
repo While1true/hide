@@ -86,4 +86,27 @@ public interface Api {
                                      @Field("content")String content ,
                                      @Field("type")int type ,
                                      @Field("message_type")int message_type );
+
+    /**
+     * 获取所有收到的提醒通知
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("push/getAllPush")
+    Observable<BaseBean<ArrayList<KotlinBean.PushBean>>> getAllPush(
+            @Field("userid")String userid,
+            @Field("token")String token,
+            @Field("type")int type);
+
+
+    /**
+     * 回复通知
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("push/replyPush")
+    Observable<BaseBean> replyPush(@Field("id")String id,@Field("userid")String userid,
+                                   @Field("fromid")String fromid, @Field("type")int type,
+                                   @Field("token")String token,@Field("reply")String reply);
+
 }

@@ -223,7 +223,7 @@ public class HospitalF extends BaseFragment {
                 Session userInfo = App.getUserInfo();
                 ApiController.pushToUser(
                         beans.getDocid(),userInfo.getToken(),userInfo.getUserid(),
-                        "请求紧急呼叫",userInfo.getType()==0?1:0,1)
+                        "请求紧急呼叫",userInfo.getType(),1)
                         .subscribe(new DataObserver(this) {
                             @Override
                             public void OnNEXT(Object bean) {

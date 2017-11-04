@@ -582,7 +582,7 @@ public class SScrollview extends LinearLayout implements NestedScrollingParent, 
         scrollingParentHelper.onNestedScrollAccepted(child, target, axes);
     }
 
-    class MyScrollView extends NestedScrollView implements NestedScrollingChild, NestedScrollingParent {
+    private static class MyScrollView extends NestedScrollView implements NestedScrollingChild, NestedScrollingParent {
 
         public MyScrollView(Context context) {
             this(context, null);

@@ -1,0 +1,22 @@
+[
+    {
+        "merged": "D:\\demo\\DoctorAssitant\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-mdpi-v4\\notify_panel_notification_icon_bg.png",
+        "source": "C:\\Users\\乐城\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.0.1.aar\\655e8ac20db118dda3d166ca46197783\\res\\drawable-mdpi-v4\\notify_panel_notification_icon_bg.png"
+    },
+    {
+        "merged": "D:\\demo\\DoctorAssitant\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-mdpi-v4\\notification_bg_low_pressed.9.png",
+        "source": "C:\\Users\\乐城\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.0.1.aar\\655e8ac20db118dda3d166ca46197783\\res\\drawable-mdpi-v4\\notification_bg_low_pressed.9.png"
+    },
+    {
+        "merged": "D:\\demo\\DoctorAssitant\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-mdpi-v4\\notification_bg_low_normal.9.png",
+        "source": "C:\\Users\\乐城\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.0.1.aar\\655e8ac20db118dda3d166ca46197783\\res\\drawable-mdpi-v4\\notification_bg_low_normal.9.png"
+    },
+    {
+        "merged": "D:\\demo\\DoctorAssitant\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-mdpi-v4\\notification_bg_normal.9.png",
+        "source": "C:\\Users\\乐城\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.0.1.aar\\655e8ac20db118dda3d166ca46197783\\res\\drawable-mdpi-v4\\notification_bg_normal.9.png"
+    },
+    {
+        "merged": "D:\\demo\\DoctorAssitant\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-mdpi-v4\\notification_bg_normal_pressed.9.png",
+        "source": "C:\\Users\\乐城\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.0.1.aar\\655e8ac20db118dda3d166ca46197783\\res\\drawable-mdpi-v4\\notification_bg_normal_pressed.9.png"
+    }
+]

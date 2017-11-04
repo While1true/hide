@@ -5,6 +5,7 @@ import com.kxjsj.doctorassistant.JavaBean.DoctorBean;
 import com.kxjsj.doctorassistant.JavaBean.KotlinBean;
 import com.kxjsj.doctorassistant.JavaBean.PatientBed;
 import com.kxjsj.doctorassistant.JavaBean.PatientHome;
+import com.kxjsj.doctorassistant.JavaBean.SickBed;
 import com.kxjsj.doctorassistant.Rx.RxSchedulers;
 
 
@@ -12,16 +13,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
+import retrofit2.http.Field;
 
 /**
  * Created by vange on 2017/9/13.
  */
 
-public class ApiController {
+public class ApiController{
 
     private static class InstanceHolder {
         private static Api api = RetrofitHttpManger.create(Api.class);
     }
+
+
 
 
     /**
@@ -29,13 +33,11 @@ public class ApiController {
      *
      * @return
      */
-    public static Observable getAllBeds() {
+    public static Observable<KotlinBean.BaseBean<List<SickBed>>> getAllBeds() {
         return InstanceHolder.api
                 .getAllBeds()
                 .compose(RxSchedulers.compose());
-
     }
-
     /**
      * 判断手机号是否注册
      *
@@ -43,11 +45,14 @@ public class ApiController {
      * @param type   0:病人 1：医生
      * @return
      */
-    public static Observable authPhone(String userid, int type) {
+
+    public static Observable<KotlinBean.BaseBean> authPhone(String userid, int type) {
         return InstanceHolder.api
                 .authPhone(userid, type)
                 .compose(RxSchedulers.compose());
     }
+
+
 
     /**
      * 注册
@@ -166,6 +171,31 @@ public class ApiController {
                                                              int message_type) {
         return InstanceHolder.api
                 .pushToUser(userid, token, fromid, content, type, message_type)
+                .compose(RxSchedulers.compose());
+    }
+    /**
+     * 获取所有消息提醒
+     * @param userid
+     * @param token
+     * @return
+     */
+    public static Observable<KotlinBean.BaseBean<ArrayList<KotlinBean.PushBean>>> getAllPush(String userid, String token,int type) {
+        return InstanceHolder.api
+                .getAllPush(userid,token,type)
+                .compose(RxSchedulers.compose());
+    }
+
+    /**
+     * 回复提醒
+     * @param id
+     * @param userid
+     * @param token
+     * @param reply
+     * @return
+     */
+    public static Observable<KotlinBean.BaseBean> replyPush(String id, String userid, String fromid,int type,String token, String reply) {
+        return InstanceHolder.api
+                .replyPush(id,userid,fromid,type,token,reply)
                 .compose(RxSchedulers.compose());
     }
 }

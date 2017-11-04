@@ -29,7 +29,6 @@ import butterknife.ButterKnife;
 /**
  * Created by vange on 2017/10/11.
  */
-
 public class SickerHome extends BaseTitleActivity {
     @BindView(R.id.srecyclerview)
     SRecyclerView srecyclerview;

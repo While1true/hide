@@ -85,7 +85,7 @@ public class InputDialog extends BaseBottomSheetDialog {
         Session userInfo = App.getUserInfo();
         ApiController.pushToUser(
                 toUserid,userInfo.getToken(),userInfo.getUserid(),
-                inputStr,userInfo.getType()==0?1:0,0)
+                inputStr,userInfo.getType(),0)
                 .subscribe(new DataObserver(this) {
                     @Override
                     public void OnNEXT(Object bean) {

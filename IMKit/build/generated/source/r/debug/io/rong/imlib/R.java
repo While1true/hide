@@ -8,13 +8,13 @@ package io.rong.imlib;
 
 public final class R {
     public static final class bool {
-        public static int rc_extension_history = 0x7f050004;
-        public static int rc_typing_status = 0x7f050009;
+        public static int rc_extension_history = 0x7f050005;
+        public static int rc_typing_status = 0x7f05000a;
     }
     public static final class integer {
-        public static int rc_audio_encoding_bit_rate = 0x7f0d0001;
-        public static int rc_image_quality = 0x7f0d0006;
-        public static int rc_image_size = 0x7f0d0007;
+        public static int rc_audio_encoding_bit_rate = 0x7f0d0002;
+        public static int rc_image_quality = 0x7f0d0007;
+        public static int rc_image_size = 0x7f0d0008;
     }
     public static final class string {
         public static int rc_heartbeat_timer = 0x7f15007b;

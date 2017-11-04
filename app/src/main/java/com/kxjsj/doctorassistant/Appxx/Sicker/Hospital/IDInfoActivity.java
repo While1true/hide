@@ -38,6 +38,7 @@ public class IDInfoActivity extends BaseTitleActivity {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
+        ButterKnife.bind(this);
         setTitle("身份信息");
         Intent intent = getIntent();
         if(intent!=null){
@@ -64,12 +65,5 @@ public class IDInfoActivity extends BaseTitleActivity {
         if(bean!=null){
             outState.putSerializable("bean",bean);
         }
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
     }
 }
