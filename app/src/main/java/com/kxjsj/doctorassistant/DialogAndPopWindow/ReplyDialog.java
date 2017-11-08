@@ -34,6 +34,7 @@ public class ReplyDialog extends BaseBottomSheetDialog {
     TextInputEditText etInput;
     Unbinder unbinder;
 
+    CharSequence title;
     CallBack<String> callback;
     @Override
     protected int getLayoutId() {
@@ -46,9 +47,12 @@ public class ReplyDialog extends BaseBottomSheetDialog {
 
     @Override
     protected void initView(View view, Bundle savedInstanceState) {
-        setTitle("写下您的问题描述");
+        setTitle(title);
     }
-
+    public void setTitleStr(CharSequence charSequence)
+    {
+        this.title=charSequence;
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // TODO: inflate a fragment view

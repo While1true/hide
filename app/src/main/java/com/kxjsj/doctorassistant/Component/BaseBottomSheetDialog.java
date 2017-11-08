@@ -50,7 +50,7 @@ public abstract class BaseBottomSheetDialog extends BottomSheetDialogFragment {
 
     protected abstract void initView(View view, Bundle savedInstanceState);
 
-    public void setTitle(CharSequence charSequence) {
+    protected void setTitle(CharSequence charSequence) {
         if (title != null) {
             title.setText(charSequence);
         }

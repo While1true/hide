@@ -1,8 +1,6 @@
 package com.kxjsj.doctorassistant.Net;
 
 
-
-
 import com.kxjsj.doctorassistant.Constant.Session;
 import com.kxjsj.doctorassistant.JavaBean.DoctorBean;
 import com.kxjsj.doctorassistant.JavaBean.KotlinBean;
@@ -65,6 +63,11 @@ public interface Api {
     @GET("doctor/getAllDoctor")
     Observable<BaseBean<ArrayList<DoctorBean>>> getAllDoctor(@Query("token") String token);
 
+
+    @FormUrlEncoded
+    @POST("doctor/getCurrentDoc")
+    Observable<BaseBean<DoctorBean>> getCurrentDoc(@Field("userid") String userid, @Field("token") String token);
+
     @GET("patient/getDepartment")
     Observable<BaseBean<ArrayList<String>>> getDepartment();
 
@@ -82,84 +85,101 @@ public interface Api {
 
     @FormUrlEncoded
     @POST("push/pushToUser")
-    Observable<BaseBean> pushToUser( @Field("userid")String userid ,@Field("token")String token, @Field("fromid")String fromid,
-                                     @Field("content")String content ,
-                                     @Field("type")int type ,
-                                     @Field("message_type")int message_type );
+    Observable<BaseBean> pushToUser(@Field("userid") String userid, @Field("token") String token, @Field("fromid") String fromid,
+                                    @Field("content") String content,
+                                    @Field("type") int type,
+                                    @Field("message_type") int message_type);
 
     /**
      * 获取所有收到的提醒通知
+     *
      * @return
      */
     @FormUrlEncoded
     @POST("push/getAllPush")
     Observable<BaseBean<ArrayList<KotlinBean.PushBean>>> getAllPush(
-            @Field("userid")String userid,
-            @Field("token")String token,
-            @Field("type")int type);
-   /**
+            @Field("userid") String userid,
+            @Field("token") String token,
+            @Field("type") int type);
+
+    /**
      * 获取所有未处理的提醒通知
+     *
      * @return
      */
     @FormUrlEncoded
     @POST("push/getUntreatedPush")
     Observable<BaseBean<ArrayList<KotlinBean.PushBean>>> getAllUnhandlerPush(
-            @Field("userid")String userid,
-            @Field("token")String token,
-            @Field("type")int type);
+            @Field("userid") String userid,
+            @Field("token") String token,
+            @Field("type") int type);
 
 
     /**
      * 回复通知
+     *
      * @return
      */
     @FormUrlEncoded
     @POST("push/replyPush")
-    Observable<BaseBean> replyPush(@Field("id")String id,@Field("userid")String userid,
-                                   @Field("fromid")String fromid, @Field("type")int type,
-                                   @Field("token")String token,@Field("reply")String reply);
+    Observable<BaseBean> replyPush(@Field("id") String id, @Field("userid") String userid,
+                                   @Field("fromid") String fromid, @Field("type") int type,
+                                   @Field("token") String token, @Field("reply") String reply);
 
     /**
      * 留言
+     *
      * @param userid
      * @param fromid
-     * @param fromName
+     * @param
      * @param content
      * @return
      */
     @FormUrlEncoded
     @POST("push/comment")
-    Observable<BaseBean>comment(@Field("userid")String userid,
-                                @Field("fromid")String fromid,
-                                @Field("fromName")String fromName,
-                                @Field("content")String content
-                              );
+    Observable<BaseBean<ArrayList<KotlinBean.PushBean>>> comment(@Field("userid") String userid,
+                                                                 @Field("token") String token,
+                                                                 @Field("fromid") String fromid,
+                                                                 @Field("content") String content
+    );
 
     /**
-     * 获取未回复留言
+     * 获取回复留言
+     *
      * @param userid
      * @return
      */
-     @FormUrlEncoded
-    @POST("push/getUntreatedComment")
-    Observable<BaseBean>getUntreatedComment(@Field("userid")String userid,
-                                @Field("token")String token);
-     /**
-     * 获取留言
-     * @param userid
-     * @return
-     */
-     @FormUrlEncoded
-    @POST("push/getComments")
-    Observable<BaseBean>getComments(@Field("userid")String userid,
-                                @Field("token")String token);
-     /**
-     * 回复留言
-     * @return
-     */
-     @FormUrlEncoded
-    @POST("push/answerComment")
-    Observable<BaseBean>answerComment(@Field("id")String userid,
-                                @Field("token")String token);
+    @FormUrlEncoded
+    @POST("push/getReplyComment")
+    Observable<BaseBean<ArrayList<KotlinBean.PushBean>>> getReplyComment(@Field("userid") String userid,
+                                                                         @Field("token") String token);
 
+    /**
+     * 获取留言
+     *
+     * @param userid
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("push/getComments")
+    Observable<BaseBean<ArrayList<KotlinBean.PushBean>>> getComment(@Field("userid") String userid,
+                                                                    @Field("token") String token);
+
+    /**
+     * 回复留言
+     *
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("push/answerComment")
+    Observable<BaseBean> answerComment(@Field("id") String id,
+                                       @Field("token") String token,
+                                       @Field("isshow") String isshow,
+                                       @Field("reply") String reply,
+                                       @Field("userid") String userid,
+                                       @Field("fromid") String fromid);
+
+    @FormUrlEncoded
+    @POST("queryInfo/getCheckupPro")
+    Observable<BaseBean<ArrayList<KotlinBean.CheckBean>>>getCheckupPro();
 }

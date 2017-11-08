@@ -48,6 +48,53 @@ object KotlinBean {
     data class UserInfoBean constructor(var name : String,var userid : String,var imgUrl :String, var userName : String,var patientNo :String)
 
     /**
+     * 检查项目
+     */
+    data class CheckBean constructor(var check_notes_no: String,
+                                     var check_notes :String ,
+                                     var check_description:String,
+                                     var price : String)
+
+    /**
+     * 检查报告
+     */
+    data class CheckReportBean constructor(var checkup_no:String,
+                                           var check_type:String,
+                                           var check_part:String,
+                                           var check_date:String,
+                                           var check_description:String,
+                                           var doctor_no:String,
+                                           var status:Int)
+
+    /**
+     * 住院信息
+     */
+    data class HospitalBean constructor(var recorddate:String,
+                                        var intime:String,
+                                        var outtime:String,
+                                        var diagnose:String,
+                                        var department:String,
+                                        var reliabledoctor:String,
+                                        var reliablenurse:String)
+
+    /**
+     * 用药信息
+     */
+    data class MedicineBean constructor(var medicationtime:String,
+                                        var medicinename:String,
+                                        var num :Int,
+                                        var price:String)
+
+    /**
+     * 充值明细
+     */
+    data class BankDetail constructor(var paymentNo:String,
+                                      var pay :String,
+                                      var payTime:String,
+                                      var balance:String)
+
+
+    /**
      * 推送bean
      */
     @Entity(tableName = "pushBean")
@@ -64,7 +111,7 @@ object KotlinBean {
             @ColumnInfo(name = "message_type") var message_type :Int=0,
             @ColumnInfo(name = "creatorTime") var creatorTime :String?=null,
             @ColumnInfo(name = "reply")  var reply :String?=null
-    ){
+    ): Serializable{
         constructor() : this("")
     }
 

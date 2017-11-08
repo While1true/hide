@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.nfc.tech.TagTechnology;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,7 +38,12 @@ import com.kxjsj.doctorassistant.Utils.K2JUtils;
 import com.kxjsj.doctorassistant.View.GradualButton;
 import com.kxjsj.doctorassistant.View.MoveTextview;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,21 +66,14 @@ public class HospitalDF extends BaseFragment {
     @BindView(R.id.seemore)
     GradualButton seemore;
     private SAdapter adapter;
-    ArrayList<KotlinBean.PushBean> bean;
-
-    /**
-     * 两个title的位置
-     */
-    int lastIndex1 = -1;
-    int lastIndex2 = -1;
+    ArrayList<KotlinBean.PushBean> bean = new ArrayList<>();
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Override
     protected void initView(@Nullable Bundle savedInstanceState) {
         setRetainInstance(true);
 
         if (savedInstanceState != null) {
-            lastIndex1 = savedInstanceState.getInt("index1", -1);
-            lastIndex2 = savedInstanceState.getInt("index2", -1);
             bean = (ArrayList<KotlinBean.PushBean>) savedInstanceState.getSerializable("bean");
         }
         if (!firstLoad) {
@@ -93,32 +92,38 @@ public class HospitalDF extends BaseFragment {
         seemore.start(seemore.getCurrentTextColor(), getResources().getColor(R.color.colorecRed), 2000);
 
         Session userInfo = App.getUserInfo();
-        RxBus.getDefault().toObservable(
-                Constance.Rxbus.CALLHELP, BaseBean.class)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new MyObserver<BaseBean>(this) {
+        acqurePush();
+        initAdapter();
+        srecyclerview.addDefaultHeaderFooter()
+                .setAdapter(linearLayoutManager, adapter)
+                .setRefreshingListener(new SRecyclerView.OnRefreshListener() {
                     @Override
-                    public void onNext(BaseBean baseBean) {
-                        super.onNext(baseBean);
-                        if (Constance.DEBUGTAG)
-                            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onNext: " + baseBean);
-                        KotlinBean.PushBean bean = (KotlinBean.PushBean) baseBean.getData();
-                        movetext.start(bean.getFromName() + ": " + bean.getContent());
+                    public void Refreshing() {
+                        getAllUnhandlerPush(userInfo);
                     }
                 });
-        //                    Intent intent = new Intent(view.getContext(), SickerHome.class);
-//                            intent.putExtra("")
-//                            startActivity(intent);
+        if (!firstLoad) {
+            setdata(bean);
+        }
+        if (firstLoad) {
+            srecyclerview.setRefreshing();
+        } else {
+            adapter.showNomore();
+        }
+
+    }
+
+    private void initAdapter() {
         adapter = new SAdapter()
                 .addType(R.layout.title_layout, new PositionHolder() {
                     @Override
                     public void onBind(SimpleViewHolder holder, int position) {
-                        holder.setText(R.id.title, position == lastIndex1 ? "紧急事项" : "其他事项");
+                        holder.setText(R.id.title, "待处理事项");
                     }
 
                     @Override
                     public boolean istype(int position) {
-                        return position == lastIndex1 || position == lastIndex2+1;
+                        return position == 0;
                     }
                 })
                 .addType(R.layout.doctor_answer_item, new PositionHolder() {
@@ -126,26 +131,10 @@ public class HospitalDF extends BaseFragment {
                     public void onBind(SimpleViewHolder holder, int position) {
                         if (Constance.DEBUGTAG)
                             Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onBind: " + position);
-                        /**
-                         * 除去标题所占的位置
-                         */
-                        if (lastIndex1 == -1) {
-                            position = position - 1;
-                        } else {
-                            if(lastIndex2==-1){
-                                position = position - 1;
-                            }else {
-                                if(position<=lastIndex2){
-                                    position = position - 1;
-                                }else{
-                                    position = position - 2;
-                                }
-                            }
-                        }
-                        KotlinBean.PushBean pushBean = bean.get(position);
+                        KotlinBean.PushBean pushBean = bean.get(position - 1);
                         holder.setText(R.id.question, "来自" + pushBean.getFromName() + "的提醒--" + pushBean.getCreatorTime());
                         holder.setTextColor(R.id.question, getResources().getColor(pushBean.getMessage_type() == 1 ? R.color.colorecRed : R.color.navi_checked));
-                        holder.setText(R.id.answer, null==pushBean.getReply()?"（待处理）":"（已处理）"+pushBean.getContent());
+                        holder.setText(R.id.answer, null == pushBean.getReply() ? "（待处理）" : "（已处理）" + pushBean.getContent());
 
                         holder.itemView.setOnClickListener(view -> {
                             ApiController.getUserInfo(pushBean.getFromid(), App.getToken(), 0)
@@ -170,16 +159,19 @@ public class HospitalDF extends BaseFragment {
 
                         holder.itemView.setOnLongClickListener(v -> {
                             ReplyDialog replyDialog = new ReplyDialog();
+                            replyDialog.setTitleStr("写下您的问题描述");
                             replyDialog.setCallback(obj -> {
                                 K2JUtils.toast(obj);
                                 Session userInfo = App.getUserInfo();
-                                ApiController.replyPush(pushBean.getId()+"", userInfo.getUserid(), pushBean.getFromid(), userInfo.getType(), userInfo.getToken(), obj)
+                                ApiController.replyPush(pushBean.getId() + "", userInfo.getUserid(), pushBean.getFromid(), userInfo.getType(), userInfo.getToken(), obj)
                                         .subscribe(new DataObserver(getContext()) {
                                             @Override
                                             public void OnNEXT(Object beans) {
                                                 replyDialog.dismiss();
                                                 K2JUtils.toast("成功");
-                                            getAllUnhandlerPush(App.getUserInfo());
+                                                if (bean != null) {
+                                                    bean.remove(pushBean);
+                                                }
                                             }
                                         });
                             });
@@ -193,25 +185,53 @@ public class HospitalDF extends BaseFragment {
                         return true;
                     }
                 });
-        srecyclerview.addDefaultHeaderFooter()
-                .setAdapter(linearLayoutManager, adapter)
-                .setRefreshingListener(new SRecyclerView.OnRefreshListener() {
+    }
+
+    private void acqurePush() {
+        RxBus.getDefault().toObservable(
+                Constance.Rxbus.CALLHELP, BaseBean.class)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MyObserver<BaseBean>(this) {
                     @Override
-                    public void Refreshing() {
-                        getAllUnhandlerPush(userInfo);
+                    public void onNext(BaseBean baseBean) {
+                        super.onNext(baseBean);
+                        if (Constance.DEBUGTAG)
+                            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onNext: " + baseBean);
+                        KotlinBean.PushBean beanz = (KotlinBean.PushBean) baseBean.getData();
+                        bean.add(beanz);
+                        sortList();
+                        adapter.setBeanList(bean);
+                        adapter.notifyDataSetChanged();
+                        movetext.start(beanz.getFromName() + ": " + beanz.getContent());
                     }
                 });
-        if(bean == null) {
-            getAllUnhandlerPush(userInfo);
-        }else{
-            setdata(bean);
-        }
-        if (firstLoad) {
-            srecyclerview.setRefreshing();
-        } else {
-            adapter.showNomore();
-        }
+    }
 
+    /**
+     * 按紧急排序 按时间排序
+     */
+    private void sortList() {
+        Collections.sort(bean, (o1, o2) -> {
+            int type = o1.getType();
+            int type1 = o2.getType();
+            if (type > type1) {
+                return 1;
+            } else if (type == type1) {
+                try {
+                    Date parse = format.parse(o1.getCreatorTime());
+                    Date parse2 = format.parse(o2.getCreatorTime());
+                    if (parse.after(parse2)) {
+                        return 1;
+                    } else {
+                        return -1;
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                    return 0;
+                }
+            }
+            return -1;
+        });
     }
 
     private void getAllUnhandlerPush(Session userInfo) {
@@ -233,34 +253,8 @@ public class HospitalDF extends BaseFragment {
     }
 
     private void setdata(ArrayList<KotlinBean.PushBean> beans) {
-        /**
-         * 找出标题位置
-         */
-        lastIndex1=-1;
-        lastIndex2=-1;
-        for (int i = 0; i < beans.size() - 1; i++) {
-            KotlinBean.PushBean pushBean = beans.get(i);
-            int message_type = pushBean.getMessage_type();
-            if (message_type == 1) {
-                if (lastIndex1 == -1)
-                    lastIndex1 = i;
-            } else {
-                lastIndex2 = i;
-                break;
-            }
-        }
         if (bean.size() > 0) {
-            int count = 0;
-            if (lastIndex1 == -1) {
-                count += 1;
-            } else {
-                if (lastIndex2 == -1) {
-                    count = 1;
-                } else {
-                    count = 2;
-                }
-            }
-            adapter.setCount(bean.size()+count);
+            adapter.setCount(beans.size() + 1);
             adapter.showItem();
             srecyclerview.notifyRefreshComplete();
         } else {
@@ -292,8 +286,6 @@ public class HospitalDF extends BaseFragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         if (bean != null) {
-            outState.putInt("index1", lastIndex1);
-            outState.putInt("index2", lastIndex2);
             outState.putSerializable("bean", bean);
         }
     }

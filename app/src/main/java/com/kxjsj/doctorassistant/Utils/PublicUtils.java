@@ -14,7 +14,9 @@ import com.kxjsj.doctorassistant.Net.ApiController;
 public class PublicUtils {
     public static void loginOut(Context context) {
         ActivityUtils.getInstance().removeAll();
-        context.startActivity(new Intent(context, LoginActivity.class));
+        Intent intent = new Intent(context, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
     }
 
 }

@@ -15,12 +15,21 @@ import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.DefaultStateListener;
 import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.PositionHolder;
 import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.SAdapter;
 import com.ck.hello.nestrefreshlib.View.RefreshViews.SRecyclerView;
+import com.kxjsj.doctorassistant.App;
 import com.kxjsj.doctorassistant.Component.BaseTitleActivity;
 import com.kxjsj.doctorassistant.Constant.Constance;
+import com.kxjsj.doctorassistant.Constant.Session;
+import com.kxjsj.doctorassistant.DialogAndPopWindow.InputDialog;
+import com.kxjsj.doctorassistant.DialogAndPopWindow.ReplyDialog;
 import com.kxjsj.doctorassistant.Glide.GlideLoader;
+import com.kxjsj.doctorassistant.Holder.CallBack;
 import com.kxjsj.doctorassistant.JavaBean.DoctorBean;
+import com.kxjsj.doctorassistant.JavaBean.KotlinBean;
+import com.kxjsj.doctorassistant.Net.Api;
+import com.kxjsj.doctorassistant.Net.ApiController;
 import com.kxjsj.doctorassistant.R;
 import com.kxjsj.doctorassistant.RongYun.ConversationUtils;
+import com.kxjsj.doctorassistant.Rx.DataObserver;
 import com.kxjsj.doctorassistant.Screen.AdjustUtil;
 import com.kxjsj.doctorassistant.Screen.OrentionUtils;
 import com.kxjsj.doctorassistant.Utils.K2JUtils;
@@ -41,13 +50,15 @@ public class DoctorHome extends BaseTitleActivity {
      */
     @BindView(R.id.srecyclerview)
     SRecyclerView srecyclerview;
-    private SAdapter sBaseMutilAdapter;
+    private SAdapter adapter;
 
     /**
      * 数据包
      */
-    private ArrayList<String> datas;
+    ArrayList<KotlinBean.PushBean> datas;
     DoctorBean.ContentBean bean;
+    private ReplyDialog replyDialog;
+
     @Override
     protected int getContentLayoutId() {
 
@@ -56,18 +67,19 @@ public class DoctorHome extends BaseTitleActivity {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
+        ButterKnife.bind(this);
         Intent intent = getIntent();
         if(savedInstanceState!=null){
             bean= savedInstanceState.getParcelable("data");
             setTitle(bean.getName()+"的个人主页");
-            datas= (ArrayList<String>) savedInstanceState.getSerializable("bean");
+            datas= (ArrayList<KotlinBean.PushBean>) savedInstanceState.getSerializable("bean");
         }
         if(intent!=null&&bean==null){
             bean=intent.getParcelableExtra("data");
         }
 
-        ButterKnife.bind(this);
-        sBaseMutilAdapter = new SAdapter(30)
+
+        adapter = new SAdapter(30)
                 .addType(R.layout.doctor_info, new PositionHolder() {
                     @Override
                     public void onBind(SimpleViewHolder holder, int position) {
@@ -110,14 +122,17 @@ public class DoctorHome extends BaseTitleActivity {
                 .addType(R.layout.doctor_answer_item, new PositionHolder() {
                     @Override
                     public void onBind(SimpleViewHolder holder, int position) {
-
+                        KotlinBean.PushBean pushBean = datas.get(position - 1);
+                        holder.setText(R.id.question, pushBean.getFromName()+":" + pushBean.getContent());
+                        holder.setText(R.id.answer,bean.getName()+":"+pushBean.getReply());
                     }
 
                     @Override
                     public boolean istype(int position) {
                         return true;
                     }
-                }).setStateListener(new DefaultStateListener() {
+                })
+                .setStateListener(new DefaultStateListener() {
                     @Override
                     public void netError(Context context) {
                         loadData();
@@ -130,7 +145,7 @@ public class DoctorHome extends BaseTitleActivity {
                             loadData();
 
                     }
-                }).setAdapter(new LinearLayoutManager(this), sBaseMutilAdapter)
+                }).setAdapter(new LinearLayoutManager(this), adapter)
                 .setRefreshing();
     }
 
@@ -149,31 +164,33 @@ public class DoctorHome extends BaseTitleActivity {
      */
     private void askQuestion(String userid) {
 
-        new MaterialDialog.Builder(this)
-                .title("留言提问")
-                .content("留言可能不能及时收到回复，请谅解\n您可以试着先看看别人的提问，也许可以找到你想要的答案")
-                .inputType(InputType.TYPE_CLASS_TEXT)
-                .positiveText("提交")
-                .negativeText("取消")
-                .input("请输入您的问题", "", false, (dialog, input) -> {
-
-                }).onPositive((dialog, which) -> {
-            String string = dialog.getInputEditText().getText().toString();
-            K2JUtils.toast(string, 1);
-        }).build()
-                .show();
+        if(replyDialog==null) {
+            replyDialog = new ReplyDialog();
+            replyDialog.setTitleStr("写下留言的问题");
+            replyDialog.setCallback(obj -> {
+                Session userInfo = App.getUserInfo();
+                ApiController.Comment(userid,userInfo.getUserid(),userInfo.getToken(),obj)
+                        .subscribe(new DataObserver(this) {
+                            @Override
+                            public void OnNEXT(Object bean) {
+                                K2JUtils.toast("留言成功！");
+                            }
+                        });
+            });
+        }
+        replyDialog.show(getSupportFragmentManager());
 
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if(sBaseMutilAdapter!=null) {
+        if(adapter!=null) {
             /**
              * 为了不重启调整布局，把doctor_info后缀加了个Land
              */
             AdjustUtil.changeTypeValue(this);
-            sBaseMutilAdapter.notifyDataSetChanged();
+            adapter.notifyDataSetChanged();
             if (Constance.DEBUGTAG)
                 Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onConfigurationChanged: ");
         }
@@ -183,11 +200,20 @@ public class DoctorHome extends BaseTitleActivity {
      * 请求网络获取数据
      */
     private void loadData() {
-
-
-
-
-        sBaseMutilAdapter.showState(SAdapter.SHOW_NOMORE, "无更多内容了");
+        Session userInfo = App.getUserInfo();
+        ApiController.getReplyComment(userInfo.getUserid(),userInfo.getToken())
+                .subscribe(new DataObserver<ArrayList<KotlinBean.PushBean>>(this) {
+                    @Override
+                    public void OnNEXT(ArrayList<KotlinBean.PushBean> bean) {
+                       datas=bean;
+                       if(datas.size()==0){
+                           adapter.showEmpty();
+                       }else{
+                           adapter.setBeanList(datas);
+                           adapter.showItem();
+                       }
+                    }
+                });
         srecyclerview.notifyRefreshComplete();
 
     }

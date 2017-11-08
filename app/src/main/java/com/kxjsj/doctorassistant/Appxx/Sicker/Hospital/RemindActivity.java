@@ -63,7 +63,7 @@ public class RemindActivity extends BaseTitleActivity {
                     @Override
                     public void onBind(SimpleViewHolder holder, final KotlinBean.PushBean item, int position) {
                         holder.setText(R.id.question, item.getFromName() + "/" + item.getCreatorTime());
-                        holder.setText(R.id.answer, (null==item.getReply()?"（待处理）":"（已处理）")+(item.getMessage_type() == 0 ? item.getContent() : "请求紧急呼叫"));
+                        holder.setText(R.id.answer, (item.getMessage_type() == 0 ? (item.getContent()+"\n回复：" +item.getReply()): "请求紧急呼叫")+(null==item.getReply()?"（待处理）":"（已处理）"));
                         holder.setTextColor(R.id.answer, item.getMessage_type() == 0 ? 0xff535353 : getResources().getColor(R.color.navi_checked));
                         holder.setTextColor(R.id.question, item.getMessage_type() == 0 ? getResources().getColor(R.color.navi_checked) : getResources().getColor(R.color.colorecRed));
                         holder.itemView.setOnClickListener(v -> {
@@ -84,6 +84,7 @@ public class RemindActivity extends BaseTitleActivity {
                             holder.itemView.setOnLongClickListener(v -> {
                                 if(null==item.getReply()) {
                                     ReplyDialog replyDialog = new ReplyDialog();
+                                    replyDialog.setTitleStr("写下提醒的内容");
                                     replyDialog.setCallback(obj -> {
                                         K2JUtils.toast(obj);
                                         Session userInfo = App.getUserInfo();

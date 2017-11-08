@@ -21,7 +21,7 @@ import io.reactivex.Observable;
 public class PushViewModel extends ViewModel {
     private MutableLiveData<List<KotlinBean.PushBean>> datas;
 
-    public LiveData<List<KotlinBean.PushBean>> getUsers() {
+    public LiveData<List<KotlinBean.PushBean>> getComment() {
         if (datas == null) {
             datas = new MutableLiveData<>();
             loadDatas();

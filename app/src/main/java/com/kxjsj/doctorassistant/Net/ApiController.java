@@ -192,7 +192,7 @@ public class ApiController{
      */
     public static Observable<KotlinBean.BaseBean<ArrayList<KotlinBean.PushBean>>> getAllUnhandlerPush(String userid, String token,int type) {
         return InstanceHolder.api
-                .getAllPush(userid,token,type)
+                .getAllUnhandlerPush(userid,token,type)
                 .compose(RxSchedulers.compose());
     }
 
@@ -214,18 +214,59 @@ public class ApiController{
      * 留言
      * @return
      */
-    public static Observable<KotlinBean.BaseBean> comment(String userid,String fromid,
-                                                          String fromName,
+    public static Observable<KotlinBean.BaseBean> Comment(String userid,String fromid,
+                                                          String token,
                                                          String content) {
         return InstanceHolder.api
-                .comment(userid,fromid,fromName,content)
+                .comment(userid,token,fromid,content)
+                .compose(RxSchedulers.compose());
+    }
+    /**
+     * 获取留言
+     * @return
+     */
+    public static Observable<KotlinBean.BaseBean<ArrayList<KotlinBean.PushBean>>> getComment(String userid,
+                                                         String content) {
+        return InstanceHolder.api
+                .getComment(userid,content)
                 .compose(RxSchedulers.compose());
     }
 
-    Observable<KotlinBean.BaseBean>getUntreatedComment(String userid,
+    /**
+     * 获取未回复留言
+     * @param userid
+     * @param token
+     * @return
+     */
+    public static Observable<KotlinBean.BaseBean<ArrayList<KotlinBean.PushBean>>>getReplyComment(String userid,
                                                        String token){
         return InstanceHolder.api
-                .getUntreatedComment(userid,token)
+                .getReplyComment(userid,token)
+                .compose(RxSchedulers.compose());
+    }
+
+    /**
+     * 回复留言
+     * @param
+     * @param token
+     * @return
+     */
+    public static Observable<KotlinBean.BaseBean>answerComment(String id,String token,String reply,
+                                                  String userid,String fromid){
+        return InstanceHolder.api
+                .answerComment(id,token,reply,1+"",userid,fromid)
+                .compose(RxSchedulers.compose());
+    }
+
+    /**
+     * 根据userid获取医生信息
+     * @param userid
+     * @param token
+     * @return
+     */
+    public static Observable<KotlinBean.BaseBean<DoctorBean>> getCurrentDoc(String userid, String token){
+        return InstanceHolder.api
+                .getCurrentDoc(userid,token)
                 .compose(RxSchedulers.compose());
     }
 }

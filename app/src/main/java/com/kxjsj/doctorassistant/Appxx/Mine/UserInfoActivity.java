@@ -66,18 +66,7 @@ public class UserInfoActivity extends BaseTitleActivity {
         ButterKnife.bind(this);
         setTitle("用户信息");
         sScrollview.setRefreshMode(true, true, false, false);
-        RxBus.getDefault().
-                toObservable(Constance.Rxbus.PIC, BaseBean.class)
-                .subscribe(new MyObserver<BaseBean>(this) {
-                    @Override
-                    public void onNext(BaseBean baseBean) {
-                        super.onNext(baseBean);
-                        GlideLoader.loadRound(img.getImageView(), baseBean.getData());
-                        if (Constance.DEBUGTAG)
-                            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onNext: " + baseBean.getCode());
-
-                    }
-                });
+        acquirePicCallback();
         userInfo = App.getUserInfo();
         if (userInfo == null) {
             K2JUtils.toast("登录失效，请重新登录");
@@ -91,6 +80,21 @@ public class UserInfoActivity extends BaseTitleActivity {
         sickcard.setSubText(userInfo.getPatientNo());
 
 
+    }
+
+    private void acquirePicCallback() {
+        RxBus.getDefault().
+                toObservable(Constance.Rxbus.PIC, BaseBean.class)
+                .subscribe(new MyObserver<BaseBean>(this) {
+                    @Override
+                    public void onNext(BaseBean baseBean) {
+                        super.onNext(baseBean);
+                        GlideLoader.loadRound(img.getImageView(), baseBean.getData());
+                        if (Constance.DEBUGTAG)
+                            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onNext: " + baseBean.getCode());
+
+                    }
+                });
     }
 
     @OnClick({R.id.money, R.id.img, R.id.nickname, R.id.phone, R.id.sickcard, R.id.idinfo, R.id.password})

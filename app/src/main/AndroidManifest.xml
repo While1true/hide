@@ -87,6 +87,7 @@
         <activity android:name=".Appxx.Mine.Wallet.WalletActivity"/>
         <activity android:name=".Appxx.Sicker.Hospital.SelfPayActivity"/>
         <activity android:name=".Appxx.Sicker.Hospital.MedicalInfo"/>
+        <activity android:name=".Appxx.Mine.Comment.CommentActivity" android:launchMode="singleTask"/>
 
 
 

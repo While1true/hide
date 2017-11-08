@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.kxjsj.doctorassistant.Appxx.Doctor.RadioActivityD;
+import com.kxjsj.doctorassistant.Appxx.Mine.Comment.CommentActivity;
 import com.kxjsj.doctorassistant.Appxx.Sicker.RadioActivity;
 import com.kxjsj.doctorassistant.Constant.Constance;
 import com.kxjsj.doctorassistant.JavaBean.KotlinBean;
@@ -85,7 +86,7 @@ public class MiPushReceiver extends MiMessageReceiver {
             KotlinBean.PushBean pushBean = GsonUtils.parse2Bean(mMessage, KotlinBean.PushBean.class);
             if(pushBean!=null) {
                 RxBus.getDefault().post(new BaseBean<>(Constance.Rxbus.CALLHELP, pushBean));
-                showPush(context, pushBean);
+//                showPush(context, pushBean);
             }
         }else if("1".equals(description)){
             KotlinBean.PushBean pushBean = GsonUtils.parse2Bean(mMessage, KotlinBean.PushBean.class);
@@ -100,9 +101,10 @@ public class MiPushReceiver extends MiMessageReceiver {
 
     private void showPush(Context context, KotlinBean.PushBean pushBean) {
         boolean showPush = K2JUtils.get("showPush", true);
-        if(showPush)
-        NotificationUtils.CreatNotification(context,
-                "医院助手",pushBean.getContent(),pushBean.getType()==0?new Intent(context, RadioActivity.class):new Intent(context, RadioActivityD.class));
+        if(showPush) {
+            NotificationUtils.CreatNotification(context,
+                    "病床管理", pushBean.getContent(), new Intent(context, CommentActivity.class));
+        }
     }
 
 
