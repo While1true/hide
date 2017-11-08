@@ -54,7 +54,7 @@
             android:drawableTop="@drawable/knowledge_radio_selector"
             android:gravity="center"
             android:padding="10dp"
-            android:text="健康知识"
+            android:text="信息查询"
             android:textColor="@drawable/radio_text_selector"
             android:textSize="14sp" />
         <RadioButton

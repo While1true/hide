@@ -97,6 +97,16 @@ public interface Api {
             @Field("userid")String userid,
             @Field("token")String token,
             @Field("type")int type);
+   /**
+     * 获取所有未处理的提醒通知
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("push/getUntreatedPush")
+    Observable<BaseBean<ArrayList<KotlinBean.PushBean>>> getAllUnhandlerPush(
+            @Field("userid")String userid,
+            @Field("token")String token,
+            @Field("type")int type);
 
 
     /**
@@ -108,5 +118,48 @@ public interface Api {
     Observable<BaseBean> replyPush(@Field("id")String id,@Field("userid")String userid,
                                    @Field("fromid")String fromid, @Field("type")int type,
                                    @Field("token")String token,@Field("reply")String reply);
+
+    /**
+     * 留言
+     * @param userid
+     * @param fromid
+     * @param fromName
+     * @param content
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("push/comment")
+    Observable<BaseBean>comment(@Field("userid")String userid,
+                                @Field("fromid")String fromid,
+                                @Field("fromName")String fromName,
+                                @Field("content")String content
+                              );
+
+    /**
+     * 获取未回复留言
+     * @param userid
+     * @return
+     */
+     @FormUrlEncoded
+    @POST("push/getUntreatedComment")
+    Observable<BaseBean>getUntreatedComment(@Field("userid")String userid,
+                                @Field("token")String token);
+     /**
+     * 获取留言
+     * @param userid
+     * @return
+     */
+     @FormUrlEncoded
+    @POST("push/getComments")
+    Observable<BaseBean>getComments(@Field("userid")String userid,
+                                @Field("token")String token);
+     /**
+     * 回复留言
+     * @return
+     */
+     @FormUrlEncoded
+    @POST("push/answerComment")
+    Observable<BaseBean>answerComment(@Field("id")String userid,
+                                @Field("token")String token);
 
 }

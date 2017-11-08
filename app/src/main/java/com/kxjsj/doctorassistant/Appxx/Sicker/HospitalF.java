@@ -7,17 +7,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ck.hello.nestrefreshlib.View.RefreshViews.SScrollview;
 import com.kxjsj.doctorassistant.App;
-import com.kxjsj.doctorassistant.Appxx.Mine.UserInfoActivity;
-import com.kxjsj.doctorassistant.Appxx.Mine.Wallet.WalletActivity;
-import com.kxjsj.doctorassistant.Appxx.Sicker.Hospital.IDInfoActivity;
 import com.kxjsj.doctorassistant.Appxx.Sicker.Hospital.RemindActivity;
-import com.kxjsj.doctorassistant.Appxx.Sicker.Hospital.SelfPayActivity;
 import com.kxjsj.doctorassistant.Component.BaseFragment;
 import com.kxjsj.doctorassistant.Constant.Constance;
 import com.kxjsj.doctorassistant.Constant.Session;
@@ -30,9 +24,7 @@ import com.kxjsj.doctorassistant.RongYun.ConversationUtils;
 import com.kxjsj.doctorassistant.Rx.BaseBean;
 import com.kxjsj.doctorassistant.Rx.DataObserver;
 import com.kxjsj.doctorassistant.Rx.MyObserver;
-import com.kxjsj.doctorassistant.Rx.RxSchedulers;
 import com.kxjsj.doctorassistant.Rx.Utils.RxBus;
-import com.kxjsj.doctorassistant.Utils.InputUtils;
 import com.kxjsj.doctorassistant.Utils.K2JUtils;
 import com.kxjsj.doctorassistant.View.GradualButton;
 import com.kxjsj.doctorassistant.View.MoveTextview;
@@ -52,18 +44,6 @@ public class HospitalF extends BaseFragment {
     Unbinder unbinder;
     @BindView(R.id.movetext)
     MoveTextview movetext;
-    @BindView(R.id.id)
-    Button id;
-    @BindView(R.id.checkinfo)
-    Button checkinfo;
-    @BindView(R.id.medicalinfo)
-    Button medicalinfo;
-    @BindView(R.id.money)
-    Button money;
-    @BindView(R.id.checke_price)
-    Button checkePrice;
-    @BindView(R.id.roominfo)
-    Button roominfo;
     @BindView(R.id.seemore)
     GradualButton seemore;
     @BindView(R.id.sscrollview)
@@ -89,6 +69,7 @@ public class HospitalF extends BaseFragment {
     private InputDialog inputDialog;
 
     PatientBed beans;
+
     @Override
     protected void initView(@Nullable Bundle savedInstanceState) {
         setRetainInstance(true);
@@ -99,15 +80,15 @@ public class HospitalF extends BaseFragment {
                 .setRefreshingListener(new SScrollview.OnRefreshListener() {
                     @Override
                     public void Refreshing() {
-                    doNet();
+                        doNet();
                     }
                 });
-        if(savedInstanceState!=null){
-            beans= (PatientBed) savedInstanceState.getSerializable("beans");
+        if (savedInstanceState != null) {
+            beans = (PatientBed) savedInstanceState.getSerializable("beans");
         }
-        if(beans!=null)
+        if (beans != null)
             updateUi(beans);
-        if (firstLoad||beans==null)
+        if (firstLoad || beans == null)
             sscrollview.setRefreshing();
 
         RxBus.getDefault().toObservable(
@@ -118,9 +99,9 @@ public class HospitalF extends BaseFragment {
                     public void onNext(BaseBean baseBean) {
                         super.onNext(baseBean);
                         if (Constance.DEBUGTAG)
-                            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onNext: "+baseBean);
-                       KotlinBean.PushBean bean= (KotlinBean.PushBean) baseBean.getData();
-                        movetext.start(bean.getFromName()+": "+bean.getContent());
+                            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onNext: " + baseBean);
+                        KotlinBean.PushBean bean = (KotlinBean.PushBean) baseBean.getData();
+                        movetext.start(bean.getFromName() + ": " + bean.getContent());
                     }
                 });
 
@@ -132,10 +113,10 @@ public class HospitalF extends BaseFragment {
                 .subscribe(new DataObserver<PatientBed>(this) {
                     @Override
                     public void OnNEXT(PatientBed bean) {
-                        if(bean==null){
+                        if (bean == null) {
                             K2JUtils.toast("获取信息失败");
                         }
-                        beans=bean;
+                        beans = bean;
                         updateUi(bean);
                     }
 
@@ -154,7 +135,7 @@ public class HospitalF extends BaseFragment {
         bennumber.setText(bean.getroomId());
         instruction.setText(bean.getRemark());
         nurse.setText(bean.getNurname());
-        level.setText("¥"+bean.getBalance());
+        level.setText("¥" + bean.getBalance());
         date.setText(bean.getIntime());
 //                      date.setText(bean.get);
 //                      level.setText();
@@ -189,45 +170,37 @@ public class HospitalF extends BaseFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable("beans",beans);
+        outState.putSerializable("beans", beans);
     }
 
-    @OnClick({R.id.ll,R.id.seemore, R.id.id, R.id.checkinfo, R.id.medicalinfo, R.id.money, R.id.checke_price, R.id.roominfo,R.id.callhelp,R.id.help})
+    @OnClick({R.id.ll, R.id.seemore, R.id.callhelp, R.id.help, R.id.help_nurse, R.id.callhelp_doctor})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.help_nurse:
+                if(beans==null)
+                    return;
+                ConversationUtils.startChartSingle(getContext(),beans.getNurid(),beans.getNurname());
+                break;
+            case R.id.callhelp_doctor:
+                if(beans==null)
+                    return;
+                ConversationUtils.startChartSingle(getContext(),beans.getDocid(),beans.getDocname());
+                break;
             case R.id.seemore:
             case R.id.ll:
                 startActivity(new Intent(getContext(), RemindActivity.class));
-                break;
-            case R.id.id:
-//                if(beans==null)
-//                    return;
-                Intent intent = new Intent(getContext(), IDInfoActivity.class);
-                intent.putExtra("bean",beans);
-                startActivity(intent);
-                break;
-            case R.id.checkinfo:
-                break;
-            case R.id.medicalinfo:
-                break;
-            case R.id.money:
-                startActivity(new Intent(getContext(), SelfPayActivity.class));
-                break;
-            case R.id.checke_price:
-                break;
-            case R.id.roominfo:
                 break;
             case R.id.callhelp:
                 if(beans==null)
                     return;
                 Session userInfo = App.getUserInfo();
                 ApiController.pushToUser(
-                        beans.getDocid(),userInfo.getToken(),userInfo.getUserid(),
-                        "请求紧急呼叫",userInfo.getType(),1)
+                        beans.getDocid(), userInfo.getToken(), userInfo.getUserid(),
+                        "请求紧急呼叫", userInfo.getType(), 1)
                         .subscribe(new DataObserver(this) {
                             @Override
                             public void OnNEXT(Object bean) {
-                             K2JUtils.toast("发送成功");
+                                K2JUtils.toast("发送成功");
                             }
                         });
 //                ConversationUtils.sendMessage();

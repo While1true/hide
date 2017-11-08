@@ -16,21 +16,21 @@
         android:layout_marginLeft="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginTop="32dp"
-        app:layout_constraintTop_toBottomOf="@+id/callhelp" />
+        app:layout_constraintTop_toBottomOf="@+id/callhelp_doctor" />
 
     <TextView
         android:id="@+id/instruction"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:lineSpacingExtra="8sp"
-        android:textSize="@dimen/subtitlesize"
-        android:text="热感冒伴有发热，冷感冒无发热症状。常发生在春秋季，常因室内外气温悬殊，导致汗孔闭塞，骤冷骤热的刺激诱发发热、恶寒、头痛、咽痛、口干舌燥、小便黄、全身乏力等症状。"
         android:layout_marginLeft="16dp"
-        app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginRight="16dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         android:layout_marginTop="8dp"
+        android:lineSpacingExtra="8sp"
+        android:text="热感冒伴有发热，冷感冒无发热症状。常发生在春秋季，常因室内外气温悬殊，导致汗孔闭塞，骤冷骤热的刺激诱发发热、恶寒、头痛、咽痛、口干舌燥、小便黄、全身乏力等症状。"
+        android:textSize="@dimen/subtitlesize"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
     <com.kxjsj.doctorassistant.View.GradualButton
@@ -39,20 +39,20 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginTop="24dp"
-        android:drawableTop="@drawable/ic_callhelp"
+        android:layout_marginTop="32dp"
         android:background="@drawable/stoken_background_selector"
+        android:clickable="true"
+        android:drawablePadding="8dp"
+        android:drawableTop="@drawable/ic_callhelp"
+        android:gravity="center"
         android:paddingBottom="15dp"
         android:paddingTop="15dp"
         android:text="紧急呼叫"
-        android:gravity="center"
-        android:clickable="true"
-        android:drawablePadding="8dp"
         android:textSize="@dimen/titlesize"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/guideline4"
-        app:layout_constraintTop_toBottomOf="@+id/textview3"
-        app:layout_constraintHorizontal_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/textview8" />
 
     <com.kxjsj.doctorassistant.View.GradualButton
         android:id="@+id/help"
@@ -91,25 +91,24 @@
         android:id="@+id/textview2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:text="姓名："
-        android:textStyle="bold"
         android:textSize="@dimen/titlesize"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/textview1"
-        android:layout_marginLeft="0dp"
-        app:layout_constraintLeft_toLeftOf="@+id/textview1" />
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="@+id/textview1"
+        app:layout_constraintTop_toBottomOf="@+id/textview1" />
 
     <TextView
         android:id="@+id/textview3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:text="床号："
-        android:textStyle="bold"
         android:textSize="@dimen/titlesize"
-        android:layout_marginLeft="0dp"
+        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="@+id/textview2"
-        android:layout_marginTop="16dp"
         app:layout_constraintTop_toBottomOf="@+id/textview2" />
+
 
     <TextView
         android:id="@+id/textview4"
@@ -123,6 +122,18 @@
         android:layout_marginLeft="16dp"
         app:layout_constraintLeft_toLeftOf="@+id/guideline4" />
 
+    <TextView
+        android:id="@+id/textview5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="32dp"
+        android:text="责任医生："
+        android:textSize="@dimen/titlesize"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline4"
+        app:layout_constraintTop_toBottomOf="@+id/textview4" />
+
     <android.support.constraint.Guideline
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -134,25 +145,23 @@
         android:id="@+id/textView12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:text="入院日期："
-        android:textStyle="bold"
         android:textSize="@dimen/titlesize"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/textview4"
-        android:layout_marginLeft="0dp"
-        app:layout_constraintLeft_toLeftOf="@+id/textview4" />
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="@+id/textview4"
+        app:layout_constraintTop_toBottomOf="@+id/textview5" />
 
     <TextView
         android:id="@+id/textview8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
         android:text="账户余额："
         android:textSize="@dimen/titlesize"
         android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="@+id/textView12"
-        app:layout_constraintTop_toBottomOf="@+id/textView12" />
+        app:layout_constraintStart_toStartOf="@+id/textview3"
+        app:layout_constraintTop_toBottomOf="@+id/bennumber" />
 
     <TextView
         android:id="@+id/number"
@@ -193,7 +202,7 @@
     android:layout_height="0dp"
     app:layout_constraintTop_toTopOf="@+id/textview1"
     android:layout_marginTop="0dp"
-    app:layout_constraintBottom_toBottomOf="@+id/textview3"
+    app:layout_constraintBottom_toBottomOf="@+id/level"
     android:layout_marginBottom="0dp"
     android:layout_marginRight="8dp"
     app:layout_constraintRight_toRightOf="parent"
@@ -250,15 +259,69 @@
         android:id="@+id/level"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="一级"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:text="220.00"
         android:textSize="@dimen/titlesize"
         app:layout_constraintBottom_toBottomOf="@+id/textview8"
-        android:layout_marginBottom="0dp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline4"
+        app:layout_constraintLeft_toRightOf="@+id/textview8"
         app:layout_constraintTop_toTopOf="@+id/textview8"
-        android:layout_marginTop="0dp"
+        android:layout_marginRight="8dp" />
+
+    <TextView
+        android:id="@+id/doctor"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="梅花寒"
+        android:textSize="@dimen/titlesize"
+        app:layout_constraintBottom_toBottomOf="@+id/textview5"
+        android:layout_marginBottom="0dp"
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toRightOf="@+id/textview8"
-        android:layout_marginLeft="8dp" />
+        app:layout_constraintLeft_toRightOf="@+id/textview5"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintTop_toTopOf="@+id/textview5"
+        android:layout_marginTop="0dp" />
 
+    <com.kxjsj.doctorassistant.View.GradualButton
+        android:id="@+id/callhelp_doctor"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/stoken_background_selector"
+        android:clickable="true"
+        android:drawablePadding="8dp"
+        android:drawableTop="@drawable/ic_cdoctor"
+        android:gravity="center"
+        android:paddingBottom="15dp"
+        android:paddingTop="15dp"
+        android:text="联系责任医生"
+        android:textSize="@dimen/titlesize"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/guideline4"
+        app:layout_constraintTop_toBottomOf="@+id/callhelp" />
+
+    <com.kxjsj.doctorassistant.View.GradualButton
+        android:id="@+id/help_nurse"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/stoken_background_selector"
+        android:clickable="true"
+        android:drawablePadding="8dp"
+        android:drawableTop="@drawable/ic_nurse"
+        android:gravity="center"
+        android:paddingBottom="15dp"
+        android:paddingTop="15dp"
+        android:text="联系责任护士"
+        android:textSize="@dimen/titlesize"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline4"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/callhelp_doctor" />
 </android.support.constraint.ConstraintLayout>

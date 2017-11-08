@@ -184,6 +184,17 @@ public class ApiController{
                 .getAllPush(userid,token,type)
                 .compose(RxSchedulers.compose());
     }
+  /**
+     * 获取所有未处理消息提醒
+     * @param userid
+     * @param token
+     * @return
+     */
+    public static Observable<KotlinBean.BaseBean<ArrayList<KotlinBean.PushBean>>> getAllUnhandlerPush(String userid, String token,int type) {
+        return InstanceHolder.api
+                .getAllPush(userid,token,type)
+                .compose(RxSchedulers.compose());
+    }
 
     /**
      * 回复提醒
@@ -196,6 +207,25 @@ public class ApiController{
     public static Observable<KotlinBean.BaseBean> replyPush(String id, String userid, String fromid,int type,String token, String reply) {
         return InstanceHolder.api
                 .replyPush(id,userid,fromid,type,token,reply)
+                .compose(RxSchedulers.compose());
+    }
+
+    /**
+     * 留言
+     * @return
+     */
+    public static Observable<KotlinBean.BaseBean> comment(String userid,String fromid,
+                                                          String fromName,
+                                                         String content) {
+        return InstanceHolder.api
+                .comment(userid,fromid,fromName,content)
+                .compose(RxSchedulers.compose());
+    }
+
+    Observable<KotlinBean.BaseBean>getUntreatedComment(String userid,
+                                                       String token){
+        return InstanceHolder.api
+                .getUntreatedComment(userid,token)
                 .compose(RxSchedulers.compose());
     }
 }

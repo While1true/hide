@@ -1,7 +1,11 @@
 package com.kxjsj.doctorassistant.JavaBean
 
+import android.arch.persistence.room.ColumnInfo
+import android.arch.persistence.room.Entity
+import android.arch.persistence.room.PrimaryKey
 import java.io.File
 import java.io.Serializable
+import java.util.*
 
 /**
  * Created by vange on 2017/9/28.
@@ -46,17 +50,22 @@ object KotlinBean {
     /**
      * 推送bean
      */
+    @Entity(tableName = "pushBean")
     data class PushBean constructor(
-            var userid : String,
-            var id : String,
-            var token : String,
-            var fromid : String,
-            var fromName : String,
-            var content : String?,
-            var type : Int,
-            var message_type :Int,
-            var creatorTime :String,
-            var reply :String
-    ):Serializable
+            @ColumnInfo(name = "userid")
+            var userid : String?=null,
+            @ColumnInfo(name = "id")
+            @PrimaryKey var id : Int=0,
+            @ColumnInfo(name = "token") var token : String?=null,
+            @ColumnInfo(name = "fromid") var fromid : String?=null,
+            @ColumnInfo(name = "fromName") var fromName : String?=null,
+            @ColumnInfo(name = "content") var content : String?=null,
+            @ColumnInfo(name = "type") var type : Int=0,
+            @ColumnInfo(name = "message_type") var message_type :Int=0,
+            @ColumnInfo(name = "creatorTime") var creatorTime :String?=null,
+            @ColumnInfo(name = "reply")  var reply :String?=null
+    ){
+        constructor() : this("")
+    }
 
 }

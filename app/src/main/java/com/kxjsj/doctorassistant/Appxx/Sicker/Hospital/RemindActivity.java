@@ -63,28 +63,10 @@ public class RemindActivity extends BaseTitleActivity {
                     @Override
                     public void onBind(SimpleViewHolder holder, final KotlinBean.PushBean item, int position) {
                         holder.setText(R.id.question, item.getFromName() + "/" + item.getCreatorTime());
-                        holder.setText(R.id.answer, item.getMessage_type() == 0 ? item.getContent() : "请求紧急呼叫");
-                        holder.setTextColor(R.id.answer, item.getMessage_type() == 1 ? 0xff535353 : getResources().getColor(R.color.navi_checked));
-                        holder.setTextColor(R.id.question, item.getMessage_type() == 0 ? 0xff535353 : getResources().getColor(R.color.colorecRed));
+                        holder.setText(R.id.answer, (null==item.getReply()?"（待处理）":"（已处理）")+(item.getMessage_type() == 0 ? item.getContent() : "请求紧急呼叫"));
+                        holder.setTextColor(R.id.answer, item.getMessage_type() == 0 ? 0xff535353 : getResources().getColor(R.color.navi_checked));
+                        holder.setTextColor(R.id.question, item.getMessage_type() == 0 ? getResources().getColor(R.color.navi_checked) : getResources().getColor(R.color.colorecRed));
                         holder.itemView.setOnClickListener(v -> {
-                            ReplyDialog replyDialog = new ReplyDialog();
-                            replyDialog.setCallback(obj -> {
-                                K2JUtils.toast(obj);
-                                Session userInfo = App.getUserInfo();
-                                ApiController.replyPush(item.getId(), userInfo.getUserid(), item.getFromid(), userInfo.getType(), userInfo.getToken(), obj)
-                                        .subscribe(new DataObserver(RemindActivity.this) {
-                                            @Override
-                                            public void OnNEXT(Object bean) {
-                                                replyDialog.dismiss();
-                                                K2JUtils.toast("成功");
-                                                loadData();
-                                            }
-                                        });
-                            });
-                            replyDialog.show(getSupportFragmentManager());
-                        });
-                        holder.itemView.setOnLongClickListener(v -> {
-
                             ApiController.getUserInfo(item.getFromid(), App.getToken(), item.getType())
                                     .compose(RxSchedulers.compose())
                                     .subscribe(new DataObserver<KotlinBean.UserInfoBean>(RemindActivity.this) {
@@ -97,9 +79,30 @@ public class RemindActivity extends BaseTitleActivity {
                                             }
                                         }
                                     });
-
-                            return true;
                         });
+
+                            holder.itemView.setOnLongClickListener(v -> {
+                                if(null==item.getReply()) {
+                                    ReplyDialog replyDialog = new ReplyDialog();
+                                    replyDialog.setCallback(obj -> {
+                                        K2JUtils.toast(obj);
+                                        Session userInfo = App.getUserInfo();
+                                        ApiController.replyPush(item.getId()+"", userInfo.getUserid(), item.getFromid(), userInfo.getType(), userInfo.getToken(), obj)
+                                                .subscribe(new DataObserver(RemindActivity.this) {
+                                                    @Override
+                                                    public void OnNEXT(Object bean) {
+                                                        replyDialog.dismiss();
+                                                        K2JUtils.toast("成功");
+                                                        loadData();
+                                                    }
+                                                });
+                                    });
+                                    replyDialog.show(getSupportFragmentManager());
+                                }else{
+                                    K2JUtils.toast("已处理");
+                                }
+                                    return true;
+                            });
                     }
 
                     @Override

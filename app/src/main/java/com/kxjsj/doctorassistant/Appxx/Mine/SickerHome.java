@@ -49,17 +49,16 @@ public class SickerHome extends BaseTitleActivity {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-        setTitle(patientNo);
         ButterKnife.bind(this);
         if(getIntent()!=null)
             patientNo=getIntent().getStringExtra("patientNo");
         if(savedInstanceState!=null&&patientNo==null)
             patientNo=savedInstanceState.getString("patientNo");
-
+        setTitle(patientNo);
         LinearLayoutManager manager = new LinearLayoutManager(this);
 
         adapter = new SAdapter()
-                .addType(R.layout.sickerinfo, new PositionHolder() {
+                .addType(R.layout.sickerhome, new PositionHolder() {
                     @Override
                     public void onBind(SimpleViewHolder holder, int position) {
                         holder.setText(R.id.number,bean.getPatientNo());

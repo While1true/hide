@@ -63,7 +63,7 @@
             android:textColor="@drawable/radio_text_selector"
             android:drawableTop="@drawable/knowledge_radio_selector"
             android:gravity="center"
-            android:text="健康知识" />
+            android:text="信息查询" />
 
         <RadioButton
             android:id="@+id/rb_mine"

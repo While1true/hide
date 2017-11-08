@@ -3,6 +3,7 @@ package com.kxjsj.doctorassistant.Appxx.Sicker.Hospital;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.ck.hello.nestrefreshlib.View.RefreshViews.SScrollview;
 import com.kxjsj.doctorassistant.Component.BaseTitleActivity;
 import com.kxjsj.doctorassistant.JavaBean.PatientBed;
 import com.kxjsj.doctorassistant.R;
@@ -16,6 +17,8 @@ import butterknife.ButterKnife;
  */
 
 public class IDInfoActivity extends BaseTitleActivity {
+    @BindView(R.id.sscrollview)
+    SScrollview sScrollview;
     @BindView(R.id.name)
     SettingView name;
     @BindView(R.id.id)
@@ -31,6 +34,7 @@ public class IDInfoActivity extends BaseTitleActivity {
     @BindView(R.id.address)
     SettingView address;
     PatientBed bean;
+
     @Override
     protected int getContentLayoutId() {
         return R.layout.id_layout;
@@ -39,31 +43,32 @@ public class IDInfoActivity extends BaseTitleActivity {
     @Override
     protected void initView(Bundle savedInstanceState) {
         ButterKnife.bind(this);
+        sScrollview.setRefreshMode(true,true,false,false);
         setTitle("身份信息");
         Intent intent = getIntent();
-        if(intent!=null){
-            bean= (PatientBed) intent.getSerializableExtra("bean");
+        if (intent != null) {
+            bean = (PatientBed) intent.getSerializableExtra("bean");
         }
-        if(bean==null&&savedInstanceState!=null){
-          bean= (PatientBed) savedInstanceState.getSerializable("bean");
-      }
-      if(bean==null)
-          return;
-      name.setSubText(bean.getPage());
-      id.setSubText(bean.getIdentity());
-      phone.setSubText(bean.getphoneNumber())  ;
-      sex.setSubText(bean.getPsex());
-      age.setSubText(bean.getPage());
-      birthday.setSubText(bean.getBirthday());
-      address.setSubText(bean.getAdress());
+        if (bean == null && savedInstanceState != null) {
+            bean = (PatientBed) savedInstanceState.getSerializable("bean");
+        }
+        if (bean == null)
+            return;
+        name.setSubText(bean.getPage());
+        id.setSubText(bean.getIdentity());
+        phone.setSubText(bean.getphoneNumber());
+        sex.setSubText(bean.getPsex());
+        age.setSubText(bean.getPage());
+        birthday.setSubText(bean.getBirthday());
+        address.setSubText(bean.getAdress());
 
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if(bean!=null){
-            outState.putSerializable("bean",bean);
+        if (bean != null) {
+            outState.putSerializable("bean", bean);
         }
     }
 }

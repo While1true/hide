@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.ck.hello.nestrefreshlib.View.RefreshViews.SScrollview
+    android:id="@+id/sscrollview"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<android.support.constraint.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -121,3 +126,4 @@
         app:subtitleText="what are you doing now?"
         app:titletext="地址" />
 </android.support.constraint.ConstraintLayout>
+</com.ck.hello.nestrefreshlib.View.RefreshViews.SScrollview>

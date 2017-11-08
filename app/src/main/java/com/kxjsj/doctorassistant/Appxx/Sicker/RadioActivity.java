@@ -46,7 +46,7 @@ public class RadioActivity extends BaseTitleActivity implements RadioGroup.OnChe
     private HospitalF hospitalF;
     private MineF mineF;
     private int checkedID = R.id.rb_hospital;
-    private String[] titles = {"医护监控", "医患交流","健康知识","我的"};
+    private String[] titles = {"医护监控", "医患交流","信息查询","我的"};
     private Disposable subscribe;
 
     @Override
