@@ -161,7 +161,7 @@ public interface Api {
      * @return
      */
     @FormUrlEncoded
-    @POST("push/getComments")
+    @POST("push/getComment")
     Observable<BaseBean<ArrayList<KotlinBean.PushBean>>> getComment(@Field("userid") String userid,
                                                                     @Field("token") String token);
 
@@ -179,7 +179,12 @@ public interface Api {
                                        @Field("userid") String userid,
                                        @Field("fromid") String fromid);
 
-    @FormUrlEncoded
-    @POST("queryInfo/getCheckupPro")
+    @GET("queryInfo/getCheckupPro")
     Observable<BaseBean<ArrayList<KotlinBean.CheckBean>>>getCheckupPro();
+
+    @FormUrlEncoded
+    @POST("queryInfo/getCheckupReport")
+    Observable<BaseBean<ArrayList<KotlinBean.CheckReportBean>>>getCheckupReport(@Field("patientNo")String patientNo,@Field("token")String token);
+
+
 }

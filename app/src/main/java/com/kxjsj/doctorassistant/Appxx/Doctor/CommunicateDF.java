@@ -15,7 +15,7 @@ import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.PositionHolder;
 import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.SAdapter;
 import com.ck.hello.nestrefreshlib.View.RefreshViews.SRecyclerView;
 import com.kxjsj.doctorassistant.App;
-import com.kxjsj.doctorassistant.Appxx.Mine.SickerHome;
+import com.kxjsj.doctorassistant.Appxx.Sicker.Home.SickerHome;
 import com.kxjsj.doctorassistant.Component.BaseFragment;
 import com.kxjsj.doctorassistant.Constant.Constance;
 import com.kxjsj.doctorassistant.DialogAndPopWindow.DepartmentDialog;

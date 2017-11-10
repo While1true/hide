@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.ck.hello.nestrefreshlib.View.RefreshViews.SScrollview;
 import com.kxjsj.doctorassistant.App;
-import com.kxjsj.doctorassistant.Appxx.Sicker.Hospital.RemindActivity;
+import com.kxjsj.doctorassistant.Appxx.Sicker.QuiryInfo.RemindActivity;
 import com.kxjsj.doctorassistant.Component.BaseFragment;
 import com.kxjsj.doctorassistant.Constant.Constance;
 import com.kxjsj.doctorassistant.Constant.Session;

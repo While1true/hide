@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.View;
 
 import com.ck.hello.nestrefreshlib.View.Adpater.Base.ItemHolder;
@@ -12,9 +13,10 @@ import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.DefaultStateListener;
 import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.SAdapter;
 import com.ck.hello.nestrefreshlib.View.RefreshViews.SRecyclerView;
 import com.kxjsj.doctorassistant.App;
-import com.kxjsj.doctorassistant.Appxx.Mine.DoctorHome;
-import com.kxjsj.doctorassistant.Appxx.Mine.SickerHome;
+import com.kxjsj.doctorassistant.Appxx.Doctor.Home.DoctorHome;
+import com.kxjsj.doctorassistant.Appxx.Sicker.Home.SickerHome;
 import com.kxjsj.doctorassistant.Component.BaseTitleActivity;
+import com.kxjsj.doctorassistant.Constant.Constance;
 import com.kxjsj.doctorassistant.Constant.Session;
 import com.kxjsj.doctorassistant.DialogAndPopWindow.ReplyDialog;
 import com.kxjsj.doctorassistant.Holder.CallBack;
@@ -24,7 +26,6 @@ import com.kxjsj.doctorassistant.Net.ApiController;
 import com.kxjsj.doctorassistant.R;
 import com.kxjsj.doctorassistant.Rx.DataObserver;
 import com.kxjsj.doctorassistant.Rx.RxSchedulers;
-import com.kxjsj.doctorassistant.Utils.PublicUtils;
 
 import java.util.ArrayList;
 
@@ -66,19 +67,14 @@ public class CommentActivity extends BaseTitleActivity {
                             }else{
                                 holder.setText(R.id.answer,item.getReply());
                             }
-                            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    goDoctorHome(item.getUserid());
-                                }
-                            });
+                            holder.itemView.setOnClickListener(v -> goDoctorHome(item.getUserid()));
                         }else{
                             holder.setText(R.id.question, item.getFromName()+":" + item.getContent());
                             holder.setTextColor(R.id.question,(null==item.getReply())?0xff535353:getResources().getColor(R.color.navi_checked));
                             if(null==item.getReply()){
                                 holder.setText(R.id.answer,"（待回复）");
                             }else{
-                                holder.setText(R.id.answer,item.getReply());
+                                holder.setText(R.id.answer,"@回复/"+item.getReply());
                             }
 
 
@@ -99,9 +95,10 @@ public class CommentActivity extends BaseTitleActivity {
 
                     @Override
                     public boolean istype(KotlinBean.PushBean item, int position) {
-                        return false;
+                        return true;
                     }
-                }).setStateListener(new DefaultStateListener() {
+                })
+                .setStateListener(new DefaultStateListener() {
                     @Override
                     public void netError(Context context) {
                         loadData();
@@ -134,6 +131,9 @@ public class CommentActivity extends BaseTitleActivity {
                         if(bean==null){
                             return;
                         }
+                        DoctorBean.ContentBean content = bean.getContent();
+                        if (Constance.DEBUGTAG)
+                            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "OnNEXT: "+content);
                         Intent intent=new Intent(CommentActivity.this,DoctorHome.class);
                         intent.putExtra("data",bean.getContent());
                         startActivity(intent);

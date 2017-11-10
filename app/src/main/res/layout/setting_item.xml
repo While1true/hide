@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.kxjsj.doctorassistant.View.SettingView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/setting"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:subtitleText="200"
+    android:padding="20dp"
+    app:titletext="感冒药"
+    android:layout_height="wrap_content">
+
+</com.kxjsj.doctorassistant.View.SettingView>

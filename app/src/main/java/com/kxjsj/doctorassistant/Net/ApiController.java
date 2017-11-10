@@ -254,7 +254,7 @@ public class ApiController{
     public static Observable<KotlinBean.BaseBean>answerComment(String id,String token,String reply,
                                                   String userid,String fromid){
         return InstanceHolder.api
-                .answerComment(id,token,reply,1+"",userid,fromid)
+                .answerComment(id,token,1+"",reply,userid,fromid)
                 .compose(RxSchedulers.compose());
     }
 
@@ -267,6 +267,26 @@ public class ApiController{
     public static Observable<KotlinBean.BaseBean<DoctorBean>> getCurrentDoc(String userid, String token){
         return InstanceHolder.api
                 .getCurrentDoc(userid,token)
+                .compose(RxSchedulers.compose());
+    }
+
+    /**
+     * 获取检查项目
+     * @return
+     */
+    public static Observable<KotlinBean.BaseBean<ArrayList<KotlinBean.CheckBean>>>getCheckupPro(){
+        return InstanceHolder.api
+                .getCheckupPro()
+                .compose(RxSchedulers.compose());
+    }
+
+    /**
+     * 获取检查报告
+     * @return
+     */
+    public static Observable<KotlinBean.BaseBean<ArrayList<KotlinBean.CheckReportBean>>>getCheckReport(String patientNo,String token){
+        return InstanceHolder.api
+                .getCheckupReport(patientNo,token)
                 .compose(RxSchedulers.compose());
     }
 }

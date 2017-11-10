@@ -1,10 +1,9 @@
 package com.kxjsj.doctorassistant.Appxx.Doctor;
 
+import android.content.Context;
 import android.content.Intent;
-import android.nfc.tech.TagTechnology;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,20 +11,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.ck.hello.nestrefreshlib.View.Adpater.Base.SimpleViewHolder;
+import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.DefaultStateListener;
 import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.PositionHolder;
 import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.SAdapter;
-import com.ck.hello.nestrefreshlib.View.Adpater.SBaseMutilAdapter;
 import com.ck.hello.nestrefreshlib.View.RefreshViews.SRecyclerView;
 import com.kxjsj.doctorassistant.App;
-import com.kxjsj.doctorassistant.Appxx.Mine.SickerHome;
-import com.kxjsj.doctorassistant.Appxx.Sicker.Hospital.RemindActivity;
+import com.kxjsj.doctorassistant.Appxx.Sicker.Home.SickerHome;
+import com.kxjsj.doctorassistant.Appxx.Sicker.QuiryInfo.RemindActivity;
 import com.kxjsj.doctorassistant.Component.BaseFragment;
 import com.kxjsj.doctorassistant.Constant.Constance;
 import com.kxjsj.doctorassistant.Constant.Session;
 import com.kxjsj.doctorassistant.DialogAndPopWindow.ReplyDialog;
-import com.kxjsj.doctorassistant.Holder.MyHolder;
 import com.kxjsj.doctorassistant.JavaBean.KotlinBean;
 import com.kxjsj.doctorassistant.Net.ApiController;
 import com.kxjsj.doctorassistant.R;
@@ -42,7 +39,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 
 import butterknife.BindView;
@@ -50,6 +46,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by vange on 2017/9/28.
@@ -161,16 +158,17 @@ public class HospitalDF extends BaseFragment {
                             ReplyDialog replyDialog = new ReplyDialog();
                             replyDialog.setTitleStr("写下您的问题描述");
                             replyDialog.setCallback(obj -> {
+                                replyDialog.dismiss();
                                 K2JUtils.toast(obj);
                                 Session userInfo = App.getUserInfo();
                                 ApiController.replyPush(pushBean.getId() + "", userInfo.getUserid(), pushBean.getFromid(), userInfo.getType(), userInfo.getToken(), obj)
                                         .subscribe(new DataObserver(getContext()) {
                                             @Override
                                             public void OnNEXT(Object beans) {
-                                                replyDialog.dismiss();
                                                 K2JUtils.toast("成功");
-                                                if (bean != null) {
+                                                if (bean != null&&bean.contains(bean)) {
                                                     bean.remove(pushBean);
+                                                    adapter.notifyDataSetChanged();
                                                 }
                                             }
                                         });
@@ -184,12 +182,19 @@ public class HospitalDF extends BaseFragment {
                     public boolean istype(int position) {
                         return true;
                     }
+                })
+                .setStateListener(new DefaultStateListener() {
+                    @Override
+                    public void netError(Context context) {
+                        getAllUnhandlerPush(App.getUserInfo());
+                    }
                 });
     }
 
     private void acqurePush() {
         RxBus.getDefault().toObservable(
                 Constance.Rxbus.CALLHELP, BaseBean.class)
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new MyObserver<BaseBean>(this) {
                     @Override
@@ -198,9 +203,10 @@ public class HospitalDF extends BaseFragment {
                         if (Constance.DEBUGTAG)
                             Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onNext: " + baseBean);
                         KotlinBean.PushBean beanz = (KotlinBean.PushBean) baseBean.getData();
+                        if (Constance.DEBUGTAG)
+                            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onNext: "+beanz);
                         bean.add(beanz);
                         sortList();
-                        adapter.setBeanList(bean);
                         adapter.notifyDataSetChanged();
                         movetext.start(beanz.getFromName() + ": " + beanz.getContent());
                     }
@@ -220,7 +226,7 @@ public class HospitalDF extends BaseFragment {
                 try {
                     Date parse = format.parse(o1.getCreatorTime());
                     Date parse2 = format.parse(o2.getCreatorTime());
-                    if (parse.after(parse2)) {
+                    if (parse.before(parse2)) {
                         return 1;
                     } else {
                         return -1;

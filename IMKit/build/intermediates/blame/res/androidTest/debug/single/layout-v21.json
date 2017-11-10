@@ -1,18 +1,18 @@
 [
     {
         "merged": "D:\\demo\\DoctorAssitant\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout-v21\\notification_template_icon_group.xml",
-        "source": "C:\\Users\\乐城\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.0.1.aar\\655e8ac20db118dda3d166ca46197783\\res\\layout-v21\\notification_template_icon_group.xml"
+        "source": "C:\\Users\\乐城\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\a173fd86c1608d0eedb99c2e0ae9cb02\\res\\layout-v21\\notification_template_icon_group.xml"
     },
     {
         "merged": "D:\\demo\\DoctorAssitant\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout-v21\\notification_template_custom_big.xml",
-        "source": "C:\\Users\\乐城\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.0.1.aar\\655e8ac20db118dda3d166ca46197783\\res\\layout-v21\\notification_template_custom_big.xml"
+        "source": "C:\\Users\\乐城\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\a173fd86c1608d0eedb99c2e0ae9cb02\\res\\layout-v21\\notification_template_custom_big.xml"
     },
     {
         "merged": "D:\\demo\\DoctorAssitant\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout-v21\\notification_action.xml",
-        "source": "C:\\Users\\乐城\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.0.1.aar\\655e8ac20db118dda3d166ca46197783\\res\\layout-v21\\notification_action.xml"
+        "source": "C:\\Users\\乐城\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\a173fd86c1608d0eedb99c2e0ae9cb02\\res\\layout-v21\\notification_action.xml"
     },
     {
         "merged": "D:\\demo\\DoctorAssitant\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout-v21\\notification_action_tombstone.xml",
-        "source": "C:\\Users\\乐城\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.0.1.aar\\655e8ac20db118dda3d166ca46197783\\res\\layout-v21\\notification_action_tombstone.xml"
+        "source": "C:\\Users\\乐城\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\a173fd86c1608d0eedb99c2e0ae9cb02\\res\\layout-v21\\notification_action_tombstone.xml"
     }
 ]

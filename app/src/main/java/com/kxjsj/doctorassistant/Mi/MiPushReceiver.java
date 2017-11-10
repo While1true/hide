@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.kxjsj.doctorassistant.App;
 import com.kxjsj.doctorassistant.Appxx.Doctor.RadioActivityD;
 import com.kxjsj.doctorassistant.Appxx.Mine.Comment.CommentActivity;
 import com.kxjsj.doctorassistant.Appxx.Sicker.RadioActivity;
@@ -103,7 +104,7 @@ public class MiPushReceiver extends MiMessageReceiver {
         boolean showPush = K2JUtils.get("showPush", true);
         if(showPush) {
             NotificationUtils.CreatNotification(context,
-                    "病床管理", pushBean.getContent(), new Intent(context, CommentActivity.class));
+                    "病床管理",App.getUserInfo().getType()==0?("@回复"+pushBean.getReply()):("@留言"+pushBean.getContent()), new Intent(context, CommentActivity.class));
         }
     }
 

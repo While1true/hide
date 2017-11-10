@@ -41,7 +41,7 @@ public class RadioActivity extends BaseTitleActivity implements RadioGroup.OnChe
     RadioGroup rgGroup;
     @BindView(R.id.vp)
     NoScrollViewPager vp;
-    private KnowledgeF knowledgeF;
+    private QuiryInfoF quiryInfoF;
     private CommunicateF communicateF;
     private HospitalF hospitalF;
     private MineF mineF;
@@ -70,7 +70,7 @@ public class RadioActivity extends BaseTitleActivity implements RadioGroup.OnChe
                     case 1:
                         return communicateF;
                     case 2:
-                        return knowledgeF;
+                        return quiryInfoF;
                     case 3:
                         return mineF;
                 }
@@ -92,15 +92,15 @@ public class RadioActivity extends BaseTitleActivity implements RadioGroup.OnChe
     private void initial(Bundle bundle) {
         if (bundle != null) {
             FragmentManager supportFragmentManager = getSupportFragmentManager();
-            knowledgeF = (KnowledgeF) supportFragmentManager.getFragment(bundle, "knowledgeF");
+            quiryInfoF = (QuiryInfoF) supportFragmentManager.getFragment(bundle, "quiryInfoF");
             communicateF = (CommunicateF) supportFragmentManager.getFragment(bundle, "communicateF");
             hospitalF = (HospitalF) supportFragmentManager.getFragment(bundle, "hospitalF");
             mineF = (MineF) supportFragmentManager.getFragment(bundle, "mineF");
         }
         if (Constance.DEBUGTAG)
-            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "initial: " + (knowledgeF == null));
-        if (knowledgeF == null) {
-            knowledgeF = new KnowledgeF();
+            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "initial: " + (quiryInfoF == null));
+        if (quiryInfoF == null) {
+            quiryInfoF = new QuiryInfoF();
 //            supportFragmentManager.beginTransaction().add(sickbedF,"sickbedF");
         }
 
@@ -255,7 +255,7 @@ public class RadioActivity extends BaseTitleActivity implements RadioGroup.OnChe
         rgGroup = null;
         RongIM.getInstance().removeUnReadMessageCountChangedObserver(this);
         hospitalF = null;
-        knowledgeF = null;
+        quiryInfoF = null;
         communicateF = null;
         mineF = null;
         super.onDestroy();
@@ -281,7 +281,7 @@ public class RadioActivity extends BaseTitleActivity implements RadioGroup.OnChe
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("checkedID", checkedID);
-        getSupportFragmentManager().putFragment(outState, "knowledgeF", knowledgeF);
+        getSupportFragmentManager().putFragment(outState, "quiryInfoF", quiryInfoF);
         getSupportFragmentManager().putFragment(outState, "hospitalF", hospitalF);
         getSupportFragmentManager().putFragment(outState, "communicateF", communicateF);
         getSupportFragmentManager().putFragment(outState, "mineF", mineF);

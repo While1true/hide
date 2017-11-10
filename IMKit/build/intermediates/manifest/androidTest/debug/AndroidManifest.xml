@@ -88,7 +88,7 @@
 
         <meta-data
             android:name="android.support.VERSION"
-            android:value="26.0.1" /> <!-- imlib config begin -->
+            android:value="26.1.0" /> <!-- imlib config begin -->
         <meta-data
             android:name="RONG_CLOUD_APP_KEY"
             android:value="pvxdm17jpiwdr" />
@@ -143,6 +143,10 @@
                 <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
             </intent-filter>
         </receiver>
+
+        <meta-data
+            android:name="android.arch.lifecycle.VERSION"
+            android:value="27.0.0-SNAPSHOT" />
     </application>
 
 </manifest>

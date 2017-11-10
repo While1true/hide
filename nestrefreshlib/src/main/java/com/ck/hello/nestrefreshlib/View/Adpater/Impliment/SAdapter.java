@@ -49,7 +49,7 @@ public class SAdapter<T> extends BaseAdapter<T, Object> {
 
     @Override
     protected void onBindView(SimpleViewHolder holder, T t, int positon) {
-        Holdersid.get(holder.getItemViewType()).onBind(holder, t, positon);
+            Holdersid.get(holder.getItemViewType()).onBind(holder, t, positon);
     }
 
     /**

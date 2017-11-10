@@ -12,7 +12,7 @@ import com.ck.hello.nestrefreshlib.View.RefreshViews.SScrollview;
 import com.kxjsj.doctorassistant.App;
 import com.kxjsj.doctorassistant.Appxx.Mine.Login.AuthActivity;
 import com.kxjsj.doctorassistant.Appxx.Mine.Wallet.WalletActivity;
-import com.kxjsj.doctorassistant.Appxx.Sicker.Hospital.IDInfoActivity;
+import com.kxjsj.doctorassistant.Appxx.Sicker.QuiryInfo.IDInfoActivity;
 import com.kxjsj.doctorassistant.Component.BaseTitleActivity;
 import com.kxjsj.doctorassistant.Constant.Constance;
 import com.kxjsj.doctorassistant.Constant.Session;

@@ -40,11 +40,8 @@
 
     <com.kxjsj.doctorassistant.View.GradualButton
         android:id="@+id/callhelp"
-        android:layout_width="0dp"
+        android:layout_width="293dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="32dp"
         android:background="@drawable/stoken_background_selector"
         android:drawablePadding="8dp"
         android:drawableTop="@drawable/ic_callhelp"
@@ -53,18 +50,15 @@
         android:paddingTop="15dp"
         android:text="紧急呼叫"
         android:textSize="@dimen/titlesize"
-        app:layout_constraintBottom_toTopOf="@+id/help"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintLeft_toLeftOf="@+id/guideline4"
-        app:layout_constraintRight_toLeftOf="@+id/guideline2"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/number"
+        tools:layout_editor_absoluteX="324dp" />
 
     <com.kxjsj.doctorassistant.View.GradualButton
         android:id="@+id/help"
-        android:layout_width="0dp"
+        android:layout_width="288dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/stoken_background_selector"
         android:drawablePadding="8dp"
@@ -74,10 +68,8 @@
         android:paddingTop="15dp"
         android:text="需要帮助"
         android:textSize="@dimen/titlesize"
-        app:layout_constraintBottom_toTopOf="@+id/callhelp_doctor"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintLeft_toLeftOf="@+id/guideline4"
-        app:layout_constraintRight_toLeftOf="@+id/guideline2"
+        app:layout_constraintEnd_toEndOf="@+id/callhelp"
+        app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toBottomOf="@+id/callhelp" />
 
     <TextView
@@ -167,15 +159,19 @@
         app:layout_constraintEnd_toEndOf="@+id/callhelp_doctor"
         app:layout_constraintStart_toStartOf="@+id/callhelp_doctor"
         app:layout_constraintTop_toBottomOf="@+id/callhelp_doctor" />
+
     <TextView
         android:id="@+id/doctor"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:text="梅花寒"
         android:textSize="@dimen/titlesize"
         app:layout_constraintBottom_toBottomOf="@+id/textview5"
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
-        app:layout_constraintLeft_toRightOf="@+id/textview5"
+        app:layout_constraintStart_toEndOf="@+id/textview5"
         app:layout_constraintTop_toTopOf="@+id/textview5" />
 
     <android.support.constraint.Guideline

@@ -47,7 +47,7 @@
             android:launchMode="singleTask"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name=".Appxx.Mine.DoctorHome"
+            android:name=".Appxx.Doctor.Home.DoctorHome"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
             android:windowSoftInputMode="stateHidden|adjustPan" />
@@ -66,7 +66,7 @@
             <!--android:launchMode="singleTask"-->
             <!--android:windowSoftInputMode="stateHidden|adjustPan" />-->
         <activity
-            android:name=".Appxx.Mine.SickerHome"
+            android:name=".Appxx.Sicker.Home.SickerHome"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="singleTask"
             android:windowSoftInputMode="stateHidden|adjustPan" />
@@ -82,12 +82,14 @@
 
         <activity android:name=".Appxx.Mine.UserInfoActivity"/>
         <activity android:name=".Appxx.Mine.Push.PushActivity"/>
-        <activity android:name=".Appxx.Sicker.Hospital.RemindActivity"/>
-        <activity android:name=".Appxx.Sicker.Hospital.IDInfoActivity"/>
+        <activity android:name=".Appxx.Sicker.QuiryInfo.RemindActivity"/>
+        <activity android:name=".Appxx.Sicker.QuiryInfo.IDInfoActivity"/>
         <activity android:name=".Appxx.Mine.Wallet.WalletActivity"/>
-        <activity android:name=".Appxx.Sicker.Hospital.SelfPayActivity"/>
-        <activity android:name=".Appxx.Sicker.Hospital.MedicalInfo"/>
+        <activity android:name=".Appxx.Sicker.QuiryInfo.SelfPayActivity"/>
+        <activity android:name=".Appxx.Sicker.QuiryInfo.MedicalInfo"/>
         <activity android:name=".Appxx.Mine.Comment.CommentActivity" android:launchMode="singleTask"/>
+        <activity android:name=".Appxx.Sicker.QuiryInfo.CheckPartActivity"/>
+        <activity android:name=".Appxx.Sicker.QuiryInfo.ReportActivity"/>
 
 
 

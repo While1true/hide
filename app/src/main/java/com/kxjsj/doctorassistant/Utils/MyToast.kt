@@ -100,7 +100,7 @@ class MyToast private constructor(context: Context) {
          * @param text
          * @param during
          */
-        fun showToaste(text: CharSequence, during: Int) {
+        fun showToaste(text: CharSequence?, during: Int) {
                 myToast.textView.text = text
                 myToast.toast.duration = during
                 myToast.toast.show()

@@ -63,7 +63,9 @@ public class GsonUtils {
     public static <T> T parse2Bean(String json, Class<T> clazz) {
         return GsonHolder.gson.fromJson(json, clazz);
     }
-
+    public static <T> T parse2Bean(String json,Type type) {
+        return GsonHolder.gson.fromJson(json, type);
+    }
     /**
      * class 2 String
      *
