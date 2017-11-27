@@ -19,7 +19,7 @@ import retrofit2.http.Field;
  * Created by vange on 2017/9/13.
  */
 
-public class ApiController{
+public class ApiController {
 
     private static class InstanceHolder {
         private static Api api = RetrofitHttpManger.create(Api.class);
@@ -264,7 +264,7 @@ public class ApiController{
      * @param token
      * @return
      */
-    public static Observable<KotlinBean.BaseBean<DoctorBean>> getCurrentDoc(String userid, String token){
+    public static Observable<KotlinBean.BaseBean<DoctorBean.ContentBean>> getCurrentDoc(String userid, String token){
         return InstanceHolder.api
                 .getCurrentDoc(userid,token)
                 .compose(RxSchedulers.compose());
@@ -287,6 +287,81 @@ public class ApiController{
     public static Observable<KotlinBean.BaseBean<ArrayList<KotlinBean.CheckReportBean>>>getCheckReport(String patientNo,String token){
         return InstanceHolder.api
                 .getCheckupReport(patientNo,token)
+                .compose(RxSchedulers.compose());
+    }
+
+    /**
+     * 用药信息
+     * @param patientNo
+     * @param token
+     * @return
+     */
+    public static Observable<KotlinBean.BaseBean<ArrayList<KotlinBean.MedicineBean>>>getMedicationInfo(String patientNo,String token){
+        return InstanceHolder.api
+                .getMedicationInfo(patientNo,token)
+                .compose(RxSchedulers.compose());
+    }
+    /**
+     * 住院信息
+     * @param patientNo
+     * @param token
+     * @return
+     */
+    public static Observable<KotlinBean.BaseBean<ArrayList<KotlinBean.HospitalBean>>>getHospitalizationInfo(String patientNo,String token){
+        return InstanceHolder.api
+                .getHospitalizationInfo(patientNo,token)
+                .compose(RxSchedulers.compose());
+    }
+
+    public static Observable<KotlinBean.BaseBean> updateContactMode(String userid, String token, String contactMode) {
+        return InstanceHolder.api
+                .updateContactMode(userid,token,contactMode)
+                .compose(RxSchedulers.compose());
+    }
+
+    public static Observable<KotlinBean.BaseBean> updateAddress(String userid, String token, String address) {
+        return InstanceHolder.api
+                .updateAddress(userid,token,address)
+                .compose(RxSchedulers.compose());
+    }
+
+    /**
+     * 充值
+     * @param patientNo
+     * @param token
+     * @param ammount
+     * @return
+     */
+    public static Observable<KotlinBean.BaseBean<KotlinBean.ChargeResult>> charge(String patientNo, String token, String ammount){
+        return InstanceHolder.api
+                .recharge(patientNo,token,ammount)
+                .compose(RxSchedulers.compose());
+    }
+
+    /**
+     * 付费
+     * @param patientNo
+     * @param token
+     * @param ammount
+     * @return
+     */
+    public static Observable<KotlinBean.BaseBean<KotlinBean.ChargeResult>> pay(String patientNo,String token,String ammount){
+        return InstanceHolder.api
+                .debit(patientNo,token,ammount)
+                .compose(RxSchedulers.compose());
+    }
+
+    /**
+     * 明细
+     * @param patientNo
+     * @param token
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    public static Observable<KotlinBean.BaseBean<ArrayList<KotlinBean.BankDetail>>> payDetail(String patientNo,String token,String startTime,String endTime){
+        return InstanceHolder.api
+                .selectDetails(patientNo,token,startTime,endTime)
                 .compose(RxSchedulers.compose());
     }
 }

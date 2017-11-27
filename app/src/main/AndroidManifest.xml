@@ -23,7 +23,7 @@
     <application
         android:name=".App"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_medicine"
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
         >
@@ -90,6 +90,10 @@
         <activity android:name=".Appxx.Mine.Comment.CommentActivity" android:launchMode="singleTask"/>
         <activity android:name=".Appxx.Sicker.QuiryInfo.CheckPartActivity"/>
         <activity android:name=".Appxx.Sicker.QuiryInfo.ReportActivity"/>
+        <activity android:name=".Appxx.Sicker.QuiryInfo.RoomDetailActivity"/>
+        <activity android:name=".Appxx.Sicker.QuiryInfo.RoomInfoActivity"/>
+        <activity android:name=".Appxx.Mine.Wallet.ChargeDetailActivity"/>
+        <activity android:name=".Appxx.Mine.Wallet.MoneyDetailsActivity"/>
 
 
 

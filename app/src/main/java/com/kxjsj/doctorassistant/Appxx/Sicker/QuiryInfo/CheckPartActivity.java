@@ -48,17 +48,15 @@ public class CheckPartActivity extends BaseTitleActivity {
         if(savedInstanceState!=null){
             beans= (ArrayList<KotlinBean.CheckBean>) savedInstanceState.getSerializable("bean");
         }
-        if(beans==null) {
-            loadData();
-        }
+
         adapter = new SAdapter()
                 .addType(R.layout.check_programmer, new ItemHolder<KotlinBean.CheckBean>() {
                     @Override
                     public void onBind(SimpleViewHolder holder, KotlinBean.CheckBean item, int position) {
-                          holder.setText(R.id.title,item.getCheck_description());
+                          holder.setText(R.id.title,item.getName()+"/"+item.getPart());
                           holder.setText(R.id.price,"￥"+item.getPrice());
-                          holder.setText(R.id.number,"项目编号："+item.getCheck_notes_no());
-                          holder.setText(R.id.decscription,item.getCheck_description());
+                          holder.setText(R.id.number,"z："+item.getCheck_no());
+                          holder.setText(R.id.description,item.getDescription()+"\n"+item.getNotes()+"\n"+item.getRemark());
                     }
 
                     @Override
@@ -72,7 +70,16 @@ public class CheckPartActivity extends BaseTitleActivity {
                     }
                 });
 
-
+        if(beans==null) {
+            loadData();
+        }else{
+            if(beans.size()>0) {
+                adapter.setBeanList(beans);
+                adapter.showItem();
+            }else{
+                adapter.showEmpty();
+            }
+        }
         sRecyclerView.setAdapter(new GridLayoutManager(this, OrentionUtils.isPortrait(this)?2:3), adapter)
                 .setRefreshMode(true,true,false,false)
                 .setPullRate(2);

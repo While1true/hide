@@ -1,5 +1,6 @@
 package com.kxjsj.doctorassistant.Appxx.Sicker.Home;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,9 +12,14 @@ import com.ck.hello.nestrefreshlib.View.Adpater.Base.SimpleViewHolder;
 import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.PositionHolder;
 import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.SAdapter;
 import com.ck.hello.nestrefreshlib.View.RefreshViews.SRecyclerView;
+import com.kxjsj.doctorassistant.App;
+import com.kxjsj.doctorassistant.Appxx.Sicker.QuiryInfo.CheckPartActivity;
+import com.kxjsj.doctorassistant.Appxx.Sicker.QuiryInfo.MedicalInfo;
+import com.kxjsj.doctorassistant.Appxx.Sicker.QuiryInfo.ReportActivity;
 import com.kxjsj.doctorassistant.Component.BaseTitleActivity;
 import com.kxjsj.doctorassistant.Constant.Constance;
 import com.kxjsj.doctorassistant.DialogAndPopWindow.InputDialog;
+import com.kxjsj.doctorassistant.JavaBean.KotlinBean;
 import com.kxjsj.doctorassistant.JavaBean.PatientBed;
 import com.kxjsj.doctorassistant.Net.ApiController;
 import com.kxjsj.doctorassistant.R;
@@ -23,8 +29,13 @@ import com.kxjsj.doctorassistant.Utils.K2JUtils;
 import com.kxjsj.doctorassistant.View.GradualButton;
 
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.functions.Function;
 
 /**
  * Created by vange on 2017/10/11.
@@ -41,6 +52,7 @@ public class SickerHome extends BaseTitleActivity {
 
     String patientNo;
     private InputDialog inputDialog;
+    ArrayList<KotlinBean.PushBean> beans;
 
     @Override
     protected int getContentLayoutId() {
@@ -93,11 +105,23 @@ public class SickerHome extends BaseTitleActivity {
                         TextView tv = holder.getView(R.id.bt);
                         tv.setCompoundDrawables(null, drawable, null, null);
                         holder.setText(R.id.bt, infos[position - 1]);
+                        holder.setOnClickListener(R.id.bt, (View v) -> {
+                            if(position==1){
+                                Intent intent = new Intent(SickerHome.this, ReportActivity.class);
+                                intent.putExtra("patientNo",bean.getPatientNo());
+                                startActivity(intent);
+                            }else{
+                                Intent intent = new Intent(SickerHome.this, MedicalInfo.class);
+                                intent.putExtra("patientNo",bean.getPatientNo());
+                                startActivity(intent);
+                            }
+                        });
+
                     }
 
                     @Override
                     public boolean istype(int position) {
-                        return position<infos.length+1;
+                        return position==1||position==2;
                     }
                 })
                 .addType(R.layout.title_layout, new PositionHolder() {
@@ -114,9 +138,12 @@ public class SickerHome extends BaseTitleActivity {
                 .addType(R.layout.doctor_answer_item, new PositionHolder() {
                     @Override
                     public void onBind(SimpleViewHolder holder, int position) {
-                        holder.setText(R.id.question, "提醒--10/12 8:41");
+                        int i = position - 4;
+                        KotlinBean.PushBean pushBean = beans.get(i);
+
+                        holder.setText(R.id.question, "来自"+pushBean.getFromName()+"的提醒/"+pushBean.getCreatorTime());
                         holder.setTextColor(R.id.question, getResources().getColor(R.color.navi_checked));
-                        holder.setText(R.id.answer, "已知悉，正在准备换药");
+                        holder.setText(R.id.answer, pushBean.getContent());
                     }
 
                     @Override
@@ -161,7 +188,7 @@ public class SickerHome extends BaseTitleActivity {
                         if (Constance.DEBUGTAG)
                             Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "OnNEXT: " + bean);
                         bean = beanz;
-                        adapter.setCount(20);
+                        adapter.setCount(4);
                         adapter.showNomore();
                         srecyclerview.notifyRefreshComplete();
                     }
@@ -173,6 +200,20 @@ public class SickerHome extends BaseTitleActivity {
                         K2JUtils.toast(error);
                     }
                 });
+        ApiController.getBedInfo(patientNo).flatMap(patientBedBaseBean ->
+                ApiController.getAllUnhandlerPush(patientBedBaseBean.getData().getPatientId(), App.getToken(),0))
+                .subscribe(new DataObserver<ArrayList<KotlinBean.PushBean>>(this) {
+                    @Override
+                    public void OnNEXT(ArrayList<KotlinBean.PushBean> bean) {
+                        beans=bean;
+                        if(beans.size()>0){
+                            adapter.setCount(adapter.getItemCount()+beans.size());
+                            adapter.showNomore();
+                        }
+                    }
+                });
+//        ;
+
     }
 
     private void startButtonAnimator(SimpleViewHolder holder) {

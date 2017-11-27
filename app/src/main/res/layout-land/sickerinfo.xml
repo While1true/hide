@@ -42,6 +42,9 @@
         android:id="@+id/callhelp"
         android:layout_width="293dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:background="@drawable/stoken_background_selector"
         android:drawablePadding="8dp"
         android:drawableTop="@drawable/ic_callhelp"
@@ -50,15 +53,14 @@
         android:paddingTop="15dp"
         android:text="紧急呼叫"
         android:textSize="@dimen/titlesize"
-        app:layout_constraintTop_toTopOf="@+id/number"
-        tools:layout_editor_absoluteX="324dp" />
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintStart_toStartOf="@+id/guideline4"
+        app:layout_constraintTop_toTopOf="@+id/number" />
 
     <com.kxjsj.doctorassistant.View.GradualButton
         android:id="@+id/help"
         android:layout_width="288dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/stoken_background_selector"
         android:drawablePadding="8dp"
@@ -69,7 +71,7 @@
         android:text="需要帮助"
         android:textSize="@dimen/titlesize"
         app:layout_constraintEnd_toEndOf="@+id/callhelp"
-        app:layout_constraintStart_toStartOf="@+id/guideline4"
+        app:layout_constraintStart_toStartOf="@+id/callhelp"
         app:layout_constraintTop_toBottomOf="@+id/callhelp" />
 
     <TextView
@@ -110,7 +112,6 @@
         android:id="@+id/textview4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
         android:layout_marginTop="32dp"
         android:text="责任护士："
         android:textSize="@dimen/titlesize"
@@ -124,9 +125,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
         android:background="@drawable/stoken_background_selector"
         android:clickable="true"
         android:drawablePadding="8dp"
@@ -137,10 +136,8 @@
         android:text="联系责任医生"
         android:textSize="@dimen/titlesize"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/callhelp" />
 
     <com.kxjsj.doctorassistant.View.GradualButton
         android:id="@+id/help_nurse"

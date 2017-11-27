@@ -298,6 +298,8 @@ public class RadioActivity extends BaseTitleActivity implements RadioGroup.OnChe
 
     @Override
     public void onCountChanged(int i) {
-        tipTextView.post(() -> tipTextView.setIndicate(i));
+        if(tipTextView!=null) {
+            tipTextView.post(() -> tipTextView.setIndicate(i));
+        }
     }
 }

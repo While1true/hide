@@ -25,9 +25,11 @@
 #-renamesourcefileattribute SourceFile
 #RongYUN
 -dontwarn io.rong.push.**
- -dontnote com.xiaomi.**
--dontnote com.google.android.gms.gcm.**
- -dontnote io.rong.**
+
+# -dontnote com.xiaomi.**
+
+#-dontnote com.google.android.gms.gcm.**
+# -dontnote io.rong.**
 -keep class com.kxjsj.doctorassistant.RongYun.RongPushReceiver {*;}
 
 #Mipush

@@ -109,7 +109,7 @@ public class SickbedF extends BaseFragment {
                 }).setStateListener(new DefaultStateListener() {
                     @Override
                     public void netError(Context context) {
-                        K2JUtils.toast("cuole", 1);
+                       onRefresh();
                     }
                 });
         srecyclerview.addDefaultHeaderFooter()
@@ -160,6 +160,8 @@ public class SickbedF extends BaseFragment {
 
             @Override
             public void OnERROR(String error) {
+                srecyclerview.notifyRefreshComplete();
+                baseMutilAdapter.ShowError();
                 if (Constance.DEBUGTAG)
                     Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "OnERROR: " + error);
 

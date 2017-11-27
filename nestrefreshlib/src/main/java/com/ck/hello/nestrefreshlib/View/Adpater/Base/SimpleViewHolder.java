@@ -99,7 +99,13 @@ public class SimpleViewHolder extends RecyclerView.ViewHolder {
         view.setTextColor(textColor);
         return this;
     }
-
+    public SimpleViewHolder setTextBold(boolean bold, int... res) {
+        for (int re : res) {
+            TextView view = getView(re);
+            view.getPaint().setFakeBoldText(bold);
+        }
+        return this;
+    }
     public SimpleViewHolder setTextColorRes(int viewId, int textColorRes) {
         TextView view = getView(viewId);
         view.setTextColor(mContext.getResources().getColor(textColorRes));

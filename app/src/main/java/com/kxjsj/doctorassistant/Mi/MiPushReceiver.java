@@ -104,7 +104,7 @@ public class MiPushReceiver extends MiMessageReceiver {
         boolean showPush = K2JUtils.get("showPush", true);
         if(showPush) {
             NotificationUtils.CreatNotification(context,
-                    "病床管理",App.getUserInfo().getType()==0?("@回复"+pushBean.getReply()):("@留言"+pushBean.getContent()), new Intent(context, CommentActivity.class));
+                    "病床管理",App.getUserInfo().getType()==0?("@回复"+pushBean.getReply()):(pushBean.getFromName()+"@留言/"+pushBean.getContent()), new Intent(context, CommentActivity.class));
         }
     }
 

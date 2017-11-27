@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import com.kxjsj.doctorassistant.App;
 import com.kxjsj.doctorassistant.Component.BaseBottomSheetDialog;
@@ -47,7 +48,7 @@ public class InputDialog extends BaseBottomSheetDialog {
     @Override
     protected void initView(View view, Bundle savedInstanceState) {
         setTitle("写下您的问题描述");
-
+        etInput.requestFocus();
               if(savedInstanceState!=null){
                   toUserid=savedInstanceState.getString("toUserid");
               }
@@ -65,6 +66,12 @@ public class InputDialog extends BaseBottomSheetDialog {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     }
 
     @Override

@@ -11,6 +11,7 @@ import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.PositionHolder;
 import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.SAdapter;
 import com.ck.hello.nestrefreshlib.View.RefreshViews.SRecyclerView;
 import com.kxjsj.doctorassistant.Component.BaseBottomSheetDialog;
+import com.kxjsj.doctorassistant.Holder.CallBack;
 import com.kxjsj.doctorassistant.R;
 import com.kxjsj.doctorassistant.Screen.OrentionUtils;
 import com.kxjsj.doctorassistant.Utils.K2JUtils;
@@ -28,7 +29,7 @@ public class ChargeDialog extends BaseBottomSheetDialog {
     SRecyclerView srecyclerview;
     Unbinder unbinder;
     int[]moneys={10,20,30,50,100,200,500,1000,2000,5000};
-
+    CallBack<String> callback;
     @Override
     protected int getLayoutId() {
         return R.layout.srecyclerview;
@@ -45,7 +46,9 @@ public class ChargeDialog extends BaseBottomSheetDialog {
                     public void onBind(SimpleViewHolder holder, int position) {
                         holder.setText(R.id.bt,moneys[position]+"元");
                         holder.setOnClickListener(R.id.bt,v -> {
-                            K2JUtils.toast("已充值:"+moneys[position]+"元");
+                            if(callback!=null){
+                                callback.onCallBack(moneys[position]+"");
+                            }
                             dismiss();
                         });
                     }
@@ -68,6 +71,9 @@ public class ChargeDialog extends BaseBottomSheetDialog {
         return rootView;
     }
 
+    public void SetCallBack(CallBack<String> callback){
+        this.callback=callback;
+    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();

@@ -66,7 +66,7 @@ public interface Api {
 
     @FormUrlEncoded
     @POST("doctor/getCurrentDoc")
-    Observable<BaseBean<DoctorBean>> getCurrentDoc(@Field("userid") String userid, @Field("token") String token);
+    Observable<BaseBean<DoctorBean.ContentBean>> getCurrentDoc(@Field("userid") String userid, @Field("token") String token);
 
     @GET("patient/getDepartment")
     Observable<BaseBean<ArrayList<String>>> getDepartment();
@@ -186,5 +186,32 @@ public interface Api {
     @POST("queryInfo/getCheckupReport")
     Observable<BaseBean<ArrayList<KotlinBean.CheckReportBean>>>getCheckupReport(@Field("patientNo")String patientNo,@Field("token")String token);
 
+    @FormUrlEncoded
+    @POST("queryInfo/getMedicationInfo")
+    Observable<BaseBean<ArrayList<KotlinBean.MedicineBean>>>getMedicationInfo(@Field("patientNo")String patientNo,@Field("token")String token);
+
+    @FormUrlEncoded
+    @POST("queryInfo/getHospitalizationInfo")
+    Observable<BaseBean<ArrayList<KotlinBean.HospitalBean>>>getHospitalizationInfo(@Field("patientNo")String patientNo,@Field("token")String token);
+
+    @FormUrlEncoded
+    @POST("money/recharge")
+    Observable<BaseBean<KotlinBean.ChargeResult>>recharge(@Field("patientNo")String patientNo, @Field("token")String token, @Field("paymentAmount")String paymentAmount);
+
+    @FormUrlEncoded
+    @POST("money/debit")
+    Observable<BaseBean<KotlinBean.ChargeResult>>debit(@Field("patientNo")String patientNo, @Field("token")String token, @Field("paymentAmount")String paymentAmount);
+
+    @FormUrlEncoded
+    @POST("money/selectDetails")
+    Observable<BaseBean<ArrayList<KotlinBean.BankDetail>>>selectDetails(@Field("patientNo")String patientNo,@Field("token")String token,@Field("startTime")String startTime,@Field("endTime")String endTime);
+
+    @FormUrlEncoded
+    @POST("login/updateContactMode")
+    Observable<BaseBean>updateContactMode(@Field("userid")String userid,@Field("token")String token,@Field("contactMode")String contactMode);
+
+    @FormUrlEncoded
+    @POST("login/updateAddress")
+    Observable<BaseBean>updateAddress(@Field("userid")String userid,@Field("token")String token,@Field("address")String address);
 
 }

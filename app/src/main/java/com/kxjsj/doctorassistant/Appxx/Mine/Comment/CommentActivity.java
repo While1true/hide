@@ -16,7 +16,6 @@ import com.kxjsj.doctorassistant.App;
 import com.kxjsj.doctorassistant.Appxx.Doctor.Home.DoctorHome;
 import com.kxjsj.doctorassistant.Appxx.Sicker.Home.SickerHome;
 import com.kxjsj.doctorassistant.Component.BaseTitleActivity;
-import com.kxjsj.doctorassistant.Constant.Constance;
 import com.kxjsj.doctorassistant.Constant.Session;
 import com.kxjsj.doctorassistant.DialogAndPopWindow.ReplyDialog;
 import com.kxjsj.doctorassistant.Holder.CallBack;
@@ -52,6 +51,7 @@ public class CommentActivity extends BaseTitleActivity {
     protected void initView(Bundle savedInstanceState) {
         userInfo = App.getUserInfo();
         ButterKnife.bind(this);
+        setTitle("收到的留言");
         if (savedInstanceState != null) {
             beans = (ArrayList<KotlinBean.PushBean>) savedInstanceState.getSerializable("bean");
         }
@@ -125,17 +125,14 @@ public class CommentActivity extends BaseTitleActivity {
 
     private void goDoctorHome(String userid) {
         ApiController.getCurrentDoc(userid,App.getToken())
-                .subscribe(new DataObserver<DoctorBean>(this) {
+                .subscribe(new DataObserver<DoctorBean.ContentBean>(this) {
                     @Override
-                    public void OnNEXT(DoctorBean bean) {
+                    public void OnNEXT(DoctorBean.ContentBean bean) {
                         if(bean==null){
                             return;
                         }
-                        DoctorBean.ContentBean content = bean.getContent();
-                        if (Constance.DEBUGTAG)
-                            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "OnNEXT: "+content);
                         Intent intent=new Intent(CommentActivity.this,DoctorHome.class);
-                        intent.putExtra("data",bean.getContent());
+                        intent.putExtra("data",bean);
                         startActivity(intent);
                     }
                 });
@@ -152,6 +149,7 @@ public class CommentActivity extends BaseTitleActivity {
                                 @Override
                                 public void OnNEXT(Object objs) {
                                     bean.setReply(obj);
+                                    dialog.dismiss();
                                     adapter.notifyDataSetChanged();
                                 }
                             });

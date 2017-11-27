@@ -293,9 +293,9 @@ public class RadioActivityD extends BaseTitleActivity implements RadioGroup.OnCh
 
     @Override
     public void onCountChanged(int i) {
-        if (Constance.DEBUGTAG)
-            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onCountChanged: "+i);
-        tipTextView.post(() -> tipTextView.setIndicate(i));
+        if(tipTextView!=null) {
+            tipTextView.post(() -> tipTextView.setIndicate(i));
+        }
 
     }
 }

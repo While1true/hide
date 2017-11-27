@@ -19,7 +19,7 @@ public class NotificationUtils {
 
     public static void CreatNotification(Context context, String title,String subTitle,Intent clickIntent){
          Notification build = new NotificationCompat.Builder(context)
-                 .setAutoCancel(false)
+                 .setAutoCancel(true)
                  .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentIntent(PendingIntent.getActivity(context, NOTIFICATION_REQUESTID, clickIntent, PendingIntent.FLAG_ONE_SHOT))
                 .setContentTitle(title)

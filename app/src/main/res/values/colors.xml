@@ -12,7 +12,7 @@
 
     <color name="titleColorWhite">#FFFFFF</color>
     <color name="background">#fAFAFA</color>
-    <color name="navi_checked">#79C4A0</color>
+    <color name="navi_checked">#ff79C4A0</color>
     <color name="navi_unchecked">#535353</color>
     <color name="light_grey">#BBBBBB</color>
 </resources>

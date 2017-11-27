@@ -32,10 +32,6 @@ object KotlinBean {
      */
     data class Doctor constructor(var type : Int=0,var title:String="第几号楼", var name : String ="几号病床")
 
-    /**
-     * 医生个人页数据
-     */
-    data class DoctorInfo constructor(var name: String):Serializable
 
     /**
      * 下载进度封装
@@ -50,20 +46,24 @@ object KotlinBean {
     /**
      * 检查项目
      */
-    data class CheckBean constructor(var check_notes_no: String,
-                                     var check_notes :String ,
-                                     var check_description:String,
+    data class CheckBean constructor(var notes: String,
+                                     var remark :String ,
+                                     var part:String,
+                                     var name:String,
+                                     var check_no:String,
+                                     var description:String,
                                      var price : String)
 
     /**
      * 检查报告
      */
-    data class CheckReportBean constructor(var checkup_no:String,
-                                           var check_type:String,
-                                           var check_part:String,
+    data class CheckReportBean constructor(var checkup_num:String,
+                                           var name:String,
+                                           var price:String,
                                            var check_date:String,
-                                           var check_description:String,
-                                           var doctor_no:String,
+                                           var part:String,
+                                           var result_description:String,
+                                           var doctorName:String,
                                            var status:Int)
 
     /**
@@ -75,13 +75,17 @@ object KotlinBean {
                                         var diagnose:String,
                                         var department:String,
                                         var reliabledoctor:String,
-                                        var reliablenurse:String)
+                                        var reliablenurse:String):Serializable
 
     /**
      * 用药信息
      */
-    data class MedicineBean constructor(var medicationtime:String,
-                                        var medicinename:String,
+    data class MedicineBean constructor(var medicationTime:String,
+                                        var name:String,
+                                        var payornot:String,
+                                        var doctorName:String,
+                                        var specifications:String,
+                                        var unit:String,
                                         var num :Int,
                                         var price:String)
 
@@ -92,6 +96,15 @@ object KotlinBean {
                                       var pay :String,
                                       var payTime:String,
                                       var balance:String)
+    /**
+     * 付费明细
+     */
+    data class DebitDetail constructor(var check_time:String,
+                                      var name :String,
+                                      var price:String,
+                                      var payornot:String)
+
+    data class ChargeResult constructor(var balance:String,var pay:String)
 
 
     /**

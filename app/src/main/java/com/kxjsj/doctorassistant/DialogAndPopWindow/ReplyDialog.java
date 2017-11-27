@@ -3,10 +3,12 @@ package com.kxjsj.doctorassistant.DialogAndPopWindow;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import com.kxjsj.doctorassistant.App;
 import com.kxjsj.doctorassistant.Component.BaseBottomSheetDialog;
@@ -33,7 +35,7 @@ public class ReplyDialog extends BaseBottomSheetDialog {
     @BindView(R.id.et_input)
     TextInputEditText etInput;
     Unbinder unbinder;
-
+    int type;
     CharSequence title;
     CallBack<String> callback;
     @Override
@@ -44,10 +46,17 @@ public class ReplyDialog extends BaseBottomSheetDialog {
     public void setCallback(CallBack<String> callback){
         this.callback=callback;
     }
-
+    public void setInputType(int type){
+        this.type=type;
+    }
     @Override
     protected void initView(View view, Bundle savedInstanceState) {
-        setTitle(title);
+        if(title!=null) {
+            setTitle(title);
+        }
+        if(type!=0) {
+            etInput.setInputType(type);
+        }
     }
     public void setTitleStr(CharSequence charSequence)
     {
@@ -66,7 +75,11 @@ public class ReplyDialog extends BaseBottomSheetDialog {
         super.onDestroyView();
         unbinder.unbind();
     }
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+    }
 
     @OnClick(R.id.send)
     public void onViewClicked() {

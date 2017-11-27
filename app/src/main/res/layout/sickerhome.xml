@@ -260,14 +260,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
         android:text="220.00"
         android:textSize="@dimen/titlesize"
         app:layout_constraintBottom_toBottomOf="@+id/textview8"
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
-        app:layout_constraintLeft_toRightOf="@+id/textview8"
-        app:layout_constraintTop_toTopOf="@+id/textview8"
-        android:layout_marginRight="8dp" />
+        app:layout_constraintStart_toEndOf="@+id/textview8"
+        app:layout_constraintTop_toTopOf="@+id/textview8" />
 
     <TextView
         android:id="@+id/doctor"

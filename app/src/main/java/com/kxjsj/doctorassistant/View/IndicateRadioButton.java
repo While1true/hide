@@ -41,8 +41,8 @@ public class IndicateRadioButton extends android.support.v7.widget.AppCompatRadi
         indicateColor = typedArray.getColor(R.styleable.IndicateView_indicateColor, 0xffff4070);
         indicateTextColor = typedArray.getColor(R.styleable.IndicateView_indicateTextColor, 0xffffffff);
         indicate = typedArray.getInt(R.styleable.IndicateView_indicate, 0);
-        indicateRadius = typedArray.getFloat(R.styleable.IndicateView_indicateRadius, dp2px(8));
-        indicatesize = typedArray.getFloat(R.styleable.IndicateView_indicatesize, dp2px(9));
+        indicateRadius = typedArray.getDimension(R.styleable.IndicateView_indicateRadius, dp2px(8));
+        indicatesize = typedArray.getDimension(R.styleable.IndicateView_indicatesize, dp2px(9));
         max = typedArray.getInt(R.styleable.IndicateView_maxnum, 99);
         typedArray.recycle();
     }

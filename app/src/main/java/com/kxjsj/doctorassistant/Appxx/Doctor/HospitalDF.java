@@ -166,8 +166,9 @@ public class HospitalDF extends BaseFragment {
                                             @Override
                                             public void OnNEXT(Object beans) {
                                                 K2JUtils.toast("成功");
-                                                if (bean != null&&bean.contains(bean)) {
+                                                if (bean != null&&bean.contains(pushBean)) {
                                                     bean.remove(pushBean);
+                                                    adapter.setCount(bean.size()+1);
                                                     adapter.notifyDataSetChanged();
                                                 }
                                             }

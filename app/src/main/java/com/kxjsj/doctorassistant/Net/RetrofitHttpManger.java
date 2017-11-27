@@ -33,7 +33,7 @@ public class RetrofitHttpManger {
                 .addInterceptor(new HttpLoggingInterceptor(message -> {
                     if (Constance.DEBUGTAG)
                         Log.i(Constance.DEBUG, "log: " + message);
-                }).setLevel(HttpLoggingInterceptor.Level.BASIC))
+                }).setLevel(HttpLoggingInterceptor.Level.BODY))
 
                 // 添加公共参数拦截器
                 // 添加通用的Header

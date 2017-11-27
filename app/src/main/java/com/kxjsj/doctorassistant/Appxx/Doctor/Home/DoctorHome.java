@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
+import android.view.WindowManager;
 
 import com.ck.hello.nestrefreshlib.View.Adpater.Base.SimpleViewHolder;
 import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.DefaultStateListener;
@@ -17,6 +18,7 @@ import com.kxjsj.doctorassistant.App;
 import com.kxjsj.doctorassistant.Component.BaseTitleActivity;
 import com.kxjsj.doctorassistant.Constant.Constance;
 import com.kxjsj.doctorassistant.Constant.Session;
+import com.kxjsj.doctorassistant.DialogAndPopWindow.InputDialog;
 import com.kxjsj.doctorassistant.DialogAndPopWindow.ReplyDialog;
 import com.kxjsj.doctorassistant.Glide.GlideLoader;
 import com.kxjsj.doctorassistant.JavaBean.DoctorBean;
@@ -164,7 +166,6 @@ public class DoctorHome extends BaseTitleActivity {
      * @param userid
      */
     private void askQuestion(String userid) {
-
         if(replyDialog==null) {
             replyDialog = new ReplyDialog();
             replyDialog.setTitleStr("写下留言的问题");

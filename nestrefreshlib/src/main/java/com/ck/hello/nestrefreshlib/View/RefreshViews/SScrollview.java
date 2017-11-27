@@ -231,7 +231,10 @@ public class SScrollview extends LinearLayout implements NestedScrollingParent, 
         }
         return this;
     }
-
+    public SScrollview setmaxTime(int maxTime) {
+       this.maxTime=maxTime;
+        return this;
+    }
     public SScrollview setScrollChangeListener(NestedScrollView.OnScrollChangeListener listener) {
         myScrollView.setOnScrollChangeListener(listener);
         return this;

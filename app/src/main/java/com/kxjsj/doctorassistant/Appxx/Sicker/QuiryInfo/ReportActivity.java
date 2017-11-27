@@ -37,6 +37,7 @@ public class ReportActivity extends BaseTitleActivity {
     SRecyclerView sRecyclerView;
     private SAdapter adapter;
     ArrayList<KotlinBean.CheckReportBean> beans;
+    String patientNo;
     @Override
     protected int getContentLayoutId() {
         return R.layout.srecyclerview;
@@ -47,17 +48,22 @@ public class ReportActivity extends BaseTitleActivity {
         setTitle("检查报告");
         ButterKnife.bind(this);
         if(savedInstanceState!=null){
-            savedInstanceState.getSerializable("bean");
+            beans= (ArrayList<KotlinBean.CheckReportBean>) savedInstanceState.getSerializable("bean");
+            patientNo=savedInstanceState.getString("patientNo");
         }
-        if(beans==null) {
-            loadData();
-        }
-        int padding = SizeUtils.dp2px(16);
-        sRecyclerView.setPadding(padding,padding,padding,padding);
+        if(patientNo==null)
+        patientNo= getIntent().getStringExtra("patientNo");
+
         adapter = new SAdapter()
                 .addType(R.layout.check_report_item, new ItemHolder<KotlinBean.CheckReportBean>() {
                     @Override
                     public void onBind(SimpleViewHolder holder, KotlinBean.CheckReportBean item, int position) {
+                      holder.setText(R.id.title,item.getName()+"/"+item.getPart()+"\n￥"+item.getPrice());
+                      holder.setText(R.id.state,getStateString(item.getStatus()));
+                      holder.setText(R.id.description,item.getResult_description());
+                      holder.setText(R.id.name,item.getDoctorName());
+                      holder.setText(R.id.time,item.getCheck_date());
+
                     }
 
                     @Override
@@ -70,16 +76,54 @@ public class ReportActivity extends BaseTitleActivity {
                         loadData();
                     }
                 });
-
+        if(beans==null) {
+            loadData();
+        }else {
+            if(beans.size()>0){
+                adapter.setBeanList(beans);
+                adapter.showItem();
+            }else{
+                adapter.showEmpty();
+            }
+        }
 
         sRecyclerView.setAdapter(new GridLayoutManager(this, OrentionUtils.isPortrait(this)?2:3), adapter)
                 .setRefreshMode(true,true,false,false)
                 .setPullRate(2);
     }
 
+    /**
+     * 检查状态 0：未检查（未报到）
+     * 1：已报到未检查（已报到）
+     * 2：已检查未诊断（已检查）
+     * 3：已诊断（完成报告）
+     * 4：报告审核通过（已签片）
+     * 5：报告审核退回（可编辑）
+     * @param state
+     * @return
+     */
+    private String getStateString(int state){
+        switch (state){
+            case 0:
+                return "未报到";
+            case 1:
+                return "已报到";
+            case 2:
+                return "已检查";
+            case 3:
+                return "完成报告";
+            case 4:
+                return "已签片";
+            case 5:
+                return "可编辑";
+                default:
+                    return null;
+        }
+    }
+
     private void loadData() {
         Session userInfo = App.getUserInfo();
-        ApiController.getCheckReport(userInfo.getPatientNo(),userInfo.getToken())
+        ApiController.getCheckReport(patientNo,userInfo.getToken())
                 .subscribe(new DataObserver<ArrayList<KotlinBean.CheckReportBean>>(this) {
                     @Override
                     public void OnNEXT(ArrayList<KotlinBean.CheckReportBean> bean) {
@@ -107,6 +151,7 @@ public class ReportActivity extends BaseTitleActivity {
         super.onSaveInstanceState(outState);
         if(beans!=null){
             outState.putSerializable("bean",beans);
+            outState.putString("patientNo",patientNo);
         }
     }
 }

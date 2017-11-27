@@ -2,6 +2,7 @@ package com.kxjsj.doctorassistant.Appxx.Sicker;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.ck.hello.nestrefreshlib.View.RefreshViews.SScrollview;
 import com.kxjsj.doctorassistant.App;
 import com.kxjsj.doctorassistant.Appxx.Sicker.QuiryInfo.RemindActivity;
@@ -193,16 +196,24 @@ public class HospitalF extends BaseFragment {
             case R.id.callhelp:
                 if(beans==null)
                     return;
-                Session userInfo = App.getUserInfo();
-                ApiController.pushToUser(
-                        beans.getDocid(), userInfo.getToken(), userInfo.getUserid(),
-                        "请求紧急呼叫", userInfo.getType(), 1)
-                        .subscribe(new DataObserver(this) {
-                            @Override
-                            public void OnNEXT(Object bean) {
-                                K2JUtils.toast("发送成功");
-                            }
-                        });
+                new MaterialDialog.Builder(getContext())
+                        .title("请求紧急呼叫")
+                        .content("请确认您真的需要紧急呼叫，以免影响其他人使用")
+                        .positiveText("呼叫")
+                        .negativeText("取消")
+                        .onPositive((dialog, which) -> {
+                            Session userInfo = App.getUserInfo();
+                            ApiController.pushToUser(
+                                    beans.getDocid(), userInfo.getToken(), userInfo.getUserid(),
+                                    "请求紧急呼叫", userInfo.getType(), 1)
+                                    .subscribe(new DataObserver(this) {
+                                        @Override
+                                        public void OnNEXT(Object bean) {
+                                            K2JUtils.toast("发送成功");
+                                        }
+                                    });
+                        }).show();
+
 //                ConversationUtils.sendMessage();
                 break;
             case R.id.help:

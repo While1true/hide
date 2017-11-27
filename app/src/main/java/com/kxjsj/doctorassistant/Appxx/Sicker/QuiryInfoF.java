@@ -10,7 +10,9 @@ import android.view.ViewGroup;
 import com.kxjsj.doctorassistant.App;
 import com.kxjsj.doctorassistant.Appxx.Sicker.QuiryInfo.CheckPartActivity;
 import com.kxjsj.doctorassistant.Appxx.Sicker.QuiryInfo.IDInfoActivity;
+import com.kxjsj.doctorassistant.Appxx.Sicker.QuiryInfo.MedicalInfo;
 import com.kxjsj.doctorassistant.Appxx.Sicker.QuiryInfo.ReportActivity;
+import com.kxjsj.doctorassistant.Appxx.Sicker.QuiryInfo.RoomInfoActivity;
 import com.kxjsj.doctorassistant.Appxx.Sicker.QuiryInfo.SelfPayActivity;
 import com.kxjsj.doctorassistant.Component.BaseFragment;
 import com.kxjsj.doctorassistant.JavaBean.PatientBed;
@@ -32,10 +34,12 @@ public class QuiryInfoF extends BaseFragment {
 
     private Unbinder unbinder;
     private PatientBed beans;
+    private String patientNo;
 
     @Override
     protected void initView(@Nullable Bundle savedInstanceState) {
         setRetainInstance(true);
+        patientNo = App.getUserInfo().getPatientNo();
         if (savedInstanceState == null) {
             loadLazy();
         }else{
@@ -91,16 +95,21 @@ public class QuiryInfoF extends BaseFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.id:
-//                if(beans==null)
-//                    return;
+                if(beans==null)
+                    return;
                 Intent intent = new Intent(getContext(), IDInfoActivity.class);
                 intent.putExtra("bean", beans);
                 startActivity(intent);
                 break;
             case R.id.checkinfo:
-                startActivity(new Intent(getContext(), ReportActivity.class));
+                Intent intent1 = new Intent(getContext(), ReportActivity.class);
+                intent1.putExtra("patientNo",patientNo);
+                startActivity(intent1);
                 break;
             case R.id.medicalinfo:
+                Intent intent2 = new Intent(getContext(), MedicalInfo.class);
+                intent2.putExtra("patientNo",patientNo);
+                startActivity(intent2);
                 break;
             case R.id.money:
                 startActivity(new Intent(getContext(), SelfPayActivity.class));
@@ -109,6 +118,7 @@ public class QuiryInfoF extends BaseFragment {
                 startActivity(new Intent(getContext(), CheckPartActivity.class));
                 break;
             case R.id.roominfo:
+                startActivity(new Intent(getContext(), RoomInfoActivity.class));
                 break;
         }
     }
