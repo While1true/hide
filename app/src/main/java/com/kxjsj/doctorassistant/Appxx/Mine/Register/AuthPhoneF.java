@@ -172,18 +172,18 @@ public class AuthPhoneF extends BaseFragment implements MessageUtils.MssListener
     }
 
     private void doAuth() {
-        RxBus.getDefault().post(new BaseBean<String>(Constance.Rxbus.SIGNNEXT, etphone.getText().toString()));
-//        if (TextUtils.isEmpty(etphone.getText().toString())) {
-//            K2JUtils.toast("请输入手机号", 1);
-//            return;
-//        }
-//        if (TextUtils.isEmpty(etcode.getText().toString())) {
-//            K2JUtils.toast("请输入验证码", 1);
-//            return;
-//        }
-//        InputUtils.hideKeyboard(etphone);
-//        showdialog("正在验证中");
-//        MessageUtils.authCode(etphone.getText().toString(), etcode.getText().toString());
+//        RxBus.getDefault().post(new BaseBean<String>(Constance.Rxbus.SIGNNEXT, etphone.getText().toString()));
+        if (TextUtils.isEmpty(etphone.getText().toString())) {
+            K2JUtils.toast("请输入手机号", 1);
+            return;
+        }
+        if (TextUtils.isEmpty(etcode.getText().toString())) {
+            K2JUtils.toast("请输入验证码", 1);
+            return;
+        }
+        InputUtils.hideKeyboard(etphone);
+        showdialog("正在验证中");
+        MessageUtils.authCode(etphone.getText().toString(), etcode.getText().toString());
     }
 
     private void showdialog(String title) {

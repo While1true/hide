@@ -195,6 +195,14 @@ public interface Api {
     Observable<BaseBean<ArrayList<KotlinBean.HospitalBean>>>getHospitalizationInfo(@Field("patientNo")String patientNo,@Field("token")String token);
 
     @FormUrlEncoded
+    @POST("money/selectPaymentDetails")
+    Observable<BaseBean<ArrayList<KotlinBean.DebitDetail>>>selectPaymentDetails(@Field("patientNo")String patientNo,@Field("token")String token);
+
+    @FormUrlEncoded
+    @POST("money/selectPaymentDetails")
+    Observable<BaseBean<ArrayList<KotlinBean.DebitDetail>>>selectUnpaidDetails(@Field("patientNo")String patientNo,@Field("token")String token);
+
+    @FormUrlEncoded
     @POST("money/recharge")
     Observable<BaseBean<KotlinBean.ChargeResult>>recharge(@Field("patientNo")String patientNo, @Field("token")String token, @Field("paymentAmount")String paymentAmount);
 

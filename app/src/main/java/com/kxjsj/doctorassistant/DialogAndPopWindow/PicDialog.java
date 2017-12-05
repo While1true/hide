@@ -26,6 +26,7 @@ import com.bumptech.glide.Glide;
 import com.ck.hello.nestrefreshlib.View.Adpater.Base.SimpleViewHolder;
 import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.PositionHolder;
 import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.SAdapter;
+import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.StringHolder;
 import com.ck.hello.nestrefreshlib.View.Adpater.SBaseAdapter;
 import com.kxjsj.doctorassistant.Component.BaseBottomSheetDialog;
 import com.kxjsj.doctorassistant.Constant.Constance;
@@ -77,7 +78,7 @@ public class PicDialog extends BaseBottomSheetDialog {
     protected void initView(View view, Bundle savedInstanceState) {
         this.view=view;
         setTitle("选择图片");
-        setData(null);
+        setData();
         getRecent20().subscribe(new MyObserver<List<String>>(this) {
             @Override
             public void onNext(List<String> strings) {
@@ -85,7 +86,6 @@ public class PicDialog extends BaseBottomSheetDialog {
                 if(adapter!=null){
                     adapter.setBeanList(strings);
                     adapter.showItem();
-                    adapter.notifyDataSetChanged();
                 }
             }
 
@@ -100,29 +100,29 @@ public class PicDialog extends BaseBottomSheetDialog {
 
     }
 
-    private void setData(List<String> strings) {
+    private void setData() {
         LinearLayoutManager manager = new LinearLayoutManager(getContext(),
                 LinearLayoutManager.HORIZONTAL, false);
         GridLayoutManager manager2=new GridLayoutManager(getContext(),2);
         recyclerview.setLayoutManager(OrentionUtils.isPortrait(getContext())?manager:manager2);
         adapter = new SAdapter()
-        .addType(R.layout.imageview, new PositionHolder() {
+        .addType(R.layout.imageview, new StringHolder() {
             @Override
-            public void onBind(SimpleViewHolder holder, int position) {
+            public void onBind(SimpleViewHolder holder, String item,int position) {
                 Glide.with(getContext())
-                        .load(strings.get(position))
+                        .load(item)
                         .apply(MyOptions.getCircleRequestOptions())
                         .transition(MyOptions.getTransitionCrossFade())
 
                         .into((ImageView) holder.getView(R.id.imageview));
                 holder.itemView.setOnClickListener(v -> {
-                    RxBus.getDefault().post(new BaseBean(Constance.Rxbus.PIC, strings.get(position)));
+                    RxBus.getDefault().post(new BaseBean(Constance.Rxbus.PIC, item));
                     dismiss();
                 });
             }
 
             @Override
-            public boolean istype(int position) {
+            public boolean istype(String item,int position) {
                 return true;
             }
         });
@@ -140,7 +140,7 @@ public class PicDialog extends BaseBottomSheetDialog {
             Uri mImageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
             ContentResolver mContentResolver = getContext()
                     .getContentResolver();
-            List<String> list = new ArrayList<String>(20);
+            List<String> list = new ArrayList<String>(21);
             // 只查询jpeg和png的图片
             Cursor mCursor = mContentResolver.query(mImageUri, null, MediaStore.Images.Media.MIME_TYPE + "=? or " + MediaStore.Images.Media.MIME_TYPE + "=? or "
                             + MediaStore.Images.Media.MIME_TYPE + "=?",
@@ -158,6 +158,7 @@ public class PicDialog extends BaseBottomSheetDialog {
                 if (list.size() > 20)
                     break;
             }
+            mCursor.close();
             e.onNext(list);
             e.onComplete();
 

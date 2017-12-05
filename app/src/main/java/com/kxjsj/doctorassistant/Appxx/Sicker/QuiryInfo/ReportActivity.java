@@ -22,8 +22,10 @@ import com.kxjsj.doctorassistant.Rx.DataObserver;
 import com.kxjsj.doctorassistant.Screen.OrentionUtils;
 import com.kxjsj.doctorassistant.Screen.SizeUtils;
 import com.kxjsj.doctorassistant.Utils.K2JUtils;
+import com.kxjsj.doctorassistant.View.WrapStaggeredManager;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,6 +40,8 @@ public class ReportActivity extends BaseTitleActivity {
     private SAdapter adapter;
     ArrayList<KotlinBean.CheckReportBean> beans;
     String patientNo;
+    private WrapStaggeredManager wrapStaggeredManager;
+
     @Override
     protected int getContentLayoutId() {
         return R.layout.srecyclerview;
@@ -60,8 +64,10 @@ public class ReportActivity extends BaseTitleActivity {
                     public void onBind(SimpleViewHolder holder, KotlinBean.CheckReportBean item, int position) {
                       holder.setText(R.id.title,item.getName()+"/"+item.getPart()+"\n￥"+item.getPrice());
                       holder.setText(R.id.state,getStateString(item.getStatus()));
-                      holder.setText(R.id.description,item.getResult_description());
-                      holder.setText(R.id.name,item.getDoctorName());
+//                      holder.setText(R.id.description,item.getResult_description());
+                      holder.setText(R.id.description,getResources().getString(R.string.test).substring(30*position%getResources().getString(R.string.test).length()));
+//                      holder.setText(R.id.name,item.getDoctorName());
+                      holder.setText(R.id.name,"最好的医生在这里");
                       holder.setText(R.id.time,item.getCheck_date());
 
                     }
@@ -87,7 +93,11 @@ public class ReportActivity extends BaseTitleActivity {
             }
         }
 
-        sRecyclerView.setAdapter(new GridLayoutManager(this, OrentionUtils.isPortrait(this)?2:3), adapter)
+        if(wrapStaggeredManager==null) {
+            wrapStaggeredManager = new WrapStaggeredManager();
+        }
+        int i = OrentionUtils.isPortrait(this) ? 2 : 3;
+        sRecyclerView.setAdapter(wrapStaggeredManager.setCount(i) ,adapter)
                 .setRefreshMode(true,true,false,false)
                 .setPullRate(2);
     }
@@ -128,6 +138,8 @@ public class ReportActivity extends BaseTitleActivity {
                     @Override
                     public void OnNEXT(ArrayList<KotlinBean.CheckReportBean> bean) {
                         beans=bean;
+                        beans.addAll(bean);
+                        beans.addAll(bean);
                         if(beans.size()>0){
                             adapter.setBeanList(beans);
                             adapter.showItem();

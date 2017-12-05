@@ -313,6 +313,18 @@ public class ApiController {
                 .compose(RxSchedulers.compose());
     }
 
+    public static Observable<KotlinBean.BaseBean<ArrayList<KotlinBean.DebitDetail>>>selectPaymentDetails(String patientNo,String token){
+        return InstanceHolder.api
+                .selectPaymentDetails(patientNo,token)
+                .compose(RxSchedulers.compose());
+    }
+    
+    public static Observable<KotlinBean.BaseBean<ArrayList<KotlinBean.DebitDetail>>>selectUnpaidDetails(String patientNo,String token){
+        return InstanceHolder.api
+                .selectUnpaidDetails(patientNo,token)
+                .compose(RxSchedulers.compose());
+    }
+
     public static Observable<KotlinBean.BaseBean> updateContactMode(String userid, String token, String contactMode) {
         return InstanceHolder.api
                 .updateContactMode(userid,token,contactMode)

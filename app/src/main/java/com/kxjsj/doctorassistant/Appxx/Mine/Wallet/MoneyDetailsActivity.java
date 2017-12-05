@@ -99,28 +99,28 @@ public class MoneyDetailsActivity extends BaseTitleActivity {
     }
 
     private void loadData() {
-//        Session userInfo = App.getUserInfo();
-//        ApiController.getHospitalizationInfo(userInfo.getPatientNo(),userInfo.getToken())
-//                .subscribe(new DataObserver<ArrayList<KotlinBean.DebitDetail>>(this) {
-//                    @Override
-//                    public void OnNEXT(ArrayList<KotlinBean.DebitDetail> bean) {
-//                        debitDetails=bean;
-//
-//                        if(debitDetails.size()>0){
-//                            adapter.setCount(debitDetails.size()+1);
-//                            adapter.showItem();
-//                        }else{
-//                            adapter.showEmpty();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void OnERROR(String error) {
-//                        super.OnERROR(error);
-//                        K2JUtils.toast(error);
-//                        adapter.ShowError();
-//                    }
-//                });
+        Session userInfo = App.getUserInfo();
+        ApiController.selectPaymentDetails(userInfo.getPatientNo(),userInfo.getToken())
+                .subscribe(new DataObserver<ArrayList<KotlinBean.DebitDetail>>(this) {
+                    @Override
+                    public void OnNEXT(ArrayList<KotlinBean.DebitDetail> bean) {
+                        debitDetails=bean;
+
+                        if(debitDetails.size()>0){
+                            adapter.setCount(debitDetails.size()+1);
+                            adapter.showItem();
+                        }else{
+                            adapter.showEmpty();
+                        }
+                    }
+
+                    @Override
+                    public void OnERROR(String error) {
+                        super.OnERROR(error);
+                        K2JUtils.toast(error);
+                        adapter.ShowError();
+                    }
+                });
     }
 
     @Override
