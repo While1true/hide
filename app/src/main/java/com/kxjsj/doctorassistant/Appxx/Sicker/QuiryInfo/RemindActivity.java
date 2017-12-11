@@ -29,10 +29,12 @@ import com.kxjsj.doctorassistant.Rx.RxSchedulers;
 import com.kxjsj.doctorassistant.Utils.K2JUtils;
 import com.kxjsj.doctorassistant.Utils.NotificationUtils;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observable;
 import zhy.com.highlight.HighLight;
 import zhy.com.highlight.position.OnBottomPosCallback;
 import zhy.com.highlight.shape.RectLightShape;
@@ -46,6 +48,7 @@ public class RemindActivity extends BaseTitleActivity {
     SRecyclerView srecyclerview;
     private SAdapter sAdapter;
     ArrayList<KotlinBean.PushBean> bean;
+    private int type;
 
     @Override
     protected int getContentLayoutId() {
@@ -57,8 +60,10 @@ public class RemindActivity extends BaseTitleActivity {
         ButterKnife.bind(this);
         NotificationManagerCompat.from(this).cancel(NotificationUtils.NOTIFICATION_REQUESTID);
         setTitle("提醒信息");
+        type = getIntent().getIntExtra("type", 0);
         if (savedInstanceState != null) {
             bean = (ArrayList<KotlinBean.PushBean>) savedInstanceState.getSerializable("bean");
+            type = savedInstanceState.getInt("type");
         }
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         sAdapter = new SAdapter()
@@ -66,41 +71,41 @@ public class RemindActivity extends BaseTitleActivity {
                     @Override
                     public void onBind(SimpleViewHolder holder, final KotlinBean.PushBean item, int position) {
                         holder.setText(R.id.question, item.getFromName() + "/" + item.getCreatorTime());
-                        holder.setText(R.id.answer, (item.getMessage_type() == 0 ? (null==item.getReply()?"":(item.getContent()+"\n回复：" +item.getReply())): "请求紧急呼叫")+(null==item.getReply()?"（待处理）":"（已处理）"));
+                        holder.setText(R.id.answer, (item.getMessage_type() == 0 ? (null == item.getReply() ? "" : (item.getContent() + "\n回复：" + item.getReply())) : "请求紧急呼叫") + (null == item.getReply() ? "（待处理）" : "（已处理）"));
                         holder.setTextColor(R.id.answer, item.getMessage_type() == 0 ? 0xff535353 : getResources().getColor(R.color.navi_checked));
                         holder.setTextColor(R.id.question, item.getMessage_type() == 0 ? getResources().getColor(R.color.navi_checked) : getResources().getColor(R.color.colorecRed));
                         holder.itemView.setOnClickListener(v -> {
-                            if(App.getUserInfo().getType()==1) {
+                            if (App.getUserInfo().getType() == 1) {
                                 goSickHome(item);
-                            }else{
+                            } else {
                                 goDoctorHome(item.getFromid());
                             }
                         });
-                        if(position==0)
-                        showIndicate(holder.itemView);
+                        if (position == 0)
+                            showIndicate(holder.itemView);
                         holder.itemView.setOnLongClickListener(v -> {
-                                if(null==item.getReply()) {
-                                    ReplyDialog replyDialog = new ReplyDialog();
-                                    replyDialog.setTitleStr("写下回复的内容");
-                                    replyDialog.setCallback(obj -> {
-                                        K2JUtils.toast(obj);
-                                        Session userInfo = App.getUserInfo();
-                                        ApiController.replyPush(item.getId()+"", userInfo.getUserid(), item.getFromid(), userInfo.getType(), userInfo.getToken(), obj)
-                                                .subscribe(new DataObserver(RemindActivity.this) {
-                                                    @Override
-                                                    public void OnNEXT(Object bean) {
-                                                        replyDialog.dismiss();
-                                                        K2JUtils.toast("成功");
-                                                        loadData();
-                                                    }
-                                                });
-                                    });
-                                    replyDialog.show(getSupportFragmentManager());
-                                }else{
-                                    K2JUtils.toast("已处理");
-                                }
-                                    return true;
-                            });
+                            if (null == item.getReply()) {
+                                ReplyDialog replyDialog = new ReplyDialog();
+                                replyDialog.setTitleStr("写下回复的内容");
+                                replyDialog.setCallback(obj -> {
+                                    K2JUtils.toast(obj);
+                                    Session userInfo = App.getUserInfo();
+                                    ApiController.replyPush(item.getId() + "", userInfo.getUserid(), item.getFromid(), userInfo.getType(), userInfo.getToken(), obj)
+                                            .subscribe(new DataObserver(RemindActivity.this) {
+                                                @Override
+                                                public void OnNEXT(Object bean) {
+                                                    replyDialog.dismiss();
+                                                    K2JUtils.toast("成功");
+                                                    loadData();
+                                                }
+                                            });
+                                });
+                                replyDialog.show(getSupportFragmentManager());
+                            } else {
+                                K2JUtils.toast("已处理");
+                            }
+                            return true;
+                        });
                     }
 
                     @Override
@@ -127,15 +132,15 @@ public class RemindActivity extends BaseTitleActivity {
     }
 
     private void showIndicate(View itemView) {
-        boolean show=K2JUtils.get("showRemindIndicate",true);
-        if(show) {
+        boolean show = K2JUtils.get("showRemindIndicate", true);
+        if (show) {
             itemView.post(() -> new HighLight(itemView.getContext())
                     .autoRemove(true)//设置背景点击高亮布局自动移除为false 默认为true
                     .intercept(true)
                     .maskColor(0x66000000)
                     .addHighLight(itemView, R.layout.hightlight, new OnBottomPosCallback(), new RectLightShape())
                     .show());
-            K2JUtils.put("showRemindIndicate",false);
+            K2JUtils.put("showRemindIndicate", false);
         }
 
     }
@@ -158,25 +163,30 @@ public class RemindActivity extends BaseTitleActivity {
     private void loadData() {
         srecyclerview.postDelayed(() -> {
             Session userInfo = App.getUserInfo();
-            ApiController.getAllPush(userInfo.getUserid(), userInfo.getToken(), userInfo.getType())
-                    .subscribe(new DataObserver<ArrayList<KotlinBean.PushBean>>(this) {
-                        @Override
-                        public void OnNEXT(ArrayList<KotlinBean.PushBean> beand) {
-                            bean = beand;
-                            if (Constance.DEBUGTAG)
-                                Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "OnNEXT: " + beand);
-                            sAdapter.setBeanList(beand);
-                            srecyclerview.notifyRefreshComplete();
-                            sAdapter.showItem();
-                        }
+            Observable<KotlinBean.BaseBean<ArrayList<KotlinBean.PushBean>>> allPush = null;
+            if (type == 0)
+                allPush = ApiController.getAllUnhandlerPush(userInfo.getUserid(), userInfo.getToken(), userInfo.getType());
+            else {
+                allPush = ApiController.getAllPush(userInfo.getUserid(), userInfo.getToken(), userInfo.getType());
+            }
+            allPush.subscribe(new DataObserver<ArrayList<KotlinBean.PushBean>>(this) {
+                @Override
+                public void OnNEXT(ArrayList<KotlinBean.PushBean> beand) {
+                    bean = beand;
+                    if (Constance.DEBUGTAG)
+                        Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "OnNEXT: " + beand);
+                    sAdapter.setBeanList(beand);
+                    srecyclerview.notifyRefreshComplete();
+                    sAdapter.showItem();
+                }
 
-                        @Override
-                        public void OnERROR(String error) {
-                            super.OnERROR(error);
-                            srecyclerview.notifyRefreshComplete();
-                            sAdapter.ShowError();
-                        }
-                    });
+                @Override
+                public void OnERROR(String error) {
+                    super.OnERROR(error);
+                    srecyclerview.notifyRefreshComplete();
+                    sAdapter.ShowError();
+                }
+            });
 
         }, 500);
     }
@@ -186,19 +196,20 @@ public class RemindActivity extends BaseTitleActivity {
         super.onSaveInstanceState(outState);
         if (bean != null) {
             outState.putSerializable("bean", bean);
+            outState.putInt("type", type);
         }
     }
 
     private void goDoctorHome(String userid) {
-        ApiController.getCurrentDoc(userid,App.getToken())
+        ApiController.getCurrentDoc(userid, App.getToken())
                 .subscribe(new DataObserver<DoctorBean.ContentBean>(this) {
                     @Override
                     public void OnNEXT(DoctorBean.ContentBean bean) {
-                        if(bean==null){
+                        if (bean == null) {
                             return;
                         }
-                        Intent intent=new Intent(RemindActivity.this,DoctorHome.class);
-                        intent.putExtra("data",bean);
+                        Intent intent = new Intent(RemindActivity.this, DoctorHome.class);
+                        intent.putExtra("data", bean);
                         startActivity(intent);
                     }
                 });

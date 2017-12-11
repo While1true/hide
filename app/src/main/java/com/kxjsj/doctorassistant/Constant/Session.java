@@ -9,12 +9,12 @@ import com.kxjsj.doctorassistant.Utils.GsonUtils;
 public class Session {
     String userid;
     String username;
-    String imgUrl;
-    String token;
-    String patientNo;
-    String rongToken;
-    String department;
-    int type;
+    String imgUrl; //头像地址
+    String token;//用户token
+    String patientNo;//病号
+    String rongToken;//融云token
+    String department;//科室
+    int type;//0:病人 1：医生 2；护士
 
     public String getDepartment() {
         return department;

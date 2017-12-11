@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 
 import com.ck.hello.nestrefreshlib.View.Adpater.Base.ItemHolder;
@@ -40,7 +41,6 @@ public class ReportActivity extends BaseTitleActivity {
     private SAdapter adapter;
     ArrayList<KotlinBean.CheckReportBean> beans;
     String patientNo;
-    private WrapStaggeredManager wrapStaggeredManager;
 
     @Override
     protected int getContentLayoutId() {
@@ -93,11 +93,8 @@ public class ReportActivity extends BaseTitleActivity {
             }
         }
 
-        if(wrapStaggeredManager==null) {
-            wrapStaggeredManager = new WrapStaggeredManager();
-        }
         int i = OrentionUtils.isPortrait(this) ? 2 : 3;
-        sRecyclerView.setAdapter(wrapStaggeredManager.setCount(i) ,adapter)
+        sRecyclerView.setAdapter(new StaggeredGridLayoutManager(i,StaggeredGridLayoutManager.VERTICAL),adapter)
                 .setRefreshMode(true,true,false,false)
                 .setPullRate(2);
     }
