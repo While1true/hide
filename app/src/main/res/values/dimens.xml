@@ -1,10 +1,14 @@
 <resources>
 
-    <dimen name="titlesize">22sp</dimen>
-    <dimen name="middlesize">32sp</dimen>
-    <dimen name="bigsize">48sp</dimen>
-    <dimen name="subtitlesize">20sp</dimen>
+    <!--<dimen name="titlesize">22sp</dimen>-->
+    <!--<dimen name="middlesize">32sp</dimen>-->
+    <!--<dimen name="bigsize">48sp</dimen>-->
+    <!--<dimen name="subtitlesize">20sp</dimen>-->
 
+    <dimen name="titlesize">18sp</dimen>
+    <dimen name="middlesize">26sp</dimen>
+    <dimen name="bigsize">30sp</dimen>
+    <dimen name="subtitlesize">16sp</dimen>
 
     <dimen name="pt0.5">0.5pt</dimen>
     <dimen name="pt1">1pt</dimen>

@@ -49,6 +49,11 @@ public class Constance {
          * 留言
          */
         public static final int COMMENT=6;
+
+        /**
+         * 评价 医生跳护士
+         */
+        public static final int DOCTOR_NURSE=7;
     }
 
 }

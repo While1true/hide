@@ -10,6 +10,7 @@ import com.kxjsj.doctorassistant.App;
 import com.kxjsj.doctorassistant.Appxx.Mine.Wallet.ChargeDetailActivity;
 import com.kxjsj.doctorassistant.Appxx.Mine.Wallet.MoneyDetailsActivity;
 import com.kxjsj.doctorassistant.Appxx.Mine.Wallet.WalletActivity;
+import com.kxjsj.doctorassistant.Appxx.Sicker.Remark.RemarkActivity;
 import com.kxjsj.doctorassistant.Component.BaseTitleActivity;
 import com.kxjsj.doctorassistant.Constant.Session;
 import com.kxjsj.doctorassistant.JavaBean.KotlinBean;
@@ -44,15 +45,9 @@ public class SelfPayActivity extends BaseTitleActivity {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
+        ButterKnife.bind(this);
         setTitle("自助缴费");
 
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
     }
 
     @OnClick({R.id.pay, R.id.detail, R.id.money})
@@ -83,6 +78,7 @@ public class SelfPayActivity extends BaseTitleActivity {
                     public void OnNEXT(KotlinBean.ChargeResult bean) {
                         needPay.setText("0");
                         K2JUtils.toast("缴费成功！"+bean.getPay());
+                        startActivity(new Intent(SelfPayActivity.this,RemarkActivity.class));
                     }
                 });
     }

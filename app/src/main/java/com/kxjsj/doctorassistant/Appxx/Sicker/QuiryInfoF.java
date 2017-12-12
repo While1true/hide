@@ -3,12 +3,11 @@ package com.kxjsj.doctorassistant.Appxx.Sicker;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.kxjsj.doctorassistant.App;
 import com.kxjsj.doctorassistant.Appxx.Sicker.QuiryInfo.CheckPartActivity;
@@ -23,10 +22,8 @@ import com.kxjsj.doctorassistant.Net.ApiController;
 import com.kxjsj.doctorassistant.R;
 import com.kxjsj.doctorassistant.Rx.DataObserver;
 import com.kxjsj.doctorassistant.Utils.K2JUtils;
-import com.kxjsj.doctorassistant.View.RotateImageView;
-
-import java.util.Arrays;
-import java.util.List;
+import com.kxjsj.doctorassistant.View.AlphaTransformer;
+import com.kxjsj.doctorassistant.View.LoopFragmentPagerAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,15 +36,15 @@ import butterknife.Unbinder;
 
 public class QuiryInfoF extends BaseFragment {
 
-
-    @BindView(R.id.imageView)
-    RotateImageView imageView;
-    private Unbinder unbinder;
-    private PatientBed beans;
-    private String patientNo;
-    Integer[] res = {R.drawable.ic_id, R.drawable.ic_medicine, R.drawable.ic_checkreport, R.drawable.ic_roominfo, R.drawable.ic_money_detail, R.drawable.ic_checkprice};
-    int selected;
     int[] buttonIds = {R.id.id, R.id.medicalinfo, R.id.checkinfo, R.id.roominfo, R.id.money, R.id.checke_price};
+    @BindView(R.id.imageView)
+    ViewPager mViewPager;
+    private Unbinder unbinder;
+    public static PatientBed beans;
+    public static String patientNo;
+
+    int selected;
+
 
     @Override
     protected void initView(@Nullable Bundle savedInstanceState) {
@@ -88,28 +85,44 @@ public class QuiryInfoF extends BaseFragment {
     }
 
     private void setAndStartAnimation() {
-        List<Integer> ints = Arrays.asList(res);
-        imageView.setAdapter(new RotateImageView.ViewAdapter<Integer>(ints) {
+        AlphaTransformer alphaTransformer = new AlphaTransformer();
+        mViewPager.setPageTransformer(false,alphaTransformer);
+        mViewPager.setAdapter(new LoopFragmentPagerAdapter(getChildFragmentManager()) {
             @Override
-            public View getView(int i, Integer resz, View conventView, ViewGroup viewGroup) {
-                if (conventView == null) {
-                    conventView = getLayoutInflater().inflate(R.layout.cardimageview, viewGroup, false);
-                }
-                ImageView imageView = conventView.findViewById(R.id.imageview);
-                TextView tv = conventView.findViewById(R.id.tv);
-                conventView.setOnClickListener(v -> {
-                    v.setTag(buttonIds[selected]);
-                    onViewClicked(v);
-                });
-                imageView.setImageResource(resz);
-                tv.setText("想了解更多信息吗？\n快来点击查看吧");
-                return conventView;
+            public int getActualCount() {
+                return 6;
             }
+
             @Override
-            public void callback(int current) {
+            public Fragment getActualItem(int position) {
+                Bundle args = new Bundle();
+                args.putInt("position", position);
+                MyFragment myFragment = new MyFragment();
+                myFragment.setArguments(args);
+                return myFragment;
+            }
+
+            @Override
+            public CharSequence getActualPagerTitle(int position) {
+                return null;
+            }
+        });
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
                 view.findViewById(buttonIds[selected]).setBackgroundResource(R.drawable.stoken_background_selector);
-                selected = current;
+                selected = position%6;
                 view.findViewById(buttonIds[selected]).setBackgroundResource(R.drawable.stoken_round_background_checked);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
             }
         });
     }
@@ -166,4 +179,10 @@ public class QuiryInfoF extends BaseFragment {
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        beans = null;
+        patientNo=null;
+    }
 }

@@ -40,8 +40,9 @@ public class Rotation3DAnimation extends Animation {
 //        camera.translate(0,0,deep);
         camera.rotateY(currentDegree);
         camera.getMatrix(matrix);
-        matrix.postScale(!reverse?interpolatedTime:(1-interpolatedTime),!reverse?interpolatedTime:(1-interpolatedTime));
         camera.restore();
+        matrix.preScale(!reverse?interpolatedTime:(1-interpolatedTime),!reverse?interpolatedTime:(1-interpolatedTime));
+        matrix.postScale(1,1);
         System.out.println(centreX+"ppp"+centreY);
         matrix.preTranslate(-centreX,-centreY);
         matrix.postTranslate(centreX,centreY);

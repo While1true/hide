@@ -14,13 +14,13 @@ import com.kxjsj.doctorassistant.Screen.AdjustUtil;
 import com.kxjsj.doctorassistant.MobSMS.MessageUtils;
 import com.kxjsj.doctorassistant.Utils.GsonUtils;
 import com.kxjsj.doctorassistant.Utils.K2JUtils;
-
+import com.qihoo360.replugin.RePluginApplication;
 
 
 /**
  * Created by vange on 2017/9/6.
  */
-public class App extends Application {
+public class App extends RePluginApplication {
     public static App app;
     private static AppComponent appComponent;
 
