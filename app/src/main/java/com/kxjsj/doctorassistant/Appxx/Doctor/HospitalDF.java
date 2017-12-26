@@ -26,7 +26,7 @@ import com.kxjsj.doctorassistant.DialogAndPopWindow.ReplyDialog;
 import com.kxjsj.doctorassistant.JavaBean.KotlinBean;
 import com.kxjsj.doctorassistant.Net.ApiController;
 import com.kxjsj.doctorassistant.R;
-import com.kxjsj.doctorassistant.Rx.BaseBean;
+import com.kxjsj.doctorassistant.Rx.RxBaseBean;
 import com.kxjsj.doctorassistant.Rx.DataObserver;
 import com.kxjsj.doctorassistant.Rx.MyObserver;
 import com.kxjsj.doctorassistant.Rx.RxSchedulers;
@@ -194,16 +194,16 @@ public class HospitalDF extends BaseFragment {
 
     private void acqurePush() {
         RxBus.getDefault().toObservable(
-                Constance.Rxbus.CALLHELP, BaseBean.class)
+                Constance.Rxbus.CALLHELP, RxBaseBean.class)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new MyObserver<BaseBean>(this) {
+                .subscribe(new MyObserver<RxBaseBean>(this) {
                     @Override
-                    public void onNext(BaseBean baseBean) {
-                        super.onNext(baseBean);
+                    public void onNext(RxBaseBean rxBaseBean) {
+                        super.onNext(rxBaseBean);
                         if (Constance.DEBUGTAG)
-                            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onNext: " + baseBean);
-                        KotlinBean.PushBean beanz = (KotlinBean.PushBean) baseBean.getData();
+                            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onNext: " + rxBaseBean);
+                        KotlinBean.PushBean beanz = (KotlinBean.PushBean) rxBaseBean.getData();
                         if (Constance.DEBUGTAG)
                             Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onNext: "+beanz);
                         bean.add(beanz);

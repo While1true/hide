@@ -1,7 +1,6 @@
 package com.kxjsj.doctorassistant.DialogAndPopWindow;
 
 import android.Manifest;
-import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
@@ -10,9 +9,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.v4.content.FileProvider;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,15 +20,13 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.ck.hello.nestrefreshlib.View.Adpater.Base.SimpleViewHolder;
-import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.PositionHolder;
 import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.SAdapter;
 import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.StringHolder;
-import com.ck.hello.nestrefreshlib.View.Adpater.SBaseAdapter;
 import com.kxjsj.doctorassistant.Component.BaseBottomSheetDialog;
 import com.kxjsj.doctorassistant.Constant.Constance;
 import com.kxjsj.doctorassistant.Glide.MyOptions;
 import com.kxjsj.doctorassistant.R;
-import com.kxjsj.doctorassistant.Rx.BaseBean;
+import com.kxjsj.doctorassistant.Rx.RxBaseBean;
 import com.kxjsj.doctorassistant.Rx.MyObserver;
 import com.kxjsj.doctorassistant.Rx.RxSchedulers;
 import com.kxjsj.doctorassistant.Rx.Utils.RxBus;
@@ -116,7 +110,7 @@ public class PicDialog extends BaseBottomSheetDialog {
 
                         .into((ImageView) holder.getView(R.id.imageview));
                 holder.itemView.setOnClickListener(v -> {
-                    RxBus.getDefault().post(new BaseBean(Constance.Rxbus.PIC, item));
+                    RxBus.getDefault().post(new RxBaseBean(Constance.Rxbus.PIC, item));
                     dismiss();
                 });
             }
@@ -234,7 +228,7 @@ public class PicDialog extends BaseBottomSheetDialog {
                 filename= getFilePathFromContentUri(uri,getContext().getContentResolver());
 
             }
-            RxBus.getDefault().post(new BaseBean<String>(Constance.Rxbus.PIC, filename));
+            RxBus.getDefault().post(new RxBaseBean<String>(Constance.Rxbus.PIC, filename));
             if (Constance.DEBUGTAG)
                 Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onActivityResult1: " + Environment.getExternalStorageDirectory()+filename);
             dismiss();
@@ -246,7 +240,7 @@ public class PicDialog extends BaseBottomSheetDialog {
             if (data != null) {
                 Uri uri = data.getData();
                 String file = getFilePathFromContentUri(uri,getContext().getContentResolver());
-                RxBus.getDefault().post(new BaseBean<String>(Constance.Rxbus.PIC, file));
+                RxBus.getDefault().post(new RxBaseBean<String>(Constance.Rxbus.PIC, file));
                 dismiss();
                 if (Constance.DEBUGTAG)
                     Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onActivityResult2: " + file);

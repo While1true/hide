@@ -23,7 +23,7 @@ import com.kxjsj.doctorassistant.JavaBean.KotlinBean;
 import com.kxjsj.doctorassistant.JavaBean.PatientBed;
 import com.kxjsj.doctorassistant.Net.ApiController;
 import com.kxjsj.doctorassistant.R;
-import com.kxjsj.doctorassistant.Rx.BaseBean;
+import com.kxjsj.doctorassistant.Rx.RxBaseBean;
 import com.kxjsj.doctorassistant.Rx.DataObserver;
 import com.kxjsj.doctorassistant.Rx.MyObserver;
 import com.kxjsj.doctorassistant.Rx.Utils.RxBus;
@@ -105,15 +105,15 @@ public class HospitalFback extends BaseFragment {
             sscrollview.setRefreshing();
 
         RxBus.getDefault().toObservable(
-                Constance.Rxbus.CALLHELP, BaseBean.class)
+                Constance.Rxbus.CALLHELP, RxBaseBean.class)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new MyObserver<BaseBean>(this) {
+                .subscribe(new MyObserver<RxBaseBean>(this) {
                     @Override
-                    public void onNext(BaseBean baseBean) {
-                        super.onNext(baseBean);
+                    public void onNext(RxBaseBean rxBaseBean) {
+                        super.onNext(rxBaseBean);
                         if (Constance.DEBUGTAG)
-                            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onNext: "+baseBean);
-                       KotlinBean.PushBean bean= (KotlinBean.PushBean) baseBean.getData();
+                            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onNext: "+ rxBaseBean);
+                       KotlinBean.PushBean bean= (KotlinBean.PushBean) rxBaseBean.getData();
                         movetext.start(bean.getFromName()+": "+bean.getContent());
                     }
                 });

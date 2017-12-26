@@ -6,7 +6,6 @@ import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,13 +13,11 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.kxjsj.doctorassistant.Appxx.Mine.Login.AuthActivity;
 import com.kxjsj.doctorassistant.Component.BaseFragment;
 import com.kxjsj.doctorassistant.Constant.Constance;
 import com.kxjsj.doctorassistant.Net.ApiController;
-import com.kxjsj.doctorassistant.Net.RetrofitHttpManger;
 import com.kxjsj.doctorassistant.R;
-import com.kxjsj.doctorassistant.Rx.BaseBean;
+import com.kxjsj.doctorassistant.Rx.RxBaseBean;
 import com.kxjsj.doctorassistant.Rx.DataObserver;
 import com.kxjsj.doctorassistant.Rx.MyObserver;
 import com.kxjsj.doctorassistant.Rx.RxSchedulers;
@@ -38,7 +35,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import io.reactivex.Observable;
-import io.reactivex.annotations.NonNull;
 
 /**
  * Created by vange on 2017/10/9.
@@ -87,11 +83,11 @@ public class AuthPhoneF extends BaseFragment implements MessageUtils.MssListener
         });
 
         RxBus.getDefault()
-                .toObservable(Constance.Rxbus.CLOST_INPUT, BaseBean.class)
-                .subscribe(new MyObserver<BaseBean>(this) {
+                .toObservable(Constance.Rxbus.CLOST_INPUT, RxBaseBean.class)
+                .subscribe(new MyObserver<RxBaseBean>(this) {
                     @Override
-                    public void onNext(BaseBean baseBean) {
-                        super.onNext(baseBean);
+                    public void onNext(RxBaseBean rxBaseBean) {
+                        super.onNext(rxBaseBean);
                         InputUtils.hideKeyboard(etphone);
                     }
                 });
@@ -172,7 +168,7 @@ public class AuthPhoneF extends BaseFragment implements MessageUtils.MssListener
     }
 
     private void doAuth() {
-//        RxBus.getDefault().post(new BaseBean<String>(Constance.Rxbus.SIGNNEXT, etphone.getText().toString()));
+//        RxBus.getDefault().post(new RxBaseBean<String>(Constance.Rxbus.SIGNNEXT, etphone.getText().toString()));
         if (TextUtils.isEmpty(etphone.getText().toString())) {
             K2JUtils.toast("请输入手机号", 1);
             return;
@@ -244,7 +240,7 @@ public class AuthPhoneF extends BaseFragment implements MessageUtils.MssListener
     public void onAuthSuccess(HashMap<String, Object> datas) {
         if (dialog != null)
             dialog.dismiss();
-        RxBus.getDefault().post(new BaseBean<String>(Constance.Rxbus.SIGNNEXT, etphone.getText().toString()));
+        RxBus.getDefault().post(new RxBaseBean<String>(Constance.Rxbus.SIGNNEXT, etphone.getText().toString()));
 
 
     }

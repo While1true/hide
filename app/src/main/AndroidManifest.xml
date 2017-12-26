@@ -94,6 +94,7 @@
         <activity android:name=".Appxx.Sicker.QuiryInfo.RoomInfoActivity"/>
         <activity android:name=".Appxx.Mine.Wallet.ChargeDetailActivity"/>
         <activity android:name=".Appxx.Mine.Wallet.MoneyDetailsActivity"/>
+        <activity android:name=".Appxx.Mine.Wallet.MoneyToPayDetailsActivity"/>
         <activity android:name=".Appxx.Sicker.Remark.RemarkActivity"
             android:windowSoftInputMode="stateHidden|adjustPan"/>
 

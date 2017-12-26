@@ -17,7 +17,7 @@ import com.kxjsj.doctorassistant.Appxx.Sicker.RadioActivity;
 import com.kxjsj.doctorassistant.Component.BaseFragment;
 import com.kxjsj.doctorassistant.Constant.Constance;
 import com.kxjsj.doctorassistant.R;
-import com.kxjsj.doctorassistant.Rx.BaseBean;
+import com.kxjsj.doctorassistant.Rx.RxBaseBean;
 import com.kxjsj.doctorassistant.Rx.Utils.RxBus;
 
 import butterknife.BindView;
@@ -86,7 +86,7 @@ public class RatingFragment extends BaseFragment {
 
 
         if(type==0){
-            RxBus.getDefault().post(new BaseBean<String>(Constance.Rxbus.DOCTOR_NURSE,""));
+            RxBus.getDefault().post(new RxBaseBean<String>(Constance.Rxbus.DOCTOR_NURSE,""));
         }else {
             startActivity(new Intent(getContext(), RadioActivity.class));
         }

@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by vange on 2017/9/13.
  */
 
-public class BaseBean<E> implements Serializable {
+public class RxBaseBean<E> implements Serializable {
     @SerializedName("code")
     private int code;
     @SerializedName("msg")
@@ -16,7 +16,7 @@ public class BaseBean<E> implements Serializable {
     @SerializedName("data")
     private E data;
 
-    public BaseBean(int code, E data) {
+    public RxBaseBean(int code, E data) {
         this.code = code;
         this.data = data;
     }

@@ -2,7 +2,6 @@ package com.kxjsj.doctorassistant.Appxx.Sicker;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.ck.hello.nestrefreshlib.View.RefreshViews.SScrollview;
 import com.kxjsj.doctorassistant.App;
@@ -24,7 +22,7 @@ import com.kxjsj.doctorassistant.JavaBean.PatientBed;
 import com.kxjsj.doctorassistant.Net.ApiController;
 import com.kxjsj.doctorassistant.R;
 import com.kxjsj.doctorassistant.RongYun.ConversationUtils;
-import com.kxjsj.doctorassistant.Rx.BaseBean;
+import com.kxjsj.doctorassistant.Rx.RxBaseBean;
 import com.kxjsj.doctorassistant.Rx.DataObserver;
 import com.kxjsj.doctorassistant.Rx.MyObserver;
 import com.kxjsj.doctorassistant.Rx.Utils.RxBus;
@@ -95,15 +93,15 @@ public class HospitalF extends BaseFragment {
             sscrollview.setRefreshing();
 
         RxBus.getDefault().toObservable(
-                Constance.Rxbus.CALLHELP, BaseBean.class)
+                Constance.Rxbus.CALLHELP, RxBaseBean.class)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new MyObserver<BaseBean>(this) {
+                .subscribe(new MyObserver<RxBaseBean>(this) {
                     @Override
-                    public void onNext(BaseBean baseBean) {
-                        super.onNext(baseBean);
+                    public void onNext(RxBaseBean rxBaseBean) {
+                        super.onNext(rxBaseBean);
                         if (Constance.DEBUGTAG)
-                            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onNext: " + baseBean);
-                        KotlinBean.PushBean bean = (KotlinBean.PushBean) baseBean.getData();
+                            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onNext: " + rxBaseBean);
+                        KotlinBean.PushBean bean = (KotlinBean.PushBean) rxBaseBean.getData();
                         movetext.start(bean.getFromName() + ": " + bean.getContent());
                     }
                 });
@@ -124,8 +122,8 @@ public class HospitalF extends BaseFragment {
                     }
 
                     @Override
-                    public void onError(Throwable e) {
-                        super.onError(e);
+                    public void OnERROR(String error) {
+                        super.OnERROR(error);
                         sscrollview.notifyRefreshComplete();
                     }
                 });

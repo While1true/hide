@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.kxjsj.doctorassistant.Component.BaseTitleActivity;
 import com.kxjsj.doctorassistant.Constant.Constance;
 import com.kxjsj.doctorassistant.R;
-import com.kxjsj.doctorassistant.Rx.BaseBean;
+import com.kxjsj.doctorassistant.Rx.RxBaseBean;
 import com.kxjsj.doctorassistant.Rx.MyObserver;
 import com.kxjsj.doctorassistant.Rx.Utils.RxBus;
 import com.kxjsj.doctorassistant.View.NoScrollViewPager;
@@ -32,10 +32,10 @@ public class RemarkActivity extends BaseTitleActivity {
     protected void initView(Bundle savedInstanceState) {
         ButterKnife.bind(this);
         setTitle("给医生评价");
-        RxBus.getDefault().toObservable(Constance.Rxbus.DOCTOR_NURSE, BaseBean.class)
-                .subscribe(new MyObserver<BaseBean>(this) {
+        RxBus.getDefault().toObservable(Constance.Rxbus.DOCTOR_NURSE, RxBaseBean.class)
+                .subscribe(new MyObserver<RxBaseBean>(this) {
                     @Override
-                    public void onNext(BaseBean baseBean) {
+                    public void onNext(RxBaseBean rxBaseBean) {
                         viewpager.setCurrentItem(1);
                         setTitle("给护士评价");
                     }

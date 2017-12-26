@@ -8,7 +8,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.kxjsj.doctorassistant.Component.BaseTitleActivity;
 import com.kxjsj.doctorassistant.Constant.Constance;
 import com.kxjsj.doctorassistant.R;
-import com.kxjsj.doctorassistant.Rx.BaseBean;
+import com.kxjsj.doctorassistant.Rx.RxBaseBean;
 import com.kxjsj.doctorassistant.Rx.MyObserver;
 import com.kxjsj.doctorassistant.Rx.RxSchedulers;
 import com.kxjsj.doctorassistant.Rx.Utils.RxBus;
@@ -42,7 +42,7 @@ public class RegisterActivity extends BaseTitleActivity {
 
     @Override
     protected void onNavigationClicked() {
-        RxBus.getDefault().post(new BaseBean<String>(Constance.Rxbus.CLOST_INPUT, ""));
+        RxBus.getDefault().post(new RxBaseBean<String>(Constance.Rxbus.CLOST_INPUT, ""));
         super.onNavigationClicked();
     }
 
@@ -97,13 +97,13 @@ public class RegisterActivity extends BaseTitleActivity {
 
 
         RxBus.getDefault()
-                .toObservable(Constance.Rxbus.SIGNNEXT, BaseBean.class)
+                .toObservable(Constance.Rxbus.SIGNNEXT, RxBaseBean.class)
                 .compose(RxSchedulers.compose())
-                .subscribe(new MyObserver<BaseBean>(this) {
+                .subscribe(new MyObserver<RxBaseBean>(this) {
                     @Override
-                    public void onNext(BaseBean baseBean) {
-                        super.onNext(baseBean);
-                        phone = (String) baseBean.getData();
+                    public void onNext(RxBaseBean rxBaseBean) {
+                        super.onNext(rxBaseBean);
+                        phone = (String) rxBaseBean.getData();
                         vp.setCurrentItem(1);
                         setTitle("输入密码");
                         K2JUtils.toast(phone);

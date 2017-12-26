@@ -1,10 +1,9 @@
 package com.kxjsj.doctorassistant.Rx.Utils;
 
 
-import com.kxjsj.doctorassistant.Rx.BaseBean;
+import com.kxjsj.doctorassistant.Rx.RxBaseBean;
 
 import io.reactivex.Observable;
-import io.reactivex.functions.Predicate;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 
@@ -33,7 +32,7 @@ public class RxBus {
         return bus.ofType(eventType);
 
     }
-    public <T extends BaseBean> Observable<T> toObservable (final int Tag, Class<T> eventType) {
+    public <T extends RxBaseBean> Observable<T> toObservable (final int Tag, Class<T> eventType) {
         return bus.ofType(eventType)
                 .filter(t -> t.getCode()==Tag);
 

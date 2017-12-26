@@ -199,16 +199,20 @@ public interface Api {
     Observable<BaseBean<ArrayList<KotlinBean.DebitDetail>>>selectPaymentDetails(@Field("patientNo")String patientNo,@Field("token")String token);
 
     @FormUrlEncoded
-    @POST("money/selectPaymentDetails")
+    @POST("money/selectUnpaidDetails")
     Observable<BaseBean<ArrayList<KotlinBean.DebitDetail>>>selectUnpaidDetails(@Field("patientNo")String patientNo,@Field("token")String token);
 
     @FormUrlEncoded
     @POST("money/recharge")
     Observable<BaseBean<KotlinBean.ChargeResult>>recharge(@Field("patientNo")String patientNo, @Field("token")String token, @Field("paymentAmount")String paymentAmount);
 
+   @FormUrlEncoded
+    @POST("money/unpaidTotalAmount")
+    Observable<BaseBean<Object>>unpaidTotalAmount(@Field("patientNo")String patientNo, @Field("token")String token);
+
     @FormUrlEncoded
     @POST("money/debit")
-    Observable<BaseBean<KotlinBean.ChargeResult>>debit(@Field("patientNo")String patientNo, @Field("token")String token, @Field("paymentAmount")String paymentAmount);
+    Observable<BaseBean<KotlinBean.ChargeResult>>debit(@Field("patientNo")String patientNo, @Field("token")String token);
 
     @FormUrlEncoded
     @POST("money/selectDetails")

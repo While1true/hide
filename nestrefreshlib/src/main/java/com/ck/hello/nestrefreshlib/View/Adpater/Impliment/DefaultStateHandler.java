@@ -88,8 +88,9 @@ public class DefaultStateHandler implements StateHandlerInterface<String> {
      * 切换状态时调用，关闭一些动画
      */
     @Override
-    public void switchState() {
-        if (sLoading != null)
+    public void switchState(int state) {
+        System.out.println(hashCode()+"switchState"+state);
+        if (sLoading != null&&state!=SAdapter.SHOW_LOADING)
             sLoading.stopAnimator();
     }
 }

@@ -20,7 +20,7 @@ import com.kxjsj.doctorassistant.Constant.Constance;
 import com.kxjsj.doctorassistant.Constant.Session;
 import com.kxjsj.doctorassistant.Net.ApiController;
 import com.kxjsj.doctorassistant.R;
-import com.kxjsj.doctorassistant.Rx.BaseBean;
+import com.kxjsj.doctorassistant.Rx.RxBaseBean;
 import com.kxjsj.doctorassistant.Rx.DataObserver;
 import com.kxjsj.doctorassistant.Rx.MyObserver;
 import com.kxjsj.doctorassistant.Rx.Utils.RxBus;
@@ -33,7 +33,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import io.reactivex.annotations.NonNull;
 import io.rong.imkit.RongIM;
 import io.rong.imlib.model.UserInfo;
 
@@ -57,11 +56,11 @@ public class RegisterF extends BaseFragment {
     @Override
     protected void initView(@Nullable Bundle savedInstanceState) {
         RxBus.getDefault()
-                .toObservable(Constance.Rxbus.CLOST_INPUT, BaseBean.class)
-                .subscribe(new MyObserver<BaseBean>(this) {
+                .toObservable(Constance.Rxbus.CLOST_INPUT, RxBaseBean.class)
+                .subscribe(new MyObserver<RxBaseBean>(this) {
                     @Override
-                    public void onNext(BaseBean baseBean) {
-                        super.onNext(baseBean);
+                    public void onNext(RxBaseBean rxBaseBean) {
+                        super.onNext(rxBaseBean);
                         InputUtils.hideKeyboard(etaccount);
                     }
                 });
@@ -122,7 +121,7 @@ public class RegisterF extends BaseFragment {
                         session.setType(RegisterActivity.type);
                         K2JUtils.put("userinfo",session.toString());
                         RongIM.getInstance().refreshUserInfoCache(new UserInfo(session.getUserid(), session.getUsername(), Uri.parse(session.getImgUrl())));
-//                        RxBus.getDefault().post(new BaseBean<Session>(Constance.Rxbus.LOGIN_SUCCESS, session));
+//                        RxBus.getDefault().post(new RxBaseBean<Session>(Constance.Rxbus.LOGIN_SUCCESS, session));
                         if(RegisterActivity.type==0){
                             startActivity(new Intent(getContext(), RadioActivity.class));
                         }else{

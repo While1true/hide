@@ -29,8 +29,13 @@ public class AdjustUtil {
         LAND, PORT, BOTH
     }
 
+    enum AdjustUnit {
+        DP, PX
+    }
+
     private static Point point;
     private static Orention type = Orention.LAND;
+    private static AdjustUnit unit = AdjustUnit.DP;
     private static int DESIGN_WIDTHs = 1920;
     private static int DESIGN_HEIGHTs = 1200;
     private static float DESIGN_SCALEs = 2.0f;
@@ -39,26 +44,27 @@ public class AdjustUtil {
 
     /**
      * 平板配置
+     *
      * @param app
      */
-    public static void adjust(Application app){
-        adjust(app,type,DESIGN_WIDTHs,DESIGN_HEIGHTs,DESIGN_SCALEs);
+    public static void adjust(Application app) {
+        adjust(app, type, unit, DESIGN_WIDTHs, DESIGN_HEIGHTs, DESIGN_SCALEs);
     }
 
     /**
-     *
      * @param app
-     * @param orention 方向
-     * @param DESIGN_WIDTH 设计稿宽
+     * @param orention      方向
+     * @param DESIGN_WIDTH  设计稿宽
      * @param DESIGN_HEIGHT 设计稿高
-     * @param DESIGN_SCALE 设计设备密度
+     * @param DESIGN_SCALE  设计设备密度
      */
-    public static void adjust(Application app, Orention orention, int DESIGN_WIDTH, int DESIGN_HEIGHT, float DESIGN_SCALE) {
+    public static void adjust(Application app, Orention orention, AdjustUnit units, int DESIGN_WIDTH, int DESIGN_HEIGHT, float DESIGN_SCALE) {
         type = orention;
+        unit = units;
         DESIGN_WIDTHs = DESIGN_WIDTH;
         DESIGN_HEIGHTs = DESIGN_HEIGHT;
         DESIGN_SCALEs = DESIGN_SCALE;
-        originalScreenScale=app.getResources().getDisplayMetrics().density;
+        originalScreenScale = app.getResources().getDisplayMetrics().density;
         doAdjust(app);
     }
 
@@ -83,7 +89,8 @@ public class AdjustUtil {
 
     /**
      * 改变density
-     *屏幕选注不重启activity时要在onConfigChanged中调用
+     * 屏幕选注不重启activity时要在onConfigChanged中调用
+     *
      * @param context
      */
     public static void changeTypeValue(Context context) {
@@ -96,7 +103,7 @@ public class AdjustUtil {
             calculateScale();
         }
         if (Constance.DEBUGTAG)
-            Log.i(Constance.DEBUG, "changeTypeValue: "+point.x+"--"+point.y+"--"+screenScale);
+            Log.i(Constance.DEBUG, "changeTypeValue: " + point.x + "--" + point.y + "--" + screenScale);
         Resources resources = context.getResources();
         DisplayMetrics displayMetrics = resources.getDisplayMetrics();
         displayMetrics.density = screenScale;

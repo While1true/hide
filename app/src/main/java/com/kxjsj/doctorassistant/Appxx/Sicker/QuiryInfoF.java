@@ -65,6 +65,7 @@ public class QuiryInfoF extends BaseFragment {
 
     @Override
     protected void loadLazy() {
+        view.findViewById(buttonIds[selected]).setBackgroundResource(R.drawable.stoken_round_background_checked);
         ApiController.getBedInfo(
                 App.getUserInfo().getPatientNo())
                 .subscribe(new DataObserver<PatientBed>(this) {

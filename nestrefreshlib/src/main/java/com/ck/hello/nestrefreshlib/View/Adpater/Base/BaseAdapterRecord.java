@@ -154,7 +154,7 @@ public abstract class BaseAdapterRecord<T, E> extends RecyclerView.Adapter imple
      */
     public void showState(int showstate, E e) {
         if (this.showstate != showstate)
-            StateHandler.switchState();
+            StateHandler.switchState(showstate);
         this.showstate = showstate;
         this.e = e;
         notifyDataSetChanged();

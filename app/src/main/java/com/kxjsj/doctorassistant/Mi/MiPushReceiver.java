@@ -6,12 +6,10 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.kxjsj.doctorassistant.App;
-import com.kxjsj.doctorassistant.Appxx.Doctor.RadioActivityD;
 import com.kxjsj.doctorassistant.Appxx.Mine.Comment.CommentActivity;
-import com.kxjsj.doctorassistant.Appxx.Sicker.RadioActivity;
 import com.kxjsj.doctorassistant.Constant.Constance;
 import com.kxjsj.doctorassistant.JavaBean.KotlinBean;
-import com.kxjsj.doctorassistant.Rx.BaseBean;
+import com.kxjsj.doctorassistant.Rx.RxBaseBean;
 import com.kxjsj.doctorassistant.Rx.Utils.RxBus;
 import com.kxjsj.doctorassistant.Utils.GsonUtils;
 import com.kxjsj.doctorassistant.Utils.K2JUtils;
@@ -86,13 +84,13 @@ public class MiPushReceiver extends MiMessageReceiver {
         if("0".equals(description)) {
             KotlinBean.PushBean pushBean = GsonUtils.parse2Bean(mMessage, KotlinBean.PushBean.class);
             if(pushBean!=null) {
-                RxBus.getDefault().post(new BaseBean<>(Constance.Rxbus.CALLHELP, pushBean));
+                RxBus.getDefault().post(new RxBaseBean<>(Constance.Rxbus.CALLHELP, pushBean));
 //                showPush(context, pushBean);
             }
         }else if("1".equals(description)){
             KotlinBean.PushBean pushBean = GsonUtils.parse2Bean(mMessage, KotlinBean.PushBean.class);
             if(pushBean!=null) {
-                RxBus.getDefault().post(new BaseBean<>(Constance.Rxbus.COMMENT, pushBean));
+                RxBus.getDefault().post(new RxBaseBean<>(Constance.Rxbus.COMMENT, pushBean));
                 showPush(context, pushBean);
             }
         }

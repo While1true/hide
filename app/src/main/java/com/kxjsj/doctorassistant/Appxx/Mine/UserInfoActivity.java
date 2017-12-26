@@ -19,7 +19,7 @@ import com.kxjsj.doctorassistant.Constant.Session;
 import com.kxjsj.doctorassistant.DialogAndPopWindow.PicDialog;
 import com.kxjsj.doctorassistant.Glide.GlideLoader;
 import com.kxjsj.doctorassistant.R;
-import com.kxjsj.doctorassistant.Rx.BaseBean;
+import com.kxjsj.doctorassistant.Rx.RxBaseBean;
 import com.kxjsj.doctorassistant.Rx.MyObserver;
 import com.kxjsj.doctorassistant.Rx.Utils.RxBus;
 import com.kxjsj.doctorassistant.Utils.K2JUtils;
@@ -84,14 +84,14 @@ public class UserInfoActivity extends BaseTitleActivity {
 
     private void acquirePicCallback() {
         RxBus.getDefault().
-                toObservable(Constance.Rxbus.PIC, BaseBean.class)
-                .subscribe(new MyObserver<BaseBean>(this) {
+                toObservable(Constance.Rxbus.PIC, RxBaseBean.class)
+                .subscribe(new MyObserver<RxBaseBean>(this) {
                     @Override
-                    public void onNext(BaseBean baseBean) {
-                        super.onNext(baseBean);
-                        GlideLoader.loadRound(img.getImageView(), baseBean.getData());
+                    public void onNext(RxBaseBean rxBaseBean) {
+                        super.onNext(rxBaseBean);
+                        GlideLoader.loadRound(img.getImageView(), rxBaseBean.getData());
                         if (Constance.DEBUGTAG)
-                            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onNext: " + baseBean.getCode());
+                            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onNext: " + rxBaseBean.getCode());
 
                     }
                 });

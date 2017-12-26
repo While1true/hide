@@ -8,7 +8,7 @@
 //
 //import com.kxjsj.doctorassistant.Component.BaseTitleActivity;
 //import com.kxjsj.doctorassistant.Constant.Constance;
-//import com.kxjsj.doctorassistant.Rx.BaseBean;
+//import com.kxjsj.doctorassistant.Rx.RxBaseBean;
 //import com.kxjsj.doctorassistant.Rx.MyObserver;
 //import com.kxjsj.doctorassistant.Rx.RxSchedulers;
 //import com.kxjsj.doctorassistant.Rx.Utils.RxBus;
@@ -28,7 +28,7 @@
 //     */
 //    public static void startCapture(Context context, MyObserver observer){
 //        RxBus.getDefault()
-//                .toObservable(Constance.Rxbus.QRCODE,BaseBean.class)
+//                .toObservable(Constance.Rxbus.QRCODE,RxBaseBean.class)
 //                .compose(RxSchedulers.compose())
 //                .subscribe(observer);
 //        context.startActivity(new Intent(context,MyCaptureActivity.class));
@@ -42,12 +42,12 @@
 //        CodeUtils.AnalyzeCallback analyzeCallback = new CodeUtils.AnalyzeCallback() {
 //            @Override
 //            public void onAnalyzeSuccess(Bitmap mBitmap, String result) {
-//                RxBus.getDefault().post(new BaseBean<String>(Constance.Rxbus.QRCODE,result));
+//                RxBus.getDefault().post(new RxBaseBean<String>(Constance.Rxbus.QRCODE,result));
 //            }
 //
 //            @Override
 //            public void onAnalyzeFailed() {
-//                RxBus.getDefault().post(new BaseBean<String>(Constance.Rxbus.QRCODE,null));
+//                RxBus.getDefault().post(new RxBaseBean<String>(Constance.Rxbus.QRCODE,null));
 //            }
 //        };
 //        @Override

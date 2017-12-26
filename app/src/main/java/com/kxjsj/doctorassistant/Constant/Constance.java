@@ -54,6 +54,11 @@ public class Constance {
          * 评价 医生跳护士
          */
         public static final int DOCTOR_NURSE=7;
+
+        /**
+         * 缴费完成
+         */
+        public static final int PAY_COMPLETE=8;
     }
 
 }

@@ -142,8 +142,8 @@ public class CommunicateF extends BaseFragment {
                     }
 
                     @Override
-                    public void onError(Throwable e) {
-                        super.onError(e);
+                    public void OnERROR(String error) {
+                        super.OnERROR(error);
                         srecyclerview.notifyRefreshComplete();
                         baseMutilAdapter.showState(SAdapter.SHOW_ERROR, "发生错误了哦");
                     }

@@ -357,9 +357,9 @@ public class ApiController {
      * @param ammount
      * @return
      */
-    public static Observable<KotlinBean.BaseBean<KotlinBean.ChargeResult>> pay(String patientNo,String token,String ammount){
+    public static Observable<KotlinBean.BaseBean<KotlinBean.ChargeResult>> pay(String patientNo,String token){
         return InstanceHolder.api
-                .debit(patientNo,token,ammount)
+                .debit(patientNo,token)
                 .compose(RxSchedulers.compose());
     }
 
@@ -374,6 +374,16 @@ public class ApiController {
     public static Observable<KotlinBean.BaseBean<ArrayList<KotlinBean.BankDetail>>> payDetail(String patientNo,String token,String startTime,String endTime){
         return InstanceHolder.api
                 .selectDetails(patientNo,token,startTime,endTime)
+                .compose(RxSchedulers.compose());
+    }
+    /**
+     * 待付款总金额
+     * @param patientNo
+     * @param token
+     */
+    public static Observable<KotlinBean.BaseBean<Object>> unpaidTotalAmount(String patientNo,String token){
+        return InstanceHolder.api
+                .unpaidTotalAmount(patientNo,token)
                 .compose(RxSchedulers.compose());
     }
 }

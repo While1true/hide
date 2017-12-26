@@ -171,7 +171,7 @@ public abstract class BaseAdapter<T, E> extends RecyclerView.Adapter implements 
      */
     public void showState(int showstate, E e) {
         if (this.showstate != showstate)
-            stateHandler.switchState();
+            stateHandler.switchState(showstate);
         this.showstate = showstate;
         this.e = e;
         notifyDataSetChanged();
