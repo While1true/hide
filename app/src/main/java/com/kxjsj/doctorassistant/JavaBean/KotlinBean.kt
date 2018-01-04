@@ -104,7 +104,7 @@ object KotlinBean {
                                       var price:String,
                                       var payornot:String)
 
-    data class ChargeResult constructor(var balance:String,var pay:String)
+    data class ChargeResult constructor(var balance:String,var pay:String,var code:String)
 
 
     /**
@@ -128,4 +128,5 @@ object KotlinBean {
         constructor() : this("")
     }
 
+    data class RatingBeanAverage constructor(var AVERAGE:String, var TOTALITY:String):Serializable
 }

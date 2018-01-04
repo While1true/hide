@@ -22,6 +22,7 @@ import butterknife.ButterKnife;
 public class RemarkActivity extends BaseTitleActivity {
     @BindView(R.id.viewpager)
     NoScrollViewPager viewpager;
+    static String code;
 
     @Override
     protected int getContentLayoutId() {
@@ -30,6 +31,10 @@ public class RemarkActivity extends BaseTitleActivity {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
+        code=getIntent().getStringExtra("code");
+        if(savedInstanceState!=null){
+            code = savedInstanceState.getString("code");
+        }
         ButterKnife.bind(this);
         setTitle("给医生评价");
         RxBus.getDefault().toObservable(Constance.Rxbus.DOCTOR_NURSE, RxBaseBean.class)
@@ -57,5 +62,19 @@ public class RemarkActivity extends BaseTitleActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(code!=null){
+            outState.putString("code",code);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        code=null;
     }
 }

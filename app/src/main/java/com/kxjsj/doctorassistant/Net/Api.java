@@ -7,13 +7,13 @@ import com.kxjsj.doctorassistant.JavaBean.KotlinBean;
 import com.kxjsj.doctorassistant.JavaBean.KotlinBean.BaseBean;
 import com.kxjsj.doctorassistant.JavaBean.PatientBed;
 import com.kxjsj.doctorassistant.JavaBean.PatientHome;
+import com.kxjsj.doctorassistant.JavaBean.RatingBean;
 import com.kxjsj.doctorassistant.JavaBean.SickBed;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
-import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -180,50 +180,66 @@ public interface Api {
                                        @Field("fromid") String fromid);
 
     @GET("queryInfo/getCheckupPro")
-    Observable<BaseBean<ArrayList<KotlinBean.CheckBean>>>getCheckupPro();
+    Observable<BaseBean<ArrayList<KotlinBean.CheckBean>>> getCheckupPro();
 
     @FormUrlEncoded
     @POST("queryInfo/getCheckupReport")
-    Observable<BaseBean<ArrayList<KotlinBean.CheckReportBean>>>getCheckupReport(@Field("patientNo")String patientNo,@Field("token")String token);
+    Observable<BaseBean<ArrayList<KotlinBean.CheckReportBean>>> getCheckupReport(@Field("patientNo") String patientNo, @Field("token") String token);
 
     @FormUrlEncoded
     @POST("queryInfo/getMedicationInfo")
-    Observable<BaseBean<ArrayList<KotlinBean.MedicineBean>>>getMedicationInfo(@Field("patientNo")String patientNo,@Field("token")String token);
+    Observable<BaseBean<ArrayList<KotlinBean.MedicineBean>>> getMedicationInfo(@Field("patientNo") String patientNo, @Field("token") String token);
 
     @FormUrlEncoded
     @POST("queryInfo/getHospitalizationInfo")
-    Observable<BaseBean<ArrayList<KotlinBean.HospitalBean>>>getHospitalizationInfo(@Field("patientNo")String patientNo,@Field("token")String token);
+    Observable<BaseBean<ArrayList<KotlinBean.HospitalBean>>> getHospitalizationInfo(@Field("patientNo") String patientNo, @Field("token") String token);
 
     @FormUrlEncoded
     @POST("money/selectPaymentDetails")
-    Observable<BaseBean<ArrayList<KotlinBean.DebitDetail>>>selectPaymentDetails(@Field("patientNo")String patientNo,@Field("token")String token);
+    Observable<BaseBean<ArrayList<KotlinBean.DebitDetail>>> selectPaymentDetails(@Field("patientNo") String patientNo, @Field("token") String token);
 
     @FormUrlEncoded
     @POST("money/selectUnpaidDetails")
-    Observable<BaseBean<ArrayList<KotlinBean.DebitDetail>>>selectUnpaidDetails(@Field("patientNo")String patientNo,@Field("token")String token);
+    Observable<BaseBean<ArrayList<KotlinBean.DebitDetail>>> selectUnpaidDetails(@Field("patientNo") String patientNo, @Field("token") String token);
 
     @FormUrlEncoded
     @POST("money/recharge")
-    Observable<BaseBean<KotlinBean.ChargeResult>>recharge(@Field("patientNo")String patientNo, @Field("token")String token, @Field("paymentAmount")String paymentAmount);
+    Observable<BaseBean<KotlinBean.ChargeResult>> recharge(@Field("patientNo") String patientNo, @Field("token") String token, @Field("paymentAmount") String paymentAmount);
 
-   @FormUrlEncoded
+    @FormUrlEncoded
     @POST("money/unpaidTotalAmount")
-    Observable<BaseBean<Object>>unpaidTotalAmount(@Field("patientNo")String patientNo, @Field("token")String token);
+    Observable<BaseBean<Object>> unpaidTotalAmount(@Field("patientNo") String patientNo, @Field("token") String token);
 
     @FormUrlEncoded
     @POST("money/debit")
-    Observable<BaseBean<KotlinBean.ChargeResult>>debit(@Field("patientNo")String patientNo, @Field("token")String token);
+    Observable<BaseBean<KotlinBean.ChargeResult>> debit(@Field("patientNo") String patientNo, @Field("token") String token);
 
     @FormUrlEncoded
     @POST("money/selectDetails")
-    Observable<BaseBean<ArrayList<KotlinBean.BankDetail>>>selectDetails(@Field("patientNo")String patientNo,@Field("token")String token,@Field("startTime")String startTime,@Field("endTime")String endTime);
+    Observable<BaseBean<ArrayList<KotlinBean.BankDetail>>> selectDetails(@Field("patientNo") String patientNo, @Field("token") String token, @Field("startTime") String startTime, @Field("endTime") String endTime);
 
     @FormUrlEncoded
     @POST("login/updateContactMode")
-    Observable<BaseBean>updateContactMode(@Field("userid")String userid,@Field("token")String token,@Field("contactMode")String contactMode);
+    Observable<BaseBean> updateContactMode(@Field("userid") String userid, @Field("token") String token, @Field("contactMode") String contactMode);
 
     @FormUrlEncoded
     @POST("login/updateAddress")
-    Observable<BaseBean>updateAddress(@Field("userid")String userid,@Field("token")String token,@Field("address")String address);
+    Observable<BaseBean> updateAddress(@Field("userid") String userid, @Field("token") String token, @Field("address") String address);
+
+    @FormUrlEncoded
+    @POST("money/selectEvaluate")
+    Observable<BaseBean<ArrayList<RatingBean>>> selectEvaluate(@Field("userid") String userid, @Field("token") String token, @Field("pageNo")int pageNo, @Field("pageSize")int pageSize);
+
+    @FormUrlEncoded
+    @POST("money/selectAverage")
+    Observable<BaseBean<KotlinBean.RatingBeanAverage>> selectAverage(@Field("userid") String userid, @Field("token") String token);
+
+    @FormUrlEncoded
+    @POST("money/saveEvaluate")
+    Observable<BaseBean<Object>> saveEvaluate(@Field("userid") String userid, @Field("token") String token, @Field("code") String code
+            ,@Field("commentorid")String commentid
+            ,@Field("type")int type
+            ,@Field("rank")float rank
+            ,@Field("comment")String comment);
 
 }

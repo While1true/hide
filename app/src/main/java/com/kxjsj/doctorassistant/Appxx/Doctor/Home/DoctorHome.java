@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
-import android.view.WindowManager;
 
 import com.ck.hello.nestrefreshlib.View.Adpater.Base.SimpleViewHolder;
 import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.DefaultStateListener;
@@ -18,7 +17,6 @@ import com.kxjsj.doctorassistant.App;
 import com.kxjsj.doctorassistant.Component.BaseTitleActivity;
 import com.kxjsj.doctorassistant.Constant.Constance;
 import com.kxjsj.doctorassistant.Constant.Session;
-import com.kxjsj.doctorassistant.DialogAndPopWindow.InputDialog;
 import com.kxjsj.doctorassistant.DialogAndPopWindow.ReplyDialog;
 import com.kxjsj.doctorassistant.Glide.GlideLoader;
 import com.kxjsj.doctorassistant.JavaBean.DoctorBean;
@@ -32,10 +30,15 @@ import com.kxjsj.doctorassistant.Screen.OrentionUtils;
 import com.kxjsj.doctorassistant.Utils.K2JUtils;
 import com.kxjsj.doctorassistant.View.GradualButton;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observable;
+import io.reactivex.functions.BiFunction;
 
 /**
  * Created by vange on 2017/9/29.
@@ -55,6 +58,7 @@ public class DoctorHome extends BaseTitleActivity {
     ArrayList<KotlinBean.PushBean> datas;
     DoctorBean.ContentBean bean;
     private ReplyDialog replyDialog;
+    private String average;
 
     @Override
     protected int getContentLayoutId() {
@@ -66,15 +70,16 @@ public class DoctorHome extends BaseTitleActivity {
     protected void initView(Bundle savedInstanceState) {
         ButterKnife.bind(this);
         Intent intent = getIntent();
-        if(savedInstanceState!=null){
-            bean= savedInstanceState.getParcelable("data");
-            datas= (ArrayList<KotlinBean.PushBean>) savedInstanceState.getSerializable("bean");
+        if (savedInstanceState != null) {
+            average=savedInstanceState.getString("average");
+            bean = savedInstanceState.getParcelable("data");
+            datas = (ArrayList<KotlinBean.PushBean>) savedInstanceState.getSerializable("bean");
         }
-        if(intent!=null&&bean==null){
-            bean=intent.getParcelableExtra("data");
+        if (intent != null && bean == null) {
+            bean = intent.getParcelableExtra("data");
         }
-        if(bean!=null){
-            setTitle(bean.getName()+"的个人主页");
+        if (bean != null) {
+            setTitle(bean.getName() + "的个人主页");
         }
 
         adapter = new SAdapter()
@@ -82,52 +87,57 @@ public class DoctorHome extends BaseTitleActivity {
                     @Override
                     public void onBind(SimpleViewHolder holder, int position) {
 
-                        GlideLoader.loadRound(holder.getView(R.id.iv_doctor),bean.getUserimg());
-                        holder.setText(R.id.introduction,bean.getRemark());
+                        GlideLoader.loadRound(holder.getView(R.id.iv_doctor), bean.getUserimg());
+                        holder.setText(R.id.introduction, bean.getRemark());
 
+                        holder.setText(R.id.ranktext, average==null?"无评分":"平均评分："+average);
+                        holder.setRating(R.id.rating, average==null?0.0f:Float.parseFloat(average));
                         startButtonAnimator(holder);
                         holder.setOnClickListener(R.id.ask, v -> {
                             askQuestion(bean.getUserid());
                         });
-                        holder.setOnClickListener(R.id.communicate, view -> ConversationUtils.startChartSingle(DoctorHome.this,bean.getUserid(),bean.getDepartment()+"/"+bean.getName()));
+                        holder.setOnClickListener(R.id.communicate, view -> ConversationUtils.startChartSingle(DoctorHome.this, bean.getUserid(), bean.getDepartment() + "/" + bean.getName()));
                     }
 
                     @Override
                     public boolean istype(int position) {
-                        return position==0&&OrentionUtils.isPortrait(DoctorHome.this);
+                        return position == 0 && OrentionUtils.isPortrait(DoctorHome.this);
                     }
                 })
                 .addType(R.layout.doctor_info_land, new PositionHolder() {
                     @Override
                     public void onBind(SimpleViewHolder holder, int position) {
-                        GlideLoader.loadRound(holder.getView(R.id.iv_doctor),bean.getUserimg());
-                        holder.setText(R.id.introduction,bean.getRemark());
+                        GlideLoader.loadRound(holder.getView(R.id.iv_doctor), bean.getUserimg());
+                        holder.setText(R.id.introduction, bean.getRemark());
+
+                        holder.setText(R.id.ranktext, (average==null||average.equals("0.0"))?"无评分":"平均评分："+average);
+                        holder.setRating(R.id.rating, average==null?0.0f:Float.parseFloat(average));
 
                         startButtonAnimator(holder);
                         holder.setOnClickListener(R.id.ask, v -> {
                             askQuestion(bean.getUserid());
                         });
-                        holder.setOnClickListener(R.id.communicate, view ->   {
-                            ConversationUtils.startChartSingle(DoctorHome.this,bean.getUserid(),bean.getDepartment()+"/"+bean.getName());
+                        holder.setOnClickListener(R.id.communicate, view -> {
+                            ConversationUtils.startChartSingle(DoctorHome.this, bean.getUserid(), bean.getDepartment() + "/" + bean.getName());
                         });
                     }
 
                     @Override
                     public boolean istype(int position) {
-                        return position==0&&!OrentionUtils.isPortrait(DoctorHome.this);
+                        return position == 0 && !OrentionUtils.isPortrait(DoctorHome.this);
                     }
                 })
                 .addType(R.layout.doctor_answer_item, new PositionHolder() {
                     @Override
                     public void onBind(SimpleViewHolder holder, int position) {
-                        if(datas.size()==0){
-                            holder.setText(R.id.question,"当前无留言") ;
-                            holder.setText(R.id.answer,"来做第一个留言的人吧") ;
+                        if (datas.size() == 0) {
+                            holder.setText(R.id.question, "当前无留言");
+                            holder.setText(R.id.answer, "来做第一个留言的人吧");
                             return;
                         }
                         KotlinBean.PushBean pushBean = datas.get(position - 1);
-                        holder.setText(R.id.question, pushBean.getFromName()+":" + pushBean.getContent());
-                        holder.setText(R.id.answer,bean.getName()+":"+pushBean.getReply());
+                        holder.setText(R.id.question, pushBean.getFromName() + ":" + pushBean.getContent());
+                        holder.setText(R.id.answer, bean.getName() + ":" + pushBean.getReply());
                     }
 
                     @Override
@@ -145,7 +155,7 @@ public class DoctorHome extends BaseTitleActivity {
                 .setRefreshingListener(new SRecyclerView.OnRefreshListener() {
                     @Override
                     public void Refreshing() {
-                            loadData();
+                        loadData();
 
                     }
                 }).setAdapter(new LinearLayoutManager(this), adapter)
@@ -166,12 +176,12 @@ public class DoctorHome extends BaseTitleActivity {
      * @param userid
      */
     private void askQuestion(String userid) {
-        if(replyDialog==null) {
+        if (replyDialog == null) {
             replyDialog = new ReplyDialog();
             replyDialog.setTitleStr("写下留言的问题");
             replyDialog.setCallback(obj -> {
                 Session userInfo = App.getUserInfo();
-                ApiController.Comment(userid,userInfo.getUserid(),userInfo.getToken(),obj)
+                ApiController.Comment(userid, userInfo.getUserid(), userInfo.getToken(), obj)
                         .subscribe(new DataObserver(this) {
                             @Override
                             public void OnNEXT(Object bean) {
@@ -188,7 +198,7 @@ public class DoctorHome extends BaseTitleActivity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if(adapter!=null) {
+        if (adapter != null) {
             /**
              * 为了不重启调整布局，把doctor_info后缀加了个Land
              */
@@ -204,14 +214,19 @@ public class DoctorHome extends BaseTitleActivity {
      */
     private void loadData() {
         Session userInfo = App.getUserInfo();
-        ApiController.getReplyComment(userInfo.getUserid(),userInfo.getToken())
+        Observable.combineLatest(ApiController.getReplyComment(userInfo.getUserid(), userInfo.getToken()),
+                ApiController.selectAverage(bean.getUserid(), userInfo.getToken()),
+                (arrayListBaseBean, baseBean) -> {
+                        average = baseBean.getData().getAVERAGE();
+                    return arrayListBaseBean;
+                })
                 .subscribe(new DataObserver<ArrayList<KotlinBean.PushBean>>(this) {
                     @Override
                     public void OnNEXT(ArrayList<KotlinBean.PushBean> bean) {
-                       datas=bean;
+                        datas = bean;
                         int size = datas.size();
-                        adapter.setCount(size ==0?size+2:size+1);
-                       adapter.showItem();
+                        adapter.setCount(size == 0 ? size + 2 : size + 1);
+                        adapter.showItem();
                     }
 
                     @Override
@@ -220,6 +235,12 @@ public class DoctorHome extends BaseTitleActivity {
                         adapter.ShowError();
                     }
                 });
+        ApiController.getReplyComment(userInfo.getUserid(), userInfo.getToken()).subscribe(new DataObserver<ArrayList<KotlinBean.PushBean>>(this) {
+            @Override
+            public void OnNEXT(ArrayList<KotlinBean.PushBean> bean) {
+                System.out.println(bean.size());
+            }
+        });
         srecyclerview.notifyRefreshComplete();
 
     }
@@ -249,8 +270,9 @@ public class DoctorHome extends BaseTitleActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable("data",bean);
-        outState.putSerializable("bean",datas);
+        outState.putParcelable("data", bean);
+        outState.putSerializable("bean", datas);
+        outState.putSerializable("average", average);
     }
 
 }

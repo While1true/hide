@@ -170,6 +170,7 @@
                     android:scheme="rong" />
             </intent-filter>
         </activity>
+        <activity android:name=".Appxx.Doctor.Rating.RatingActivity" />
 
         <receiver
             android:name=".RongYun.RongPushReceiver"

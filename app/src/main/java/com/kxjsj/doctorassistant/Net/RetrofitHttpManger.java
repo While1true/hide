@@ -22,7 +22,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitHttpManger {
     private static final int DEFAULT_CONNECT_TIMEOUT = 5;
     private static final int DEFAULT_READ_TIMEOUT = 10;
-    private static final String BASEURL = "http://10.0.110.127:8080/cxfSpringMaven/services/rest/bcszh/";
+    private static final String BASEURL = "http://10.0.110.148:8080/cxfSpringMaven/services/rest/bcszh/";
     private Retrofit mRetrofit;
 
 

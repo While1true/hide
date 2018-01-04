@@ -113,8 +113,10 @@ public class MoneyToPayDetailsActivity extends BaseTitleActivity {
                 .subscribe(new DataObserver<KotlinBean.ChargeResult>(this) {
                     @Override
                     public void OnNEXT(KotlinBean.ChargeResult bean) {
-                        K2JUtils.toast("缴费成功！"+bean.getPay());
-                        startActivity(new Intent(MoneyToPayDetailsActivity.this,RemarkActivity.class));
+                        K2JUtils.toast("缴费成功！");
+                        Intent intent = new Intent(MoneyToPayDetailsActivity.this, RemarkActivity.class);
+                        intent.putExtra("code",bean.getCode());
+                        startActivity(intent);
                         finish();
                         RxBus.getDefault().post(new RxBaseBean<String>(Constance.Rxbus.PAY_COMPLETE,""));
                     }

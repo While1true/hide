@@ -5,6 +5,7 @@ import com.kxjsj.doctorassistant.JavaBean.DoctorBean;
 import com.kxjsj.doctorassistant.JavaBean.KotlinBean;
 import com.kxjsj.doctorassistant.JavaBean.PatientBed;
 import com.kxjsj.doctorassistant.JavaBean.PatientHome;
+import com.kxjsj.doctorassistant.JavaBean.RatingBean;
 import com.kxjsj.doctorassistant.JavaBean.SickBed;
 import com.kxjsj.doctorassistant.Rx.RxSchedulers;
 
@@ -13,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
-import retrofit2.http.Field;
 
 /**
  * Created by vange on 2017/9/13.
@@ -354,7 +354,7 @@ public class ApiController {
      * 付费
      * @param patientNo
      * @param token
-     * @param ammount
+     * @param
      * @return
      */
     public static Observable<KotlinBean.BaseBean<KotlinBean.ChargeResult>> pay(String patientNo,String token){
@@ -384,6 +384,46 @@ public class ApiController {
     public static Observable<KotlinBean.BaseBean<Object>> unpaidTotalAmount(String patientNo,String token){
         return InstanceHolder.api
                 .unpaidTotalAmount(patientNo,token)
+                .compose(RxSchedulers.compose());
+    }
+
+    /**
+     * 评分
+     */
+    public static Observable<KotlinBean.BaseBean<Object>> saveEvaluate(
+            String userid,
+            String token,
+            String code,
+            String commentid,
+            int type,
+            float rank,
+            String comment){
+        return InstanceHolder.api
+                .saveEvaluate(userid,token,code,commentid,type,rank,comment)
+                .compose(RxSchedulers.compose());
+    }
+
+    /**
+     * 获取平均分
+     * @param userid
+     * @param token
+     * @return
+     */
+    public static Observable<KotlinBean.BaseBean<ArrayList<RatingBean>>> selectEvaluate(String userid, String token, int pagerNo){
+            return InstanceHolder.api
+                    .selectEvaluate(userid, token,pagerNo,20)
+                    .compose(RxSchedulers.compose());
+    }
+
+    /**
+     * 获取所有评价
+     * @param userid
+     * @param token
+     * @return
+     */
+    public static Observable<KotlinBean.BaseBean<KotlinBean.RatingBeanAverage>> selectAverage(String userid, String token){
+        return InstanceHolder.api
+                .selectAverage(userid, token)
                 .compose(RxSchedulers.compose());
     }
 }

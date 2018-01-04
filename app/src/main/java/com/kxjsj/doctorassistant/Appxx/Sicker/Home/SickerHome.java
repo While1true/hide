@@ -180,36 +180,25 @@ public class SickerHome extends BaseTitleActivity {
         inputDialog.show(getSupportFragmentManager());
     }
 
-    private void doNet(String painentNo) {
-        ApiController.getBedInfo(painentNo)
-                .subscribe(new DataObserver<PatientBed>(this) {
+    private void doNet(String patientNo) {
+        ApiController.getBedInfo(patientNo).flatMap(patientBedBaseBean -> {
+            bean=patientBedBaseBean.getData();
+            return ApiController.getAllUnhandlerPush(patientBedBaseBean.getData().getPatientId(), App.getToken(),0);
+        }).subscribe(new DataObserver<ArrayList<KotlinBean.PushBean>>(this) {
                     @Override
-                    public void OnNEXT(PatientBed beanz) {
-                        if (Constance.DEBUGTAG)
-                            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "OnNEXT: " + bean);
-                        bean = beanz;
-                        adapter.setCount(4);
-                        adapter.showNomore();
+                    public void OnNEXT(ArrayList<KotlinBean.PushBean> bean) {
+                        beans=bean;
+                        if(beans.size()>0){
+                            adapter.setCount(4+beans.size());
+                            adapter.showNomore();
+                        }
                         srecyclerview.notifyRefreshComplete();
                     }
-
                     @Override
                     public void OnERROR(String error) {
                         srecyclerview.notifyRefreshComplete();
                         adapter.ShowError();
                         K2JUtils.toast(error);
-                    }
-                });
-        ApiController.getBedInfo(patientNo).flatMap(patientBedBaseBean ->
-                ApiController.getAllUnhandlerPush(patientBedBaseBean.getData().getPatientId(), App.getToken(),0))
-                .subscribe(new DataObserver<ArrayList<KotlinBean.PushBean>>(this) {
-                    @Override
-                    public void OnNEXT(ArrayList<KotlinBean.PushBean> bean) {
-                        beans=bean;
-                        if(beans.size()>0){
-                            adapter.setCount(adapter.getItemCount()+beans.size());
-                            adapter.showNomore();
-                        }
                     }
                 });
 //        ;

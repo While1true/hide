@@ -22,20 +22,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         MyToast.Companion.init();
 //        RePlugin.startActivity(this,RePlugin.createIntent("app-debug","coms.kxjsj.myapplication.MainActivity"));
-startActivity(new Intent(this, RemarkActivity.class));
-//        Session userInfo = App.getUserInfo();
-//        String token = userInfo.getToken();
-//        if(!TextUtils.isEmpty(token)){
-//            if(userInfo.getType()==0){
-//                Sicker();
-//            }else{
-//                Doctor();
-//            }
-//        }else{
-//            startActivity(new Intent(this, LoginActivity.class));
-//            overridePendingTransition(0, 0);
-//            finish();
-//        }
+//startActivity(new Intent(this, RemarkActivity.class));
+        Session userInfo = App.getUserInfo();
+        String token = userInfo.getToken();
+        if(!TextUtils.isEmpty(token)){
+            if(userInfo.getType()==0){
+                Sicker();
+            }else{
+                Doctor();
+            }
+        }else{
+            startActivity(new Intent(this, LoginActivity.class));
+            overridePendingTransition(0, 0);
+            finish();
+        }
 
     }
 

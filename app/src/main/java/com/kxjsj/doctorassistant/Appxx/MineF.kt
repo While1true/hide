@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import com.kxjsj.doctorassistant.App
+import com.kxjsj.doctorassistant.Appxx.Doctor.Rating.RatingActivity
 import com.kxjsj.doctorassistant.Appxx.Mine.Comment.CommentActivity
 import com.kxjsj.doctorassistant.Appxx.Mine.Push.PushActivity
 import com.kxjsj.doctorassistant.Appxx.Mine.UserInfoActivity
@@ -39,6 +40,7 @@ class MineF : BaseFragment(), View.OnClickListener {
                 K2JUtils.put("userinfo", "")
                 PublicUtils.loginOut(context)
             }
+            R.id.rating -> startActivity(Intent(context, RatingActivity::class.java))
         }
     }
 
@@ -51,15 +53,17 @@ class MineF : BaseFragment(), View.OnClickListener {
         info.text = userInfo.username + "\n" + userInfo.userid
 
         if (userInfo.type == 1) {
-            message.setText("收到的留言");
+            message.setText("收到的留言")
+            rating.visibility=View.VISIBLE
         }
-        message.setOnClickListener(this);
+        message.setOnClickListener(this)
         account.setOnClickListener(this)
         push.setOnClickListener(this)
         suggest.setOnClickListener(this)
         about.setOnClickListener(this)
         loginOut.setOnClickListener(this)
         remind.setOnClickListener(this)
+        rating.setOnClickListener(this)
         loginOut.postDelayed({ loginOut.start(loginOut.currentTextColor, resources.getColor(R.color.colorPrimary)) }, 600)
 
     }
