@@ -46,6 +46,18 @@
             android:textColor="@drawable/radio_text_selector"
             android:textSize="14sp" />
         <RadioButton
+            android:id="@+id/rb_query"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/query_radio_selector"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="信息查询"
+            android:textColor="@drawable/radio_text_selector"
+            android:textSize="14sp" />
+        <RadioButton
             android:id="@+id/rb_knowledge"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -54,7 +66,7 @@
             android:drawableTop="@drawable/knowledge_radio_selector"
             android:gravity="center"
             android:padding="10dp"
-            android:text="信息查询"
+            android:text="知识服务"
             android:textColor="@drawable/radio_text_selector"
             android:textSize="14sp" />
         <RadioButton

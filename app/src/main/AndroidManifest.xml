@@ -59,7 +59,11 @@
             android:name=".Appxx.Mine.Register.ChoseRegisterActivity"
             android:windowSoftInputMode="stateHidden|adjustPan"
             android:launchMode="singleTask" />
-
+        <activity
+            android:name=".Appxx.Sicker.Knowledge.X5WebviewActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:configChanges="orientation|keyboardHidden|layoutDirection|screenSize"
+            android:launchMode="singleTask" />
         <!--<activity-->
             <!--android:name=".Utils.ZXingUtils$MyCaptureActivity"-->
             <!--android:configChanges="orientation|screenSize|keyboardHidden"-->

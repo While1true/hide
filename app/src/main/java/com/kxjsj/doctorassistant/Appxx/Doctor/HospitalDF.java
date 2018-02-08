@@ -162,7 +162,7 @@ public class HospitalDF extends BaseFragment {
                                 K2JUtils.toast(obj);
                                 Session userInfo = App.getUserInfo();
                                 ApiController.replyPush(pushBean.getId() + "", userInfo.getUserid(), pushBean.getFromid(), userInfo.getType(), userInfo.getToken(), obj)
-                                        .subscribe(new DataObserver(getContext()) {
+                                        .subscribe(new DataObserver<Object>(getContext()) {
                                             @Override
                                             public void OnNEXT(Object beans) {
                                                 K2JUtils.toast("成功");

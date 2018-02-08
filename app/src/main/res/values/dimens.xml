@@ -6,6 +6,7 @@
     <!--<dimen name="subtitlesize">20sp</dimen>-->
 
     <dimen name="titlesize">18sp</dimen>
+    <dimen name="bigtitlesize">22sp</dimen>
     <dimen name="middlesize">26sp</dimen>
     <dimen name="bigsize">30sp</dimen>
     <dimen name="subtitlesize">16sp</dimen>

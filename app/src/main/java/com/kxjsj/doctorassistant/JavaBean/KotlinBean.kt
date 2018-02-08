@@ -1,11 +1,7 @@
 package com.kxjsj.doctorassistant.JavaBean
 
-import android.arch.persistence.room.ColumnInfo
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.PrimaryKey
 import java.io.File
 import java.io.Serializable
-import java.util.*
 
 /**
  * Created by vange on 2017/9/28.
@@ -110,23 +106,22 @@ object KotlinBean {
     /**
      * 推送bean
      */
-    @Entity(tableName = "pushBean")
     data class PushBean constructor(
-            @ColumnInfo(name = "userid")
             var userid : String?=null,
-            @ColumnInfo(name = "id")
-            @PrimaryKey var id : Int=0,
-            @ColumnInfo(name = "token") var token : String?=null,
-            @ColumnInfo(name = "fromid") var fromid : String?=null,
-            @ColumnInfo(name = "fromName") var fromName : String?=null,
-            @ColumnInfo(name = "content") var content : String?=null,
-            @ColumnInfo(name = "type") var type : Int=0,
-            @ColumnInfo(name = "message_type") var message_type :Int=0,
-            @ColumnInfo(name = "creatorTime") var creatorTime :String?=null,
-            @ColumnInfo(name = "reply")  var reply :String?=null
-    ): Serializable{
-        constructor() : this("")
-    }
+            var id : Int=0,
+            var token : String?=null,
+            var fromid : String?=null,
+            var fromName : String?=null,
+            var content : String?=null,
+            var type : Int=0,
+            var message_type :Int=0,
+            var creatorTime :String?=null,
+            var reply :String?=null
+    ): Serializable
 
     data class RatingBeanAverage constructor(var AVERAGE:String, var TOTALITY:String):Serializable
+
+    data class Knowledge constructor(var id:Int,var type: String ,var title:String,var updatedate:String):Serializable
+    data class Artical constructor(var id:Int,var type: String,var title:String,var updatedate:String,var content: String ):Serializable
+    data class Title constructor(var type: Int,var name:String):Serializable
 }

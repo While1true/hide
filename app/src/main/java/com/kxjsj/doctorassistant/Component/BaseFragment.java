@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import com.kxjsj.doctorassistant.Rx.RxLifeUtils;
 import com.umeng.analytics.MobclickAgent;
 
+import java.time.temporal.IsoFields;
+
 /**
  * BaseFragment base
  */
@@ -20,10 +22,13 @@ public abstract class BaseFragment extends Fragment {
     protected View view;
     protected boolean viewCreated = false;
     protected boolean firstLoad = true;
+    protected boolean isVisable = false;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        view = SetRootView();
+        if (view == null)
             view = inflater.inflate(getLayoutId(), container, false);
         return view;
     }
@@ -33,6 +38,10 @@ public abstract class BaseFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         initView(savedInstanceState);
         viewCreated = true;
+        if(isVisable&&firstLoad){
+            loadLazy();
+            firstLoad=false;
+        }
     }
 
 
@@ -50,9 +59,15 @@ public abstract class BaseFragment extends Fragment {
      */
     protected abstract int getLayoutId();
 
+    protected View SetRootView() {
+
+        return null;
+    }
+
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
+        isVisable=isVisibleToUser;
         if (isVisibleToUser && viewCreated && firstLoad) {
             loadLazy();
             firstLoad = false;
@@ -68,8 +83,11 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        view=null;
-        toolbar=null;
+        view = null;
+        toolbar = null;
+        isVisable=false;
+        firstLoad=true;
+        viewCreated=false;
         RxLifeUtils.getInstance().remove(this);
     }
 
@@ -77,6 +95,7 @@ public abstract class BaseFragment extends Fragment {
         super.onResume();
         MobclickAgent.onPageStart(getClass().getSimpleName());
     }
+
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd(getClass().getSimpleName());

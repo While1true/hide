@@ -59,6 +59,11 @@ public class Constance {
          * 缴费完成
          */
         public static final int PAY_COMPLETE=8;
+
+        /**
+         * 知识服务推送
+         */
+        public static final int KNOWLEDGE=9;
     }
 
 }

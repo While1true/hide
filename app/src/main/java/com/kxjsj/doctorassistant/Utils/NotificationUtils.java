@@ -18,14 +18,25 @@ public class NotificationUtils {
     public static final int NOTIFICATION_REQUESTID=100;
 
     public static void CreatNotification(Context context, String title,String subTitle,Intent clickIntent){
-         Notification build = new NotificationCompat.Builder(context)
-                 .setAutoCancel(true)
-                 .setSmallIcon(R.mipmap.ic_launcher)
+        Notification build = new NotificationCompat.Builder(context)
+                .setAutoCancel(true)
+                .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentIntent(PendingIntent.getActivity(context, NOTIFICATION_REQUESTID, clickIntent, PendingIntent.FLAG_ONE_SHOT))
                 .setContentTitle(title)
                 .setContentText(subTitle)
                 .setShowWhen(true)
                 .build();
         NotificationManagerCompat.from(context).notify(NOTIFICATION_REQUESTID,build);
+    }
+    public static void CreatNotification(Context context, String title,String subTitle,Intent clickIntent,int id){
+        Notification build = new NotificationCompat.Builder(context)
+                .setAutoCancel(true)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentIntent(PendingIntent.getActivity(context, id, clickIntent, PendingIntent.FLAG_UPDATE_CURRENT))
+                .setContentTitle(title)
+                .setContentText(subTitle)
+                .setShowWhen(true)
+                .build();
+        NotificationManagerCompat.from(context).notify(id,build);
     }
 }

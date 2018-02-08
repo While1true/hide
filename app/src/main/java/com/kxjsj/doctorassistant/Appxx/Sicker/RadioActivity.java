@@ -45,8 +45,9 @@ public class RadioActivity extends BaseTitleActivity implements RadioGroup.OnChe
     private CommunicateF communicateF;
     private HospitalF hospitalF;
     private MineF mineF;
+    private KnowledgeF knowledgeF;
     private int checkedID = R.id.rb_hospital;
-    private String[] titles = {"医护监控", "医患交流","信息查询","我的"};
+    private String[] titles = {"医护监控", "医患交流","信息查询","知识服务","我的"};
     private Disposable subscribe;
 
     @Override
@@ -72,6 +73,8 @@ public class RadioActivity extends BaseTitleActivity implements RadioGroup.OnChe
                     case 2:
                         return quiryInfoF;
                     case 3:
+                        return knowledgeF;
+                    case 4:
                         return mineF;
                 }
                 return null;
@@ -79,7 +82,7 @@ public class RadioActivity extends BaseTitleActivity implements RadioGroup.OnChe
 
             @Override
             public int getCount() {
-                return 4;
+                return 5;
             }
 
         });
@@ -92,6 +95,7 @@ public class RadioActivity extends BaseTitleActivity implements RadioGroup.OnChe
     private void initial(Bundle bundle) {
         if (bundle != null) {
             FragmentManager supportFragmentManager = getSupportFragmentManager();
+            knowledgeF = (KnowledgeF) supportFragmentManager.getFragment(bundle, "knowledgeF");
             quiryInfoF = (QuiryInfoF) supportFragmentManager.getFragment(bundle, "quiryInfoF");
             communicateF = (CommunicateF) supportFragmentManager.getFragment(bundle, "communicateF");
             hospitalF = (HospitalF) supportFragmentManager.getFragment(bundle, "hospitalF");
@@ -103,10 +107,12 @@ public class RadioActivity extends BaseTitleActivity implements RadioGroup.OnChe
             quiryInfoF = new QuiryInfoF();
 //            supportFragmentManager.beginTransaction().add(sickbedF,"sickbedF");
         }
-
-
         if (communicateF == null) {
             communicateF = new CommunicateF();
+        }
+
+        if (knowledgeF == null) {
+            knowledgeF = new KnowledgeF();
 //            supportFragmentManager.beginTransaction().add(communicateF,"CommunicateF");
         }
 
@@ -172,13 +178,17 @@ public class RadioActivity extends BaseTitleActivity implements RadioGroup.OnChe
                 setTitle(titles[1]);
                 vp.setCurrentItem(1, false);
                 break;
-            case R.id.rb_knowledge:
+            case R.id.rb_query:
                 setTitle(titles[2]);
                 vp.setCurrentItem(2, false);
                 break;
-            case R.id.rb_mine:
+            case R.id.rb_knowledge:
                 setTitle(titles[3]);
                 vp.setCurrentItem(3, false);
+                break;
+            case R.id.rb_mine:
+                setTitle(titles[4]);
+                vp.setCurrentItem(4, false);
                 break;
         }
     }
@@ -285,6 +295,7 @@ public class RadioActivity extends BaseTitleActivity implements RadioGroup.OnChe
         getSupportFragmentManager().putFragment(outState, "hospitalF", hospitalF);
         getSupportFragmentManager().putFragment(outState, "communicateF", communicateF);
         getSupportFragmentManager().putFragment(outState, "mineF", mineF);
+        getSupportFragmentManager().putFragment(outState, "knowledgeF", knowledgeF);
         if (Constance.DEBUGTAG)
             Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onSaveInstanceState: ");
     }

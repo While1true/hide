@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.kxjsj.doctorassistant.App;
 import com.kxjsj.doctorassistant.Appxx.Mine.Comment.CommentActivity;
+import com.kxjsj.doctorassistant.Appxx.Sicker.Knowledge.X5WebviewActivity;
 import com.kxjsj.doctorassistant.Constant.Constance;
 import com.kxjsj.doctorassistant.JavaBean.KotlinBean;
 import com.kxjsj.doctorassistant.Rx.RxBaseBean;
@@ -79,19 +80,31 @@ public class MiPushReceiver extends MiMessageReceiver {
             String mUserAccount = message.getUserAccount();
         }
         /**
-         * 0:紧急呼叫 1：留言
+         * 0:紧急呼叫 1：留言 2：知识服务推送 3:精准推送
          */
-        if("0".equals(description)) {
+        if ("0".equals(description)) {
             KotlinBean.PushBean pushBean = GsonUtils.parse2Bean(mMessage, KotlinBean.PushBean.class);
-            if(pushBean!=null) {
+            if (pushBean != null) {
                 RxBus.getDefault().post(new RxBaseBean<>(Constance.Rxbus.CALLHELP, pushBean));
 //                showPush(context, pushBean);
             }
-        }else if("1".equals(description)){
+        } else if ("1".equals(description)) {
             KotlinBean.PushBean pushBean = GsonUtils.parse2Bean(mMessage, KotlinBean.PushBean.class);
-            if(pushBean!=null) {
+            if (pushBean != null) {
                 RxBus.getDefault().post(new RxBaseBean<>(Constance.Rxbus.COMMENT, pushBean));
                 showPush(context, pushBean);
+            }
+        } else if ("2".equals(description)) {
+            KotlinBean.Knowledge knowledge = GsonUtils.parse2Bean(mMessage, KotlinBean.Knowledge.class);
+            if (knowledge != null) {
+//                RxBus.getDefault().post(new RxBaseBean<>(Constance.Rxbus.KNOWLEDGE, knowledge));
+                showPush(context, knowledge,2);
+            }
+        }else if ("3".equals(description)) {
+            KotlinBean.Knowledge knowledge = GsonUtils.parse2Bean(mMessage, KotlinBean.Knowledge.class);
+            if (knowledge != null) {
+//                RxBus.getDefault().post(new RxBaseBean<>(Constance.Rxbus.KNOWLEDGE, knowledge));
+                showPush(context, knowledge,3);
             }
         }
         if (Constance.DEBUGTAG)
@@ -100,9 +113,20 @@ public class MiPushReceiver extends MiMessageReceiver {
 
     private void showPush(Context context, KotlinBean.PushBean pushBean) {
         boolean showPush = K2JUtils.get("showPush", true);
-        if(showPush) {
+        if (showPush) {
             NotificationUtils.CreatNotification(context,
-                    "病床管理",App.getUserInfo().getType()==0?("@回复"+pushBean.getReply()):(pushBean.getFromName()+"@留言/"+pushBean.getContent()), new Intent(context, CommentActivity.class));
+                    "病床管理", App.getUserInfo().getType() == 0 ? ("@回复" + pushBean.getReply()) : (pushBean.getFromName() + "@留言/" + pushBean.getContent()), new Intent(context, CommentActivity.class));
+        }
+    }
+
+    private void showPush(Context context, KotlinBean.Knowledge pushBean,int id) {
+        boolean showPush = K2JUtils.get("showPush", true);
+        if (showPush) {
+            Intent clickIntent = new Intent(context, X5WebviewActivity.class);
+            clickIntent.putExtra("id", pushBean.getId());
+            clickIntent.putExtra("title", pushBean.getTitle());
+            NotificationUtils.CreatNotification(context,
+                    pushBean.getTitle(),"健康知识："+pushBean.getType(), clickIntent,id);
         }
     }
 

@@ -122,7 +122,7 @@ public interface Api {
      */
     @FormUrlEncoded
     @POST("push/replyPush")
-    Observable<BaseBean> replyPush(@Field("id") String id, @Field("userid") String userid,
+    Observable<BaseBean<Object>> replyPush(@Field("id") String id, @Field("userid") String userid,
                                    @Field("fromid") String fromid, @Field("type") int type,
                                    @Field("token") String token, @Field("reply") String reply);
 
@@ -241,5 +241,16 @@ public interface Api {
             ,@Field("type")int type
             ,@Field("rank")float rank
             ,@Field("comment")String comment);
+
+    @FormUrlEncoded
+    @POST("knowledgeBase/knowledgeBaseList")
+    Observable<BaseBean<ArrayList<KotlinBean.Knowledge>>>getKnowedgesByType(@Field("type")String type);
+
+    @POST("knowledgeBase/knowledgeBaseType")
+    Observable<BaseBean<ArrayList<KotlinBean.Title>>>getknowledgeBaseType();
+
+    @FormUrlEncoded
+    @POST("knowledgeBase/knowledgeArticle")
+    Observable<BaseBean<KotlinBean.Artical>>getKnowedge(@Field("id")int id);
 
 }

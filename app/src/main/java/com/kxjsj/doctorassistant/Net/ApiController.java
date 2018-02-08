@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.POST;
 
 /**
  * Created by vange on 2017/9/13.
@@ -204,7 +207,7 @@ public class ApiController {
      * @param reply
      * @return
      */
-    public static Observable<KotlinBean.BaseBean> replyPush(String id, String userid, String fromid,int type,String token, String reply) {
+    public static Observable<KotlinBean.BaseBean<Object>> replyPush(String id, String userid, String fromid,int type,String token, String reply) {
         return InstanceHolder.api
                 .replyPush(id,userid,fromid,type,token,reply)
                 .compose(RxSchedulers.compose());
@@ -426,4 +429,32 @@ public class ApiController {
                 .selectAverage(userid, token)
                 .compose(RxSchedulers.compose());
     }
+
+
+    /**
+     * 根据type获取文章列表
+     * @param type
+     * @return
+     */
+    public static Observable<KotlinBean.BaseBean<ArrayList<KotlinBean.Knowledge>>>getKnowedgesByType(String type){
+        return InstanceHolder.api.getKnowedgesByType(type).compose(RxSchedulers.compose());
+    }
+
+
+    /**
+     * 根据id获取文章内容
+     * @param id
+     * @return
+     */
+    public static Observable<KotlinBean.BaseBean<KotlinBean.Artical>>getKnowedge(int id){
+        return InstanceHolder.api.getKnowedge(id).compose(RxSchedulers.compose());
+    }
+
+    /**
+     * 获取所有知识类目
+     * @return
+     */
+   public static Observable<KotlinBean.BaseBean<ArrayList<KotlinBean.Title>>>getknowledgeBaseType(){
+        return InstanceHolder.api.getknowledgeBaseType().compose(RxSchedulers.compose());
+   }
 }

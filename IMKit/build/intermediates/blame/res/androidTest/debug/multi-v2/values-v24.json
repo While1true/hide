@@ -4,7 +4,7 @@
             "outputFile": "D:\\demo\\DoctorAssitant\\IMKit\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-v24\\values-v24.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\乐城\\.gradle\\caches\\transforms-1\\files-1.1\\support-media-compat-26.1.0.aar\\961236e884322db19a0db60301d1d577\\res\\values-v24\\values-v24.xml",
+                    "source": "C:\\Users\\ck\\.gradle\\caches\\transforms-1\\files-1.1\\support-media-compat-26.1.0.aar\\222b16bdc2a3ddeb46d440a09554f5c3\\res\\values-v24\\values-v24.xml",
                     "from": {
                         "startLines": "2,3,4,5",
                         "startColumns": "4,4,4,4",
@@ -19,7 +19,7 @@
             "outputFile": "D:\\demo\\DoctorAssitant\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\values-v24\\values-v24.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\乐城\\.gradle\\caches\\transforms-1\\files-1.1\\support-media-compat-26.1.0.aar\\961236e884322db19a0db60301d1d577\\res\\values-v24\\values-v24.xml",
+                    "source": "C:\\Users\\ck\\.gradle\\caches\\transforms-1\\files-1.1\\support-media-compat-26.1.0.aar\\222b16bdc2a3ddeb46d440a09554f5c3\\res\\values-v24\\values-v24.xml",
                     "from": {
                         "startLines": "2,3,4,5",
                         "startColumns": "4,4,4,4",

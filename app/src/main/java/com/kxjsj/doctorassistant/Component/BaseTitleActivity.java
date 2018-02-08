@@ -24,6 +24,7 @@ public abstract class BaseTitleActivity extends AppCompatActivity {
     private TextView tv_title;
     private ImageView iv_menu;
     protected IndicateImageView tipTextView;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,22 +38,27 @@ public abstract class BaseTitleActivity extends AppCompatActivity {
         iv_menu = findViewById(R.id.menu);
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(view -> onNavigationClicked());
-        getLayoutInflater().inflate(getContentLayoutId(), content, true);
+        View rootview = SetRootView();
+        if (rootview == null)
+            getLayoutInflater().inflate(getContentLayoutId(), content, true);
+        else
+            content.addView(rootview);
         initView(savedInstanceState);
     }
+
     protected abstract int getContentLayoutId();
 
     /**
      * 初始化组件
      */
-    protected abstract void initView( Bundle savedInstanceState);
+    protected abstract void initView(Bundle savedInstanceState);
 
     /**
      * 中间title
      *
      * @CharSequence title
      */
-    public void setTitle(CharSequence title){
+    public void setTitle(CharSequence title) {
         tv_title.setText(title);
     }
 
@@ -87,15 +93,20 @@ public abstract class BaseTitleActivity extends AppCompatActivity {
         finish();
     }
 
+    protected View SetRootView() {
+
+        return null;
+    }
+
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         toolbar.setNavigationOnClickListener(null);
-        toolbar=null;
-        tv_title=null;
-        iv_menu=null;
-        tipTextView=null;
+        toolbar = null;
+        tv_title = null;
+        iv_menu = null;
+        tipTextView = null;
         RxLifeUtils.getInstance().remove(this);
         ActivityUtils.getInstance().remove(this);
     }
