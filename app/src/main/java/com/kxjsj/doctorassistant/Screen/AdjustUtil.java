@@ -35,7 +35,7 @@ public class AdjustUtil {
 
     private static Point point;
     private static Orention type = Orention.LAND;
-    private static AdjustUnit unit = AdjustUnit.DP;
+    private static AdjustUnit unit = AdjustUnit.PX;
     private static int DESIGN_WIDTHs = 1920;
     private static int DESIGN_HEIGHTs = 1200;
     private static float DESIGN_SCALEs = 2.0f;

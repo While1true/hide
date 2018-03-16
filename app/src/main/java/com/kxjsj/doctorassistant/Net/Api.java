@@ -246,7 +246,7 @@ public interface Api {
     @POST("knowledgeBase/knowledgeBaseList")
     Observable<BaseBean<ArrayList<KotlinBean.Knowledge>>>getKnowedgesByType(@Field("type")String type);
 
-    @POST("knowledgeBase/knowledgeBaseType")
+    @GET("knowledgeBase/knowledgeBaseType")
     Observable<BaseBean<ArrayList<KotlinBean.Title>>>getknowledgeBaseType();
 
     @FormUrlEncoded

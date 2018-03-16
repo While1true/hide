@@ -214,7 +214,7 @@ public class DoctorHome extends BaseTitleActivity {
      */
     private void loadData() {
         Session userInfo = App.getUserInfo();
-        Observable.combineLatest(ApiController.getReplyComment(userInfo.getUserid(), userInfo.getToken()),
+        Observable.zip(ApiController.getReplyComment(userInfo.getUserid(), userInfo.getToken()),
                 ApiController.selectAverage(bean.getUserid(), userInfo.getToken()),
                 (arrayListBaseBean, baseBean) -> {
                         average = baseBean.getData().getAVERAGE();
@@ -235,12 +235,12 @@ public class DoctorHome extends BaseTitleActivity {
                         adapter.ShowError();
                     }
                 });
-        ApiController.getReplyComment(userInfo.getUserid(), userInfo.getToken()).subscribe(new DataObserver<ArrayList<KotlinBean.PushBean>>(this) {
-            @Override
-            public void OnNEXT(ArrayList<KotlinBean.PushBean> bean) {
-                System.out.println(bean.size());
-            }
-        });
+//        ApiController.getReplyComment(userInfo.getUserid(), userInfo.getToken()).subscribe(new DataObserver<ArrayList<KotlinBean.PushBean>>(this) {
+//            @Override
+//            public void OnNEXT(ArrayList<KotlinBean.PushBean> bean) {
+//                System.out.println(bean.size());
+//            }
+//        });
         srecyclerview.notifyRefreshComplete();
 
     }
