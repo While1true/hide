@@ -1,10 +1,10 @@
 package com.kxjsj.doctorassistant.Appxx.Mine;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.constraint.Group;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -14,14 +14,10 @@ import com.kxjsj.doctorassistant.Appxx.Mine.Login.AuthActivity;
 import com.kxjsj.doctorassistant.Appxx.Mine.Wallet.WalletActivity;
 import com.kxjsj.doctorassistant.Appxx.Sicker.QuiryInfo.IDInfoActivity;
 import com.kxjsj.doctorassistant.Component.BaseTitleActivity;
-import com.kxjsj.doctorassistant.Constant.Constance;
 import com.kxjsj.doctorassistant.Constant.Session;
 import com.kxjsj.doctorassistant.DialogAndPopWindow.PicDialog;
 import com.kxjsj.doctorassistant.Glide.GlideLoader;
 import com.kxjsj.doctorassistant.R;
-import com.kxjsj.doctorassistant.Rx.RxBaseBean;
-import com.kxjsj.doctorassistant.Rx.MyObserver;
-import com.kxjsj.doctorassistant.Rx.Utils.RxBus;
 import com.kxjsj.doctorassistant.Utils.K2JUtils;
 import com.kxjsj.doctorassistant.View.SettingView;
 
@@ -66,36 +62,29 @@ public class UserInfoActivity extends BaseTitleActivity {
         ButterKnife.bind(this);
         setTitle("用户信息");
         sScrollview.setRefreshMode(true, true, false, false);
-        acquirePicCallback();
         userInfo = App.getUserInfo();
         if (userInfo == null) {
             K2JUtils.toast("登录失效，请重新登录");
             return;
         }
-        if(userInfo.getType()!=0)
+        if (userInfo.getType() != 0)
             group2.setVisibility(View.GONE);
         String imgUrl = userInfo.getImgUrl();
         GlideLoader.loadRound(img.getImageView(), imgUrl);
         nickname.setSubText(userInfo.getUsername());
         sickcard.setSubText(userInfo.getPatientNo());
 
+        //dialog打开情况下的复活 操作
+        if (savedInstanceState != null) {
+            dialog = (PicDialog) getSupportFragmentManager().getFragment(savedInstanceState, "PicDialog");
+        }
+        if (dialog != null)
+            dialog.setListener(result -> {
+                GlideLoader.loadRound(img.getImageView(), result);
+            });
 
     }
 
-    private void acquirePicCallback() {
-        RxBus.getDefault().
-                toObservable(Constance.Rxbus.PIC, RxBaseBean.class)
-                .subscribe(new MyObserver<RxBaseBean>(this) {
-                    @Override
-                    public void onNext(RxBaseBean rxBaseBean) {
-                        super.onNext(rxBaseBean);
-                        GlideLoader.loadRound(img.getImageView(), rxBaseBean.getData());
-                        if (Constance.DEBUGTAG)
-                            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onNext: " + rxBaseBean.getCode());
-
-                    }
-                });
-    }
 
     @OnClick({R.id.money, R.id.img, R.id.nickname, R.id.phone, R.id.sickcard, R.id.idinfo, R.id.password})
     public void onViewClicked(View view) {
@@ -103,6 +92,9 @@ public class UserInfoActivity extends BaseTitleActivity {
             case R.id.img:
                 if (dialog == null) {
                     dialog = new PicDialog();
+                    dialog.setListener(result -> {
+                        GlideLoader.loadRound(img.getImageView(), result);
+                    });
                 }
                 dialog.show(getSupportFragmentManager());
                 break;
@@ -148,6 +140,13 @@ public class UserInfoActivity extends BaseTitleActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (dialog != null&&dialog.isAdded())
+            getSupportFragmentManager().putFragment(outState, "PicDialog", dialog);
     }
 
     @Override

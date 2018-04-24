@@ -178,21 +178,21 @@ public class HospitalF extends BaseFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.help_nurse:
-                if(beans==null)
+                if (beans == null)
                     return;
-                ConversationUtils.startChartSingle(getContext(),beans.getNurid(),beans.getNurname());
+                ConversationUtils.startChartSingle(getContext(), beans.getNurid(), beans.getNurname());
                 break;
             case R.id.callhelp_doctor:
-                if(beans==null)
+                if (beans == null)
                     return;
-                ConversationUtils.startChartSingle(getContext(),beans.getDocid(),beans.getDocname());
+                ConversationUtils.startChartSingle(getContext(), beans.getDocid(), beans.getDocname());
                 break;
             case R.id.seemore:
             case R.id.ll:
                 startActivity(new Intent(getContext(), RemindActivity.class));
                 break;
             case R.id.callhelp:
-                if(beans==null)
+                if (beans == null)
                     return;
                 new MaterialDialog.Builder(getContext())
                         .title("请求紧急呼叫")
@@ -204,18 +204,24 @@ public class HospitalF extends BaseFragment {
                             ApiController.pushToUser(
                                     beans.getDocid(), userInfo.getToken(), userInfo.getUserid(),
                                     "请求紧急呼叫", userInfo.getType(), 1)
-                                    .subscribe(new DataObserver(this) {
-                                        @Override
-                                        public void OnNEXT(Object bean) {
-                                            K2JUtils.toast("发送成功");
-                                        }
+                                    .subscribe(new DataObserver<Object>(this) {
+                                            @Override
+                                            public void OnNEXT(Object bean) {
+                                                K2JUtils.toast("发送成功");
+                                            }
+
+                                            @Override
+                                            public void OnERROR(String error) {
+                                                super.OnERROR(error);
+                                                K2JUtils.toast("发送失败");
+                                            }
                                     });
                         }).show();
 
 //                ConversationUtils.sendMessage();
                 break;
             case R.id.help:
-                if(beans==null)
+                if (beans == null)
                     return;
                 showInputDialog();
                 break;

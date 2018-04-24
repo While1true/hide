@@ -7,13 +7,12 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CAMERA"/>
-
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
     <!-- 小米 配置开始 < -->
     <uses-permission android:name="com.xiaomi.market.sdk.UPDATE" />
-<!--<uses-sdk tools:overrideLibrary="com.android.support:design:26.1.0"/>-->
+    <!--<uses-sdk tools:overrideLibrary="com.android.support:design:26.1.0"/>-->
     <permission
         android:name="com.kxjsj.doctorassistant.permission.MIPUSH_RECEIVE"
         android:protectionLevel="signature" />
@@ -25,11 +24,19 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_medicine"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
-        >
+        android:theme="@style/AppTheme">
         <meta-data
             android:name="android.max_aspect"
             android:value="2.1" />
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="OXE8WZiZq9T5vR0RrtQrnTUGYjYE4PCp" />
+
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote"></service>
+
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize">
@@ -56,22 +63,22 @@
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name=".Appxx.Mine.Register.RegisterActivity"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name=".Appxx.Mine.Register.ChoseRegisterActivity"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name=".Appxx.Sicker.Knowledge.X5WebviewActivity"
-            android:windowSoftInputMode="stateHidden|adjustPan"
             android:configChanges="orientation|keyboardHidden|layoutDirection|screenSize"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
         <!--<activity-->
-            <!--android:name=".Utils.ZXingUtils$MyCaptureActivity"-->
-            <!--android:configChanges="orientation|screenSize|keyboardHidden"-->
-            <!--android:launchMode="singleTask"-->
-            <!--android:windowSoftInputMode="stateHidden|adjustPan" />-->
+        <!--android:name=".Utils.ZXingUtils$MyCaptureActivity"-->
+        <!--android:configChanges="orientation|screenSize|keyboardHidden"-->
+        <!--android:launchMode="singleTask"-->
+        <!--android:windowSoftInputMode="stateHidden|adjustPan" />-->
         <activity
             android:name=".Appxx.Sicker.Home.SickerHome"
             android:configChanges="orientation|keyboardHidden"
@@ -79,32 +86,36 @@
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name=".Appxx.Mine.Login.AuthActivity"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name=".Appxx.Mine.Login.ChangePassActivity"
-            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".Appxx.Mine.Login.LoginActivity"
             android:launchMode="singleTask" />
-        <activity android:name=".Appxx.Mine.Login.LoginActivity" android:launchMode="singleTask"/>
 
-        <activity android:name=".Appxx.Mine.UserInfoActivity"/>
-        <activity android:name=".Appxx.Mine.Push.PushActivity"/>
-        <activity android:name=".Appxx.Sicker.QuiryInfo.RemindActivity"/>
-        <activity android:name=".Appxx.Sicker.QuiryInfo.IDInfoActivity"/>
-        <activity android:name=".Appxx.Mine.Wallet.WalletActivity"/>
-        <activity android:name=".Appxx.Sicker.QuiryInfo.SelfPayActivity"/>
-        <activity android:name=".Appxx.Sicker.QuiryInfo.MedicalInfo"/>
-        <activity android:name=".Appxx.Mine.Comment.CommentActivity" android:launchMode="singleTask"/>
-        <activity android:name=".Appxx.Sicker.QuiryInfo.CheckPartActivity"/>
-        <activity android:name=".Appxx.Sicker.QuiryInfo.ReportActivity"/>
-        <activity android:name=".Appxx.Sicker.QuiryInfo.RoomDetailActivity"/>
-        <activity android:name=".Appxx.Sicker.QuiryInfo.RoomInfoActivity"/>
-        <activity android:name=".Appxx.Mine.Wallet.ChargeDetailActivity"/>
-        <activity android:name=".Appxx.Mine.Wallet.MoneyDetailsActivity"/>
-        <activity android:name=".Appxx.Mine.Wallet.MoneyToPayDetailsActivity"/>
-        <activity android:name=".Appxx.Sicker.Remark.RemarkActivity"
-            android:windowSoftInputMode="stateHidden|adjustPan"/>
-
+        <activity android:name=".Appxx.Mine.UserInfoActivity" />
+        <activity android:name=".Appxx.Mine.Push.PushActivity" />
+        <activity android:name=".Appxx.Sicker.QuiryInfo.RemindActivity" />
+        <activity android:name=".Appxx.Sicker.QuiryInfo.IDInfoActivity" />
+        <activity android:name=".Appxx.Mine.Wallet.WalletActivity" />
+        <activity android:name=".Appxx.Sicker.QuiryInfo.SelfPayActivity" />
+        <activity android:name=".Appxx.Sicker.QuiryInfo.MedicalInfo" />
+        <activity
+            android:name=".Appxx.Mine.Comment.CommentActivity"
+            android:launchMode="singleTask" />
+        <activity android:name=".Appxx.Sicker.QuiryInfo.CheckPartActivity" />
+        <activity android:name=".Appxx.Sicker.QuiryInfo.ReportActivity" />
+        <activity android:name=".Appxx.Sicker.QuiryInfo.RoomDetailActivity" />
+        <activity android:name=".Appxx.Sicker.QuiryInfo.RoomInfoActivity" />
+        <activity android:name=".Appxx.Mine.Wallet.ChargeDetailActivity" />
+        <activity android:name=".Appxx.Mine.Wallet.MoneyDetailsActivity" />
+        <activity android:name=".Appxx.Mine.Wallet.MoneyToPayDetailsActivity" />
+        <activity
+            android:name=".Appxx.Sicker.Remark.RemarkActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
 
 
         <!-- //来自融云的推送消息 小米 -->
@@ -251,14 +262,15 @@
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
             </intent-filter>
         </receiver>
+
         <provider
-        android:name=".Mi.MyRongProvider"
-        android:authorities="com.kxjsj.doctorassistant.FileProvider"
-        android:grantUriPermissions="true"
-        android:exported="false">
-        <meta-data
-        android:name="android.support.FILE_PROVIDER_PATHS"
-        android:resource="@xml/rc_file_path"/>
+            android:name=".Mi.MyRongProvider"
+            android:authorities="com.kxjsj.doctorassistant.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/rc_file_path" />
         </provider>
         <provider
             android:name=".Mi.MyProvider"
@@ -286,8 +298,12 @@
         <!-- 小米 配置结束 < -->
 
         <!--友盟统计配置-->
-        <meta-data android:value="59dc61fc9f06fd543a0000ae" android:name="UMENG_APPKEY"/>
-        <meta-data android:value="${UMENG_CHANNEL_VALUE}" android:name="UMENG_CHANNEL"/>
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="59dc61fc9f06fd543a0000ae" />
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="${UMENG_CHANNEL_VALUE}" />
     </application>
 
 </manifest>

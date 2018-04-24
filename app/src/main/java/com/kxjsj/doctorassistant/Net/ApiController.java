@@ -168,7 +168,7 @@ public class ApiController {
      *
      * @return
      */
-    public static Observable<KotlinBean.BaseBean> pushToUser(String userid, String token, String fromid,
+    public static Observable<KotlinBean.BaseBean<Object>> pushToUser(String userid, String token, String fromid,
                                                              String content,
                                                              int type,
                                                              int message_type) {
@@ -457,4 +457,8 @@ public class ApiController {
    public static Observable<KotlinBean.BaseBean<ArrayList<KotlinBean.Title>>>getknowledgeBaseType(){
         return InstanceHolder.api.getknowledgeBaseType().compose(RxSchedulers.compose());
    }
+
+    public static Observable<KotlinBean.BaseBean<String>>addLocationInfo(RequestParams params){
+        return InstanceHolder.api.addLocationInfo(params).compose(RxSchedulers.compose());
+    }
 }

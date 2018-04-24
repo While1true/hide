@@ -13,12 +13,21 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RadioGroup;
 
+import com.baidu.location.BDAbstractLocationListener;
+import com.baidu.location.BDLocation;
 import com.kxjsj.doctorassistant.App;
 import com.kxjsj.doctorassistant.Appxx.MineF;
 import com.kxjsj.doctorassistant.Component.BaseTitleActivity;
 import com.kxjsj.doctorassistant.Constant.Constance;
+import com.kxjsj.doctorassistant.Location.Location;
+import com.kxjsj.doctorassistant.Location.LocationManage;
+import com.kxjsj.doctorassistant.MainActivity;
+import com.kxjsj.doctorassistant.Net.ApiController;
+import com.kxjsj.doctorassistant.Net.RequestParams;
 import com.kxjsj.doctorassistant.R;
 import com.kxjsj.doctorassistant.RongYun.ConversationUtils;
+import com.kxjsj.doctorassistant.Rx.DataObserver;
+import com.kxjsj.doctorassistant.Utils.IpUtils;
 import com.kxjsj.doctorassistant.Utils.K2JUtils;
 import com.kxjsj.doctorassistant.Utils.MyToast;
 import com.kxjsj.doctorassistant.View.NoScrollViewPager;
@@ -26,7 +35,14 @@ import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import coms.pacs.pacs.Rx.Utils.DeviceUtils;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.ObservableSource;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 import io.rong.imkit.RongIM;
 import io.rong.imkit.manager.IUnReadMessageObserver;
 import io.rong.imlib.RongIMClient;
@@ -47,8 +63,9 @@ public class RadioActivity extends BaseTitleActivity implements RadioGroup.OnChe
     private MineF mineF;
     private KnowledgeF knowledgeF;
     private int checkedID = R.id.rb_hospital;
-    private String[] titles = {"医护监控", "医患交流","信息查询","知识服务","我的"};
+    private String[] titles = {"医护监控", "医患交流", "信息查询", "知识服务", "我的"};
     private Disposable subscribe;
+    private LocationManage locationManage = null;
 
     @Override
     protected void initView(Bundle savedInstanceState) {
@@ -132,7 +149,7 @@ public class RadioActivity extends BaseTitleActivity implements RadioGroup.OnChe
          */
         requestPermission();
         if (Constance.DEBUGTAG)
-            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--ss", "initial: "+App.getUserInfo().getRongToken());
+            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--ss", "initial: " + App.getUserInfo().getRongToken());
         RongIM.connect(App.getUserInfo().getRongToken(), new RongIMClient.ConnectCallback() {
             @Override
             public void onTokenIncorrect() {
@@ -156,7 +173,7 @@ public class RadioActivity extends BaseTitleActivity implements RadioGroup.OnChe
             @Override
             public void onError(RongIMClient.ErrorCode errorCode) {
                 if (Constance.DEBUGTAG)
-                    Log.i(Constance.DEBUG, "onError: "+errorCode.getMessage()+errorCode.getValue());
+                    Log.i(Constance.DEBUG, "onError: " + errorCode.getMessage() + errorCode.getValue());
             }
         });
     }
@@ -199,12 +216,13 @@ public class RadioActivity extends BaseTitleActivity implements RadioGroup.OnChe
     private void requestPermission() {
 
         subscribe = new RxPermissions(this)
-                .requestEach(Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.INTERNET,
-                        Manifest.permission.ACCESS_NETWORK_STATE
+                .requestEach(Manifest.permission.INTERNET, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION
                 )
                 .subscribe(permission -> {
                     if (permission.granted) {
+                        if (permission.name.equals(Manifest.permission.ACCESS_FINE_LOCATION)) {
+                            getLocation();
+                        }
                         // 用户已经同意该权限
                         Log.d("RxPermissions", permission.name + " is granted.");
                     } else if (permission.shouldShowRequestPermissionRationale) {
@@ -219,10 +237,46 @@ public class RadioActivity extends BaseTitleActivity implements RadioGroup.OnChe
 
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
+    private void getLocation() {
+        locationManage = new LocationManage(new BDAbstractLocationListener() {
+            @Override
+            public void onReceiveLocation(BDLocation bdLocation) {
+                Location location = LocationManage.parseString(bdLocation);
+                Observable.create((ObservableOnSubscribe<String>) e -> {
+                    e.onNext(IpUtils.getIPAddressOut());
+                    e.onComplete();
+                }).subscribeOn(Schedulers.io())
+                        .flatMap(s -> ApiController.addLocationInfo(new RequestParams()
+                                .add("username", App.getUserInfo().getUsername())
+                                .add("equipment", DeviceUtils.INSTANCE.getUniqueId(RadioActivity.this))
+                                .add("addr", location.getAddr())
+                                .add("ipDddr", s)
+                                .add("locationJson", location.toString())
+                                .add("remark", "内网Ip" + IpUtils.getIPAddressIn())))
+                        .subscribe(new DataObserver<String>(RadioActivity.this) {
+                            int i = 0;
 
+                            @Override
+                            public void OnNEXT(String bean) {
+                                K2JUtils.log("x", "上传成功！");
+                                locationManage.stop();
+                            }
+
+                            @Override
+                            public void OnERROR(String error) {
+                                super.OnERROR(error);
+                                i++;
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                super.onComplete();
+                                if (i == 2)
+                                    locationManage.stop();
+                            }
+                        });
+            }
+        }).get(this);
     }
 
     private long lastClick;
@@ -273,19 +327,6 @@ public class RadioActivity extends BaseTitleActivity implements RadioGroup.OnChe
         MyToast.Companion.cancel();
     }
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (Constance.DEBUGTAG)
-            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onCreate: ");
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        if (Constance.DEBUGTAG)
-            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onRestoreInstanceState: ");
-    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -301,15 +342,8 @@ public class RadioActivity extends BaseTitleActivity implements RadioGroup.OnChe
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        if (Constance.DEBUGTAG)
-            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onConfigurationChanged: ");
-    }
-
-    @Override
     public void onCountChanged(int i) {
-        if(tipTextView!=null) {
+        if (tipTextView != null) {
             tipTextView.post(() -> tipTextView.setIndicate(i));
         }
     }

@@ -1,0 +1,34 @@
+{
+    "logs": [
+        {
+            "outputFile": "D:\\demo\\DoctorAssitant\\IMKit\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-bg\\values-bg.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\ck\\.gradle\\wrapper\\dists\\gradle-3.3-all\\55gk2rcmfc6p2dg9u9ohc3hw9\\gradle-3.3\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\e636742f49df821d93a7962286b4895e\\res\\values-bg\\values-bg.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "100",
+                        "endOffsets": "151"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "D:\\demo\\DoctorAssitant\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\values-bg\\values-bg.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\ck\\.gradle\\wrapper\\dists\\gradle-3.3-all\\55gk2rcmfc6p2dg9u9ohc3hw9\\gradle-3.3\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\e636742f49df821d93a7962286b4895e\\res\\values-bg\\values-bg.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "100",
+                        "endOffsets": "151"
+                    }
+                }
+            ]
+        }
+    ]
+}

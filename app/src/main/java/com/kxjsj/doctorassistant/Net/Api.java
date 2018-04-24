@@ -15,6 +15,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import retrofit2.http.Field;
+import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -85,7 +86,7 @@ public interface Api {
 
     @FormUrlEncoded
     @POST("push/pushToUser")
-    Observable<BaseBean> pushToUser(@Field("userid") String userid, @Field("token") String token, @Field("fromid") String fromid,
+    Observable<BaseBean<Object>> pushToUser(@Field("userid") String userid, @Field("token") String token, @Field("fromid") String fromid,
                                     @Field("content") String content,
                                     @Field("type") int type,
                                     @Field("message_type") int message_type);
@@ -253,4 +254,7 @@ public interface Api {
     @POST("knowledgeBase/knowledgeArticle")
     Observable<BaseBean<KotlinBean.Artical>>getKnowedge(@Field("id")int id);
 
+    @FormUrlEncoded
+    @POST("bed/addLocationInfo")
+    Observable<BaseBean<String>>addLocationInfo(@FieldMap RequestParams params);
 }

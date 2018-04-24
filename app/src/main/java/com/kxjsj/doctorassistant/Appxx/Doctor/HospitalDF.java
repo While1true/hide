@@ -123,7 +123,7 @@ public class HospitalDF extends BaseFragment {
                         return position == 0;
                     }
                 })
-                .addType(R.layout.doctor_answer_item, new PositionHolder() {
+                .addType(R.layout.doctor_answer_item_reply, new PositionHolder() {
                     @Override
                     public void onBind(SimpleViewHolder holder, int position) {
                         if (Constance.DEBUGTAG)
@@ -153,7 +153,26 @@ public class HospitalDF extends BaseFragment {
                                     });
 
                         });
-
+                        if(null == pushBean.getReply()){
+                            holder.setVisible(R.id.mark,true);
+                        }else{
+                            holder.setVisible(R.id.mark,false);
+                        }
+                         holder.setOnClickListener(R.id.mark, v -> {
+                             Session userInfo = App.getUserInfo();
+                             ApiController.replyPush(pushBean.getId() + "", userInfo.getUserid(), pushBean.getFromid(), userInfo.getType(), userInfo.getToken(), "已处理")
+                                     .subscribe(new DataObserver<Object>(getContext()) {
+                                         @Override
+                                         public void OnNEXT(Object beans) {
+                                             K2JUtils.toast("成功");
+                                             if (bean != null&&bean.contains(pushBean)) {
+                                                 bean.remove(pushBean);
+                                                 adapter.setCount(bean.size()+1);
+                                                 adapter.notifyDataSetChanged();
+                                             }
+                                         }
+                                     });
+                         });
                         holder.itemView.setOnLongClickListener(v -> {
                             ReplyDialog replyDialog = new ReplyDialog();
                             replyDialog.setTitleStr("写下您的问题描述");

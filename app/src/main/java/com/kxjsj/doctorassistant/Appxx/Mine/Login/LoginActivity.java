@@ -117,6 +117,15 @@ public class LoginActivity extends BaseTitleActivity {
                         .subscribe(new DataObserver(LoginActivity.this) {
                             @Override
                             public void OnNEXT(Object bean) {
+                                RongIM.getInstance().refreshUserInfoCache(new UserInfo(o.getUserid(), o.getUsername(), Uri.parse(o.getImgUrl())));
+                                if (Constance.DEBUGTAG)
+                                    Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "OnNEXT: "+o.toString());
+                                if(checked==0){
+                                    startActivity(new Intent(LoginActivity.this, RadioActivity.class));
+                                }else{
+                                    startActivity(new Intent(LoginActivity.this, RadioActivityD.class));
+                                }
+                                finish();
                                 if (Constance.DEBUGTAG)
                                     Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "OnNEXT: 绑定小米成功");
                             }
@@ -128,16 +137,6 @@ public class LoginActivity extends BaseTitleActivity {
                                 super.OnERROR(error);
                             }
                         });
-                        
-                        RongIM.getInstance().refreshUserInfoCache(new UserInfo(o.getUserid(), o.getUsername(), Uri.parse(o.getImgUrl())));
-                        if (Constance.DEBUGTAG)
-                            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "OnNEXT: "+o.toString());
-                        if(checked==0){
-                            startActivity(new Intent(LoginActivity.this, RadioActivity.class));
-                        }else{
-                            startActivity(new Intent(LoginActivity.this, RadioActivityD.class));
-                        }
-                        finish();
                     }
 
                     @Override

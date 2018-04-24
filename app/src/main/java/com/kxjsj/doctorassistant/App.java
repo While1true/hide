@@ -1,18 +1,24 @@
 package com.kxjsj.doctorassistant;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 import android.util.Log;
 
 import com.bumptech.glide.Glide;
 import com.kxjsj.doctorassistant.Constant.Session;
+import com.kxjsj.doctorassistant.Location.LocationManage;
 import com.kxjsj.doctorassistant.RongYun.RongYunInitialUtils;
 import com.kxjsj.doctorassistant.Screen.AdjustUtil;
 import com.kxjsj.doctorassistant.MobSMS.MessageUtils;
 import com.kxjsj.doctorassistant.Utils.GsonUtils;
 import com.kxjsj.doctorassistant.Utils.K2JUtils;
 import com.qihoo360.replugin.RePluginApplication;
+import com.squareup.leakcanary.LeakCanary;
 import com.tencent.smtt.sdk.QbSdk;
+
+import io.reactivex.functions.Consumer;
+import io.reactivex.plugins.RxJavaPlugins;
 
 
 /**
@@ -30,12 +36,40 @@ public class App extends RePluginApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        if (isMainProcess()) {
+            app = this;
 
-        app=this;
+            new Thread(() -> init()).start();
 
-        new Thread(() -> init()).start();
+            AdjustUtil.adjust(this);
 
-        AdjustUtil.adjust(this);
+            LocationManage.init(this);
+
+            RxJavaPlugins.setErrorHandler(throwable -> {
+                K2JUtils.log("--", throwable.getMessage());
+            });
+        }
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(this);
+    }
+
+    /**
+     * 获取当前进程名
+     */
+    private boolean isMainProcess() {
+        int pid = android.os.Process.myPid();
+        String processName = "";
+        ActivityManager manager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningAppProcessInfo process : manager.getRunningAppProcesses()) {
+            if (process.pid == pid) {
+                processName = process.processName;
+            }
+        }
+        return getApplicationContext().getPackageName().equals(processName);
     }
 
     @Override
@@ -68,26 +102,28 @@ public class App extends RePluginApplication {
             }
         };
         //x5内核初始化接口
-        QbSdk.initX5Environment(getApplicationContext(),  cb);
+        QbSdk.initX5Environment(getApplicationContext(), cb);
 //        ZXingLibrary.initDisplayOpinion(this);
     }
 
 
     /**
      * 获取用户信息
+     *
      * @return
      */
-    public static Session getUserInfo(){
-        String userinfo=K2JUtils.get("userinfo","");
+    public static Session getUserInfo() {
+        String userinfo = K2JUtils.get("userinfo", "");
         Session session = GsonUtils.parse2Bean(userinfo, Session.class);
-        return session==null?new Session():session;
+        return session == null ? new Session() : session;
     }
 
     /**
      * 获取token
+     *
      * @return
      */
-    public static String getToken(){
+    public static String getToken() {
         return getUserInfo().getToken();
     }
 

@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.ck.hello.nestrefreshlib.View.Adpater.Base.BaseAdapter;
 import com.ck.hello.nestrefreshlib.View.Adpater.Base.SimpleViewHolder;
 import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.PositionHolder;
 import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.SAdapter;
@@ -190,7 +191,7 @@ public class SickerHome extends BaseTitleActivity {
                         beans=bean;
                         if(beans.size()>0){
                             adapter.setCount(4+beans.size());
-                            adapter.showNomore();
+                            adapter.showState(BaseAdapter.SHOW_NOMORE,"没有更多了");
                         }
                         srecyclerview.notifyRefreshComplete();
                     }

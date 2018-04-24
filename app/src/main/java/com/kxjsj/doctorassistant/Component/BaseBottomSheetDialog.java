@@ -34,7 +34,7 @@ public abstract class BaseBottomSheetDialog extends BottomSheetDialogFragment {
         View parent = inflater.inflate(R.layout.dialog_base_layout, container, false);
         title = parent.findViewById(R.id.title);
         close = parent.findViewById(R.id.close);
-        close.setOnClickListener(view ->dismiss());
+        close.setOnClickListener(view -> dismiss());
         view = parent.findViewById(R.id.content);
         View child = inflater.inflate(getLayoutId(), view, false);
         view.addView(child);
@@ -44,6 +44,12 @@ public abstract class BaseBottomSheetDialog extends BottomSheetDialogFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         initView(view, savedInstanceState);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean("isshow", getDialog().isShowing());
     }
 
     protected abstract int getLayoutId();
@@ -66,12 +72,14 @@ public abstract class BaseBottomSheetDialog extends BottomSheetDialogFragment {
         show(manager, getClass().getSimpleName());
         return this;
     }
+
     @Override
     public void onResume() {
         super.onResume();
         BottomSheetBehavior.from(view.getRootView().findViewById(android.support.design.R.id.design_bottom_sheet)).setState(BottomSheetBehavior.STATE_EXPANDED);
 
     }
+
     @Override
     public void dismiss() {
         InputUtils.hideKeyboard(getDialog());
