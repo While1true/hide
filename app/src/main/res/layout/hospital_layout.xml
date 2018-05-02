@@ -49,24 +49,27 @@
             android:background="#fff0f0f0" />
     </LinearLayout>
 
-    <com.ck.hello.nestrefreshlib.View.RefreshViews.SScrollview
+    <com.nestrefreshlib.RefreshViews.RefreshLayout
         android:id="@+id/sscrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.constraint.ConstraintLayout
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:fillViewport="true"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <include
+                    android:id="@+id/includez"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    layout="@layout/sickerinfo"
+                    />
+            </LinearLayout>
 
-            <include
-                android:id="@+id/includez"
-                layout="@layout/sickerinfo"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <!--<TextView-->
                 <!--android:id="@+id/textView5"-->
@@ -92,6 +95,6 @@
                 <!--app:layout_constraintTop_toBottomOf="@+id/textView5"-->
                 <!--app:layout_constraintVertical_bias="0.0" />-->
 
-        </android.support.constraint.ConstraintLayout>
-    </com.ck.hello.nestrefreshlib.View.RefreshViews.SScrollview>
+        </android.support.v4.widget.NestedScrollView>
+    </com.nestrefreshlib.RefreshViews.RefreshLayout>
 </LinearLayout>

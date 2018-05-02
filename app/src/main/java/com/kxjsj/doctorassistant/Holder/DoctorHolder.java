@@ -1,7 +1,7 @@
 package com.kxjsj.doctorassistant.Holder;
 
-import com.ck.hello.nestrefreshlib.View.Adpater.Base.ItemHolder;
 import com.kxjsj.doctorassistant.JavaBean.DoctorBean;
+import com.nestrefreshlib.Adpater.Base.ItemHolder;
 
 /**
  * Created by vange on 2017/10/23.

@@ -217,7 +217,7 @@ public class ApiController {
      * 留言
      * @return
      */
-    public static Observable<KotlinBean.BaseBean> Comment(String userid,String fromid,
+    public static Observable<KotlinBean.BaseBean<Object>> Comment(String userid,String fromid,
                                                           String token,
                                                          String content) {
         return InstanceHolder.api
@@ -254,7 +254,7 @@ public class ApiController {
      * @param token
      * @return
      */
-    public static Observable<KotlinBean.BaseBean>answerComment(String id,String token,String reply,
+    public static Observable<KotlinBean.BaseBean<Object>>answerComment(String id,String token,String reply,
                                                   String userid,String fromid){
         return InstanceHolder.api
                 .answerComment(id,token,1+"",reply,userid,fromid)
@@ -412,7 +412,7 @@ public class ApiController {
      * @param token
      * @return
      */
-    public static Observable<KotlinBean.BaseBean<ArrayList<RatingBean>>> selectEvaluate(String userid, String token, int pagerNo){
+    public static Observable<KotlinBean.BaseBean<List<RatingBean>>> selectEvaluate(String userid, String token, int pagerNo){
             return InstanceHolder.api
                     .selectEvaluate(userid, token,pagerNo,20)
                     .compose(RxSchedulers.compose());

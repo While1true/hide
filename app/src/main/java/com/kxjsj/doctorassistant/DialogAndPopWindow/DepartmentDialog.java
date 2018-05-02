@@ -3,22 +3,24 @@ package com.kxjsj.doctorassistant.DialogAndPopWindow;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.ck.hello.nestrefreshlib.View.Adpater.Base.SimpleViewHolder;
-import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.DefaultStateListener;
-import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.PositionHolder;
-import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.SAdapter;
-import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.StringHolder;
-import com.ck.hello.nestrefreshlib.View.RefreshViews.SRecyclerView;
 import com.kxjsj.doctorassistant.Component.BaseBottomSheetDialog;
 import com.kxjsj.doctorassistant.Holder.CallBack;
 import com.kxjsj.doctorassistant.Net.ApiController;
 import com.kxjsj.doctorassistant.R;
 import com.kxjsj.doctorassistant.Rx.DataObserver;
 import com.kxjsj.doctorassistant.Utils.K2JUtils;
+import com.nestrefreshlib.Adpater.Base.Holder;
+import com.nestrefreshlib.Adpater.Impliment.BaseHolder;
+import com.nestrefreshlib.Adpater.Impliment.SAdapter;
+import com.nestrefreshlib.RefreshViews.AdapterHelper.StateAdapter;
+import com.nestrefreshlib.RefreshViews.RefreshLayout;
+import com.nestrefreshlib.State.DefaultStateListener;
+import com.nestrefreshlib.State.Interface.StateEnum;
 
 import java.util.ArrayList;
 
@@ -31,10 +33,10 @@ import butterknife.Unbinder;
  */
 
 public class DepartmentDialog extends BaseBottomSheetDialog {
-    @BindView(R.id.srecyclerview)
-    SRecyclerView srecyclerview;
+    @BindView(R.id.refreshlayout)
+    RefreshLayout refreshLayout;
     Unbinder unbinder;
-    private SAdapter adapter;
+    private StateAdapter adapter;
     ArrayList<String> bean;
     CallBack callback;
 
@@ -73,17 +75,17 @@ public class DepartmentDialog extends BaseBottomSheetDialog {
                     @Override
                     public void onError(Throwable e) {
                         super.onError(e);
-                        adapter.showState(SAdapter.SHOW_ERROR, e.getMessage());
+                        adapter.showState(StateEnum.SHOW_ERROR, e.getMessage());
                     }
                 });
     }
 
     private void setdata(ArrayList<String> beans) {
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
-        adapter = new SAdapter(bean)
-                .addType(R.layout.label_layout, new StringHolder() {
+        adapter = new StateAdapter(bean)
+                .addType(R.layout.label_layout, new BaseHolder<String>() {
                     @Override
-                    public void onBind(SimpleViewHolder holder, String item, int position) {
+                    public void onViewBind(Holder holder, String item, int position) {
                         holder.setText(R.id.bt,item);
                         holder.setOnClickListener(R.id.bt,view -> {
                             K2JUtils.toast(item);
@@ -93,12 +95,8 @@ public class DepartmentDialog extends BaseBottomSheetDialog {
                             }
                         });
                     }
-
-                    @Override
-                    public boolean istype(String item, int position) {
-                        return true;
-                    }
-                }).setStateListener(new DefaultStateListener() {
+                });
+        adapter.setStateListener(new DefaultStateListener() {
                     @Override
                     public void netError(Context context) {
                         loadData();
@@ -110,10 +108,10 @@ public class DepartmentDialog extends BaseBottomSheetDialog {
             else
                 adapter.showItem();
         }
-        srecyclerview
-                .setRefreshMode(false,false,false,false)
-                .setAdapter(manager, adapter);
-        adapter.setBeanList(beans);
+        RecyclerView recyclerView=refreshLayout.getmScroll();
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(manager);
+        refreshLayout.getAttrsUtils().setOVERSCROLL(true);
     }
 
     @Override

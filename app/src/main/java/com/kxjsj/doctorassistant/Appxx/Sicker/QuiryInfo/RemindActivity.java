@@ -5,14 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-
-import com.ck.hello.nestrefreshlib.View.Adpater.Base.ItemHolder;
-import com.ck.hello.nestrefreshlib.View.Adpater.Base.SimpleViewHolder;
-import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.DefaultStateListener;
-import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.SAdapter;
-import com.ck.hello.nestrefreshlib.View.RefreshViews.SRecyclerView;
 import com.kxjsj.doctorassistant.App;
 import com.kxjsj.doctorassistant.Appxx.Doctor.Home.DoctorHome;
 import com.kxjsj.doctorassistant.Appxx.Sicker.Home.SickerHome;
@@ -28,8 +23,13 @@ import com.kxjsj.doctorassistant.Rx.DataObserver;
 import com.kxjsj.doctorassistant.Rx.RxSchedulers;
 import com.kxjsj.doctorassistant.Utils.K2JUtils;
 import com.kxjsj.doctorassistant.Utils.NotificationUtils;
+import com.nestrefreshlib.Adpater.Base.Holder;
+import com.nestrefreshlib.Adpater.Base.ItemHolder;
+import com.nestrefreshlib.RefreshViews.AdapterHelper.StateAdapter;
+import com.nestrefreshlib.RefreshViews.RefreshLayout;
+import com.nestrefreshlib.RefreshViews.RefreshListener;
+import com.nestrefreshlib.State.DefaultStateListener;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -44,9 +44,9 @@ import zhy.com.highlight.shape.RectLightShape;
  */
 
 public class RemindActivity extends BaseTitleActivity {
-    @BindView(R.id.srecyclerview)
-    SRecyclerView srecyclerview;
-    private SAdapter sAdapter;
+    @BindView(R.id.refreshlayout)
+    RefreshLayout refreshLayout;
+    private StateAdapter sAdapter;
     ArrayList<KotlinBean.PushBean> bean;
     private int type;
 
@@ -66,10 +66,10 @@ public class RemindActivity extends BaseTitleActivity {
             type = savedInstanceState.getInt("type");
         }
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        sAdapter = new SAdapter()
+        sAdapter = new StateAdapter()
                 .addType(R.layout.doctor_answer_item, new ItemHolder<KotlinBean.PushBean>() {
                     @Override
-                    public void onBind(SimpleViewHolder holder, final KotlinBean.PushBean item, int position) {
+                    public void onBind(Holder holder, final KotlinBean.PushBean item, int position) {
                         holder.setText(R.id.question, item.getFromName() + "/" + item.getCreatorTime());
                         holder.setText(R.id.answer, (item.getMessage_type() == 0 ? (null == item.getReply() ? "" : (item.getContent() + "\n回复：" + item.getReply())) : "请求紧急呼叫") + (null == item.getReply() ? "（待处理）" : "（已处理）"));
                         holder.setTextColor(R.id.answer, item.getMessage_type() == 0 ? 0xff535353 : getResources().getColor(R.color.navi_checked));
@@ -91,7 +91,7 @@ public class RemindActivity extends BaseTitleActivity {
                                     K2JUtils.toast(obj);
                                     Session userInfo = App.getUserInfo();
                                     ApiController.replyPush(item.getId() + "", userInfo.getUserid(), item.getFromid(), userInfo.getType(), userInfo.getToken(), obj)
-                                            .subscribe(new DataObserver(RemindActivity.this) {
+                                            .subscribe(new DataObserver<Object>(RemindActivity.this) {
                                                 @Override
                                                 public void OnNEXT(Object bean) {
                                                     replyDialog.dismiss();
@@ -109,25 +109,32 @@ public class RemindActivity extends BaseTitleActivity {
                     }
 
                     @Override
-                    public boolean istype(KotlinBean.PushBean item, int position) {
+                    public boolean istype(Object item, int position) {
                         return true;
                     }
-                }).setStateListener(new DefaultStateListener() {
+                });
+        sAdapter.setStateListener(new DefaultStateListener() {
                     @Override
                     public void netError(Context context) {
                         loadData();
                     }
                 });
-        srecyclerview.addDefaultHeaderFooter()
-                .setAdapter(linearLayoutManager, sAdapter)
-                .setRefreshingListener(new SRecyclerView.OnRefreshListener() {
-                    @Override
-                    public void Refreshing() {
-                        loadData();
-                    }
-                });
+        RecyclerView recyclerView=refreshLayout.getmScroll();
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(sAdapter);
+        refreshLayout.setListener(new RefreshListener() {
+            @Override
+            public void Refreshing() {
+                loadData();
+            }
+
+            @Override
+            public void Loading() {
+
+            }
+        });
         if (bean == null)
-            srecyclerview.setRefreshing();
+            refreshLayout.setRefreshing();
 
     }
 
@@ -161,7 +168,6 @@ public class RemindActivity extends BaseTitleActivity {
     }
 
     private void loadData() {
-        srecyclerview.postDelayed(() -> {
             Session userInfo = App.getUserInfo();
             Observable<KotlinBean.BaseBean<ArrayList<KotlinBean.PushBean>>> allPush = null;
             if (type == 0)
@@ -175,20 +181,18 @@ public class RemindActivity extends BaseTitleActivity {
                     bean = beand;
                     if (Constance.DEBUGTAG)
                         Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "OnNEXT: " + beand);
-                    sAdapter.setBeanList(beand);
-                    srecyclerview.notifyRefreshComplete();
+                    sAdapter.setList(beand);
+                    refreshLayout.NotifyCompleteRefresh0();
                     sAdapter.showItem();
                 }
 
                 @Override
                 public void OnERROR(String error) {
-                    super.OnERROR(error);
-                    srecyclerview.notifyRefreshComplete();
+                    refreshLayout.NotifyCompleteRefresh0();
                     sAdapter.ShowError();
                 }
             });
 
-        }, 500);
     }
 
     @Override

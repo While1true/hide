@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.kxjsj.doctorassistant.Rx.RxLifeUtils;
+import com.kxjsj.doctorassistant.View.LazyViewPager.LazyFragmentPagerAdapter;
 import com.umeng.analytics.MobclickAgent;
 
 import java.time.temporal.IsoFields;
@@ -17,7 +18,7 @@ import java.time.temporal.IsoFields;
  * BaseFragment base
  */
 
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment implements LazyFragmentPagerAdapter.Laziable {
     protected Toolbar toolbar;
     protected View view;
     protected boolean viewCreated = false;

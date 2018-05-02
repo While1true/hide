@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RadioGroup;
 
 import com.baidu.location.BDAbstractLocationListener;
@@ -30,6 +31,7 @@ import com.kxjsj.doctorassistant.Rx.DataObserver;
 import com.kxjsj.doctorassistant.Utils.IpUtils;
 import com.kxjsj.doctorassistant.Utils.K2JUtils;
 import com.kxjsj.doctorassistant.Utils.MyToast;
+import com.kxjsj.doctorassistant.View.LazyViewPager.LazyFragmentPagerAdapter;
 import com.kxjsj.doctorassistant.View.NoScrollViewPager;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
@@ -79,9 +81,9 @@ public class RadioActivity extends BaseTitleActivity implements RadioGroup.OnChe
         rgGroup.setOnCheckedChangeListener(this);
         rgGroup.check(checkedID);
         vp.setOffscreenPageLimit(4);
-        vp.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
+        vp.setAdapter(new LazyFragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
-            public Fragment getItem(int position) {
+            protected Fragment getItem(ViewGroup container, int position) {
                 switch (position) {
                     case 0:
                         return hospitalF;
@@ -237,6 +239,8 @@ public class RadioActivity extends BaseTitleActivity implements RadioGroup.OnChe
 
     }
 
+    int i = 0;
+
     private void getLocation() {
         locationManage = new LocationManage(new BDAbstractLocationListener() {
             @Override
@@ -254,7 +258,6 @@ public class RadioActivity extends BaseTitleActivity implements RadioGroup.OnChe
                                 .add("locationJson", location.toString())
                                 .add("remark", "内网Ip" + IpUtils.getIPAddressIn())))
                         .subscribe(new DataObserver<String>(RadioActivity.this) {
-                            int i = 0;
 
                             @Override
                             public void OnNEXT(String bean) {
@@ -271,7 +274,7 @@ public class RadioActivity extends BaseTitleActivity implements RadioGroup.OnChe
                             @Override
                             public void onComplete() {
                                 super.onComplete();
-                                if (i == 2)
+                                if (i >= 2)
                                     locationManage.stop();
                             }
                         });
@@ -332,11 +335,16 @@ public class RadioActivity extends BaseTitleActivity implements RadioGroup.OnChe
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("checkedID", checkedID);
-        getSupportFragmentManager().putFragment(outState, "quiryInfoF", quiryInfoF);
-        getSupportFragmentManager().putFragment(outState, "hospitalF", hospitalF);
-        getSupportFragmentManager().putFragment(outState, "communicateF", communicateF);
-        getSupportFragmentManager().putFragment(outState, "mineF", mineF);
-        getSupportFragmentManager().putFragment(outState, "knowledgeF", knowledgeF);
+        if (quiryInfoF.isAdded())
+            getSupportFragmentManager().putFragment(outState, "quiryInfoF", quiryInfoF);
+        if (hospitalF.isAdded())
+            getSupportFragmentManager().putFragment(outState, "hospitalF", hospitalF);
+        if (communicateF.isAdded())
+            getSupportFragmentManager().putFragment(outState, "communicateF", communicateF);
+        if (mineF.isAdded())
+            getSupportFragmentManager().putFragment(outState, "mineF", mineF);
+        if (knowledgeF.isAdded())
+            getSupportFragmentManager().putFragment(outState, "knowledgeF", knowledgeF);
         if (Constance.DEBUGTAG)
             Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onSaveInstanceState: ");
     }

@@ -28,6 +28,9 @@ public class ActivityUtils {
         }
 
     }
+    public Activity getTopActivity(){
+        return activities.get(activities.size()-1);
+    }
 
     public void removeTop() {
         if (activities.size() > 0) {

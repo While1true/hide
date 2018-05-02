@@ -4,14 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
-import android.view.View;
-
-import com.ck.hello.nestrefreshlib.View.Adpater.Base.ItemHolder;
-import com.ck.hello.nestrefreshlib.View.Adpater.Base.SimpleViewHolder;
-import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.DefaultStateListener;
-import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.SAdapter;
-import com.ck.hello.nestrefreshlib.View.RefreshViews.SRecyclerView;
+import android.support.v7.widget.RecyclerView;
 import com.kxjsj.doctorassistant.App;
 import com.kxjsj.doctorassistant.Appxx.Doctor.Home.DoctorHome;
 import com.kxjsj.doctorassistant.Appxx.Sicker.Home.SickerHome;
@@ -25,6 +18,12 @@ import com.kxjsj.doctorassistant.Net.ApiController;
 import com.kxjsj.doctorassistant.R;
 import com.kxjsj.doctorassistant.Rx.DataObserver;
 import com.kxjsj.doctorassistant.Rx.RxSchedulers;
+import com.nestrefreshlib.Adpater.Base.Holder;
+import com.nestrefreshlib.Adpater.Impliment.BaseHolder;
+import com.nestrefreshlib.RefreshViews.AdapterHelper.StateAdapter;
+import com.nestrefreshlib.RefreshViews.RefreshLayout;
+import com.nestrefreshlib.RefreshViews.RefreshListener;
+import com.nestrefreshlib.State.DefaultStateListener;
 
 import java.util.ArrayList;
 
@@ -36,9 +35,9 @@ import butterknife.ButterKnife;
  */
 
 public class CommentActivity extends BaseTitleActivity {
-    @BindView(R.id.srecyclerview)
-    SRecyclerView srecyclerview;
-    private SAdapter adapter;
+    @BindView(R.id.refreshlayout)
+    RefreshLayout refreshLayout;
+    private StateAdapter adapter;
     ArrayList<KotlinBean.PushBean> beans;
     private Session userInfo;
 
@@ -55,26 +54,26 @@ public class CommentActivity extends BaseTitleActivity {
         if (savedInstanceState != null) {
             beans = (ArrayList<KotlinBean.PushBean>) savedInstanceState.getSerializable("bean");
         }
-        adapter = new SAdapter()
-                .addType(R.layout.doctor_answer_item, new ItemHolder<KotlinBean.PushBean>() {
+        adapter = new StateAdapter()
+                .addType(R.layout.doctor_answer_item, new BaseHolder<KotlinBean.PushBean>() {
                     @Override
-                    public void onBind(SimpleViewHolder holder, KotlinBean.PushBean item, int position) {
-                        if(userInfo.getType()==0) {
+                    public void onViewBind(Holder holder, KotlinBean.PushBean item, int position) {
+                        if (userInfo.getType() == 0) {
                             holder.setText(R.id.question, "我:" + item.getContent());
-                            holder.setTextColor(R.id.question,(null==item.getReply())?0xff535353:getResources().getColor(R.color.navi_checked));
-                            if(null==item.getReply()){
-                                holder.setText(R.id.answer,"（未回复）");
-                            }else{
-                                holder.setText(R.id.answer,item.getReply());
+                            holder.setTextColor(R.id.question, (null == item.getReply()) ? 0xff535353 : getResources().getColor(R.color.navi_checked));
+                            if (null == item.getReply()) {
+                                holder.setText(R.id.answer, "（未回复）");
+                            } else {
+                                holder.setText(R.id.answer, item.getReply());
                             }
                             holder.itemView.setOnClickListener(v -> goDoctorHome(item.getUserid()));
-                        }else{
-                            holder.setText(R.id.question, item.getFromName()+":" + item.getContent());
-                            holder.setTextColor(R.id.question,(null==item.getReply())?0xff535353:getResources().getColor(R.color.navi_checked));
-                            if(null==item.getReply()){
-                                holder.setText(R.id.answer,"（待回复）");
-                            }else{
-                                holder.setText(R.id.answer,"@回复/"+item.getReply());
+                        } else {
+                            holder.setText(R.id.question, item.getFromName() + ":" + item.getContent());
+                            holder.setTextColor(R.id.question, (null == item.getReply()) ? 0xff535353 : getResources().getColor(R.color.navi_checked));
+                            if (null == item.getReply()) {
+                                holder.setText(R.id.answer, "（待回复）");
+                            } else {
+                                holder.setText(R.id.answer, "@回复/" + item.getReply());
                             }
 
 
@@ -84,9 +83,9 @@ public class CommentActivity extends BaseTitleActivity {
                             });
 
                             holder.itemView.setOnClickListener(v -> {
-                                if(null==item.getReply()){
+                                if (null == item.getReply()) {
                                     showDialogs(item);
-                                }else{
+                                } else {
                                     goSickerHome(item.getFromid());
                                 }
                             });
@@ -94,29 +93,35 @@ public class CommentActivity extends BaseTitleActivity {
                     }
 
                     @Override
-                    public boolean istype(KotlinBean.PushBean item, int position) {
+                    public boolean istype(Object item, int position) {
                         return true;
                     }
-                })
-                .setStateListener(new DefaultStateListener() {
-                    @Override
-                    public void netError(Context context) {
-                        loadData();
-                    }
                 });
+        adapter.setStateListener(new DefaultStateListener() {
+            @Override
+            public void netError(Context context) {
+                loadData();
+            }
+        });
 
-        srecyclerview.addDefaultHeaderFooter()
-                .setAdapter(new LinearLayoutManager(this), adapter)
-                .setRefreshingListener(new SRecyclerView.OnRefreshListener() {
-                    @Override
-                    public void Refreshing() {
-                        loadData();
-                    }
-                });
+        RecyclerView recyclerView=refreshLayout.getmScroll();
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+      refreshLayout.setListener(new RefreshListener() {
+          @Override
+          public void Refreshing() {
+              loadData();
+          }
+
+          @Override
+          public void Loading() {
+
+          }
+      });
         if (beans == null) {
-            srecyclerview.setRefreshing();
+            refreshLayout.setRefreshing();
         } else {
-            adapter.setBeanList(beans);
+            adapter.setList(beans);
             adapter.showItem();
         }
 
@@ -124,15 +129,15 @@ public class CommentActivity extends BaseTitleActivity {
     }
 
     private void goDoctorHome(String userid) {
-        ApiController.getCurrentDoc(userid,App.getToken())
+        ApiController.getCurrentDoc(userid, App.getToken())
                 .subscribe(new DataObserver<DoctorBean.ContentBean>(this) {
                     @Override
                     public void OnNEXT(DoctorBean.ContentBean bean) {
-                        if(bean==null){
+                        if (bean == null) {
                             return;
                         }
-                        Intent intent=new Intent(CommentActivity.this,DoctorHome.class);
-                        intent.putExtra("data",bean);
+                        Intent intent = new Intent(CommentActivity.this, DoctorHome.class);
+                        intent.putExtra("data", bean);
                         startActivity(intent);
                     }
                 });
@@ -140,34 +145,34 @@ public class CommentActivity extends BaseTitleActivity {
 
     private void showDialogs(KotlinBean.PushBean bean) {
         ReplyDialog dialog = new ReplyDialog();
-            dialog.setTitleStr("情输入回复内容");
-            dialog.setCallback(new CallBack<String>() {
-                @Override
-                public void onCallBack(String obj) {
-                    ApiController.answerComment(bean.getId()+"",userInfo.getToken(),obj,bean.getUserid(),bean.getFromid())
-                            .subscribe(new DataObserver(this) {
-                                @Override
-                                public void OnNEXT(Object objs) {
-                                    bean.setReply(obj);
-                                    dialog.dismiss();
-                                    adapter.notifyDataSetChanged();
-                                }
-                            });
+        dialog.setTitleStr("情输入回复内容");
+        dialog.setCallback(new CallBack<String>() {
+            @Override
+            public void onCallBack(String obj) {
+                ApiController.answerComment(bean.getId() + "", userInfo.getToken(), obj, bean.getUserid(), bean.getFromid())
+                        .subscribe(new DataObserver<Object>(this) {
+                            @Override
+                            public void OnNEXT(Object objs) {
+                                bean.setReply(obj);
+                                dialog.dismiss();
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
 
-                }
-            });
+            }
+        });
         dialog.show(getSupportFragmentManager());
     }
 
     private void goSickerHome(String userid) {
-        ApiController.getUserInfo(userid,userInfo.getToken(),0)
+        ApiController.getUserInfo(userid, userInfo.getToken(), 0)
                 .compose(RxSchedulers.compose())
                 .subscribe(new DataObserver<KotlinBean.UserInfoBean>(this) {
                     @Override
                     public void OnNEXT(KotlinBean.UserInfoBean bean) {
                         String patientNo = bean.getPatientNo();
-                        Intent intent=new Intent(CommentActivity.this, SickerHome.class);
-                        intent.putExtra("patientNo",patientNo);
+                        Intent intent = new Intent(CommentActivity.this, SickerHome.class);
+                        intent.putExtra("patientNo", patientNo);
                         startActivity(intent);
                     }
                 });
@@ -183,20 +188,20 @@ public class CommentActivity extends BaseTitleActivity {
                     public void OnNEXT(ArrayList<KotlinBean.PushBean> bean) {
                         beans = bean;
                         if (beans.size() > 0) {
-                            adapter.setBeanList(beans);
+                            adapter.setList(beans);
                             adapter.showItem();
                         } else {
                             adapter.showEmpty();
                         }
 
-                        srecyclerview.notifyRefreshComplete();
+                        refreshLayout.NotifyCompleteRefresh0();
                     }
 
                     @Override
                     public void OnERROR(String error) {
                         super.OnERROR(error);
                         adapter.ShowError();
-                        srecyclerview.notifyRefreshComplete();
+                        refreshLayout.NotifyCompleteRefresh0();
                     }
                 });
     }

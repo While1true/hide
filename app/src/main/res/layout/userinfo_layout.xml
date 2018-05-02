@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.ck.hello.nestrefreshlib.View.RefreshViews.SScrollview
+<com.nestrefreshlib.RefreshViews.RefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/sscrollview"
+    app:elastic_overscroll="true"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
-
+<android.support.v4.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <android.support.constraint.ConstraintLayout
 
@@ -195,4 +198,5 @@
             android:visibility="visible"
             app:constraint_referenced_ids="idinfo,money,textView9,sickcard" />
     </android.support.constraint.ConstraintLayout>
-</com.ck.hello.nestrefreshlib.View.RefreshViews.SScrollview>
+</android.support.v4.widget.NestedScrollView>
+</com.nestrefreshlib.RefreshViews.RefreshLayout>

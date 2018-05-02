@@ -5,13 +5,10 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
 
-import com.ck.hello.nestrefreshlib.View.RefreshViews.SScrollview;
 import com.kxjsj.doctorassistant.App;
 import com.kxjsj.doctorassistant.Component.BaseTitleActivity;
 import com.kxjsj.doctorassistant.Constant.Session;
 import com.kxjsj.doctorassistant.DialogAndPopWindow.ReplyDialog;
-import com.kxjsj.doctorassistant.Holder.CallBack;
-import com.kxjsj.doctorassistant.JavaBean.KotlinBean;
 import com.kxjsj.doctorassistant.JavaBean.PatientBed;
 import com.kxjsj.doctorassistant.Net.ApiController;
 import com.kxjsj.doctorassistant.R;
@@ -21,15 +18,12 @@ import com.kxjsj.doctorassistant.View.SettingView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.functions.Consumer;
 
 /**
  * Created by vange on 2017/10/31.
  */
 
 public class IDInfoActivity extends BaseTitleActivity {
-    @BindView(R.id.sscrollview)
-    SScrollview sScrollview;
     @BindView(R.id.name)
     SettingView name;
     @BindView(R.id.id)
@@ -54,7 +48,6 @@ public class IDInfoActivity extends BaseTitleActivity {
     @Override
     protected void initView(Bundle savedInstanceState) {
         ButterKnife.bind(this);
-        sScrollview.setRefreshMode(true, true, false, false);
         setTitle("身份信息");
         Intent intent = getIntent();
         if (intent != null) {

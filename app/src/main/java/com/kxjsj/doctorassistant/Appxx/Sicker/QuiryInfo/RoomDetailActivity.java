@@ -3,7 +3,6 @@ package com.kxjsj.doctorassistant.Appxx.Sicker.QuiryInfo;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.ck.hello.nestrefreshlib.View.RefreshViews.SScrollview;
 import com.kxjsj.doctorassistant.Component.BaseTitleActivity;
 import com.kxjsj.doctorassistant.JavaBean.KotlinBean;
 import com.kxjsj.doctorassistant.R;
@@ -31,8 +30,6 @@ public class RoomDetailActivity extends BaseTitleActivity {
     SettingView reliableNurse;
     @BindView(R.id.diagnose)
     SettingView diagnose;
-    @BindView(R.id.sscrollview)
-    SScrollview sScrollview;
     KotlinBean.HospitalBean hospitalBean;
 
     @Override
@@ -51,9 +48,6 @@ public class RoomDetailActivity extends BaseTitleActivity {
         if(savedInstanceState!=null){
             hospitalBean= (KotlinBean.HospitalBean) savedInstanceState.getSerializable("bean");
         }
-        sScrollview.setPullRate(2)
-                   .setmaxTime(50)
-                   .setRefreshMode(true,true,false,false);
 
         entertime.setSubText(hospitalBean.getIntime());
         outtime.setSubText(hospitalBean.getOuttime());

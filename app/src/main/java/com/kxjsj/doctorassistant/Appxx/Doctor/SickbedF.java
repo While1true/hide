@@ -5,17 +5,13 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.ck.hello.nestrefreshlib.View.Adpater.Base.SimpleViewHolder;
-import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.DefaultStateListener;
-import com.ck.hello.nestrefreshlib.View.Adpater.SBaseMutilAdapter;
-import com.ck.hello.nestrefreshlib.View.RefreshViews.SRecyclerView;
 import com.kxjsj.doctorassistant.Appxx.Sicker.Home.SickerHome;
 import com.kxjsj.doctorassistant.Component.BaseFragment;
 import com.kxjsj.doctorassistant.Constant.Constance;
@@ -24,7 +20,13 @@ import com.kxjsj.doctorassistant.Net.ApiController;
 import com.kxjsj.doctorassistant.R;
 import com.kxjsj.doctorassistant.Rx.DataObserver;
 import com.kxjsj.doctorassistant.Screen.OrentionUtils;
-import com.kxjsj.doctorassistant.Utils.K2JUtils;
+import com.nestrefreshlib.Adpater.Base.Holder;
+import com.nestrefreshlib.Adpater.Base.ItemHolder;
+import com.nestrefreshlib.RefreshViews.AdapterHelper.StateAdapter;
+import com.nestrefreshlib.RefreshViews.RefreshLayout;
+import com.nestrefreshlib.RefreshViews.RefreshListener;
+import com.nestrefreshlib.State.DefaultStateListener;
+import com.nestrefreshlib.State.Interface.StateEnum;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -47,10 +49,10 @@ import butterknife.Unbinder;
  */
 public class SickbedF extends BaseFragment {
     int spancount;
-    @BindView(R.id.srecyclerview)
-    SRecyclerView srecyclerview;
+    @BindView(R.id.refreshlayout)
+    RefreshLayout refreshLayout;
     Unbinder unbinder;
-    private SBaseMutilAdapter baseMutilAdapter;
+    private StateAdapter stateAdapter;
     private GridLayoutManager manager;
     List<SickBed> list = new ArrayList<>(10);
 
@@ -62,26 +64,28 @@ public class SickbedF extends BaseFragment {
 
 
         manager = new GridLayoutManager(getContext(), spancount);
-        baseMutilAdapter = new SBaseMutilAdapter(list)
-                .addType(R.layout.title_layout, new SBaseMutilAdapter.ITEMHOLDER<SickBed>() {
+        stateAdapter = new StateAdapter(list)
+                .addType(R.layout.title_layout, new ItemHolder<SickBed>() {
 
                     @Override
-                    public void onBind(SimpleViewHolder holder, SickBed item, int position) {
+                    public void onBind(Holder holder, SickBed item, int position) {
                         holder.setText(R.id.title, item.getFloorid() + "楼"+item.getRoomid()+"房间");
                     }
 
+
                     @Override
-                    public boolean istype(SickBed item, int position) {
+                    public boolean istype(Object obj, int position) {
+                        SickBed item= (SickBed) obj;
                         return item.getStatus() == 0;
                     }
 
                     @Override
-                    protected int gridSpanSize(SickBed item, int position) {
+                    public int gridSpanSize(SickBed item, int position) {
                         return manager.getSpanCount();
                     }
-                }).addType(R.layout.sickbed_item_bed, new SBaseMutilAdapter.ITEMHOLDER<SickBed>() {
+                }).addType(R.layout.sickbed_item_bed, new ItemHolder<SickBed>() {
                     @Override
-                    public void onBind(SimpleViewHolder holder, SickBed item, int position) {
+                    public void onBind(Holder holder, SickBed item, int position) {
                         ImageView iv = holder.getView(R.id.iv);
                         TextView tv = holder.getView(R.id.tv);
                         if (item.getIsfree() == 0) {
@@ -103,28 +107,35 @@ public class SickbedF extends BaseFragment {
                     }
 
                     @Override
-                    public boolean istype(SickBed item, int position) {
+                    public boolean istype(Object item, int position) {
                         return true;
                     }
-                }).setStateListener(new DefaultStateListener() {
+                });
+        stateAdapter.setStateListener(new DefaultStateListener() {
                     @Override
                     public void netError(Context context) {
                        onRefresh();
                     }
                 });
-        srecyclerview.addDefaultHeaderFooter()
-                .setAdapter(manager, baseMutilAdapter)
-                .setRefreshingListener(new SRecyclerView.OnRefreshListener() {
-                    @Override
-                    public void Refreshing() {
-                        onRefresh();
-                    }
-                });
+        RecyclerView recyclerView=refreshLayout.getmScroll();
+        recyclerView.setLayoutManager(manager);
+        recyclerView.setAdapter(stateAdapter);
+        refreshLayout.setListener(new RefreshListener() {
+            @Override
+            public void Refreshing() {
+                onRefresh();
+            }
+
+            @Override
+            public void Loading() {
+
+            }
+        });
         if (firstLoad) {
             firstLoad = false;
-            srecyclerview.setRefreshing();
+            refreshLayout.setRefreshing();
         } else {
-            baseMutilAdapter.showState(SBaseMutilAdapter.SHOW_NOMORE, "无更多内容了");
+            stateAdapter.showState(StateEnum.SHOW_NOMORE, "无更多内容了");
         }
 
     }
@@ -148,20 +159,20 @@ public class SickbedF extends BaseFragment {
                 }
                 if (Constance.DEBUGTAG)
                     Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "OnNEXT: " + list.size());
-                srecyclerview.notifyRefreshComplete();
-                baseMutilAdapter.setBeanList(list);
-                baseMutilAdapter.notifyDataSetChanged();
+                refreshLayout.NotifyCompleteRefresh0();
+                stateAdapter.setList(list);
+                stateAdapter.notifyDataSetChanged();
                 if (list.size() != 0) {
-                    baseMutilAdapter.showState(SBaseMutilAdapter.SHOW_NOMORE, "我是有底线的");
+                    stateAdapter.showState(StateEnum.SHOW_NOMORE, "我是有底线的");
                 } else {
-                    baseMutilAdapter.showState(SBaseMutilAdapter.SHOW_EMPTY, "没有相关数据");
+                    stateAdapter.showState(StateEnum.SHOW_EMPTY, "没有相关数据");
                 }
             }
 
             @Override
             public void OnERROR(String error) {
-                srecyclerview.notifyRefreshComplete();
-                baseMutilAdapter.ShowError();
+                refreshLayout.NotifyCompleteRefresh0();
+                stateAdapter.ShowError();
                 if (Constance.DEBUGTAG)
                     Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "OnERROR: " + error);
 

@@ -46,8 +46,8 @@
             android:layout_height="1dp"/>
     </LinearLayout>
 
-    <com.ck.hello.nestrefreshlib.View.RefreshViews.SRecyclerView
-        android:id="@+id/srecyclerview"
+    <com.nestrefreshlib.RefreshViews.RefreshLayout
+        android:id="@+id/refreshlayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

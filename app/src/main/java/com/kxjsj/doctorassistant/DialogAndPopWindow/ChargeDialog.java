@@ -2,19 +2,19 @@ package com.kxjsj.doctorassistant.DialogAndPopWindow;
 
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.ck.hello.nestrefreshlib.View.Adpater.Base.SimpleViewHolder;
-import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.PositionHolder;
-import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.SAdapter;
-import com.ck.hello.nestrefreshlib.View.RefreshViews.SRecyclerView;
 import com.kxjsj.doctorassistant.Component.BaseBottomSheetDialog;
 import com.kxjsj.doctorassistant.Holder.CallBack;
 import com.kxjsj.doctorassistant.R;
 import com.kxjsj.doctorassistant.Screen.OrentionUtils;
-import com.kxjsj.doctorassistant.Utils.K2JUtils;
+import com.nestrefreshlib.Adpater.Base.Holder;
+import com.nestrefreshlib.Adpater.Impliment.PositionHolder;
+import com.nestrefreshlib.RefreshViews.AdapterHelper.StateAdapter;
+import com.nestrefreshlib.RefreshViews.RefreshLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,8 +25,8 @@ import butterknife.Unbinder;
  */
 
 public class ChargeDialog extends BaseBottomSheetDialog {
-    @BindView(R.id.srecyclerview)
-    SRecyclerView srecyclerview;
+    @BindView(R.id.refreshlayout)
+    RefreshLayout refreshLayout;
     Unbinder unbinder;
     int[]moneys={10,20,30,50,100,200,500,1000,2000,5000};
     CallBack<String> callback;
@@ -40,10 +40,10 @@ public class ChargeDialog extends BaseBottomSheetDialog {
         setTitle("请选择金额");
         int count= OrentionUtils.isPortrait(getContext())?3:4;
         GridLayoutManager gridLayoutManager=new GridLayoutManager(getContext(),count);
-        SAdapter sAdapter=new SAdapter(10)
+        StateAdapter sAdapter=new StateAdapter(10)
                 .addType(R.layout.label_layout, new PositionHolder() {
                     @Override
-                    public void onBind(SimpleViewHolder holder, int position) {
+                    public void onBind(Holder holder, int position) {
                         holder.setText(R.id.bt,moneys[position]+"元");
                         holder.setOnClickListener(R.id.bt,v -> {
                             if(callback!=null){
@@ -58,7 +58,9 @@ public class ChargeDialog extends BaseBottomSheetDialog {
                         return true;
                     }
                 });
-        srecyclerview.setAdapter(gridLayoutManager,sAdapter);
+        RecyclerView recyclerView=refreshLayout.getmScroll();
+        recyclerView.setAdapter(sAdapter);
+        recyclerView.setLayoutManager(gridLayoutManager);
         sAdapter.showItem();
 
     }

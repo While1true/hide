@@ -138,7 +138,7 @@ public interface Api {
      */
     @FormUrlEncoded
     @POST("push/comment")
-    Observable<BaseBean<ArrayList<KotlinBean.PushBean>>> comment(@Field("userid") String userid,
+    Observable<BaseBean<Object>> comment(@Field("userid") String userid,
                                                                  @Field("token") String token,
                                                                  @Field("fromid") String fromid,
                                                                  @Field("content") String content
@@ -173,7 +173,7 @@ public interface Api {
      */
     @FormUrlEncoded
     @POST("push/answerComment")
-    Observable<BaseBean> answerComment(@Field("id") String id,
+    Observable<BaseBean<Object>> answerComment(@Field("id") String id,
                                        @Field("token") String token,
                                        @Field("isshow") String isshow,
                                        @Field("reply") String reply,
@@ -229,7 +229,7 @@ public interface Api {
 
     @FormUrlEncoded
     @POST("money/selectEvaluate")
-    Observable<BaseBean<ArrayList<RatingBean>>> selectEvaluate(@Field("userid") String userid, @Field("token") String token, @Field("pageNo")int pageNo, @Field("pageSize")int pageSize);
+    Observable<BaseBean<List<RatingBean>>> selectEvaluate(@Field("userid") String userid, @Field("token") String token, @Field("pageNo")int pageNo, @Field("pageSize")int pageSize);
 
     @FormUrlEncoded
     @POST("money/selectAverage")

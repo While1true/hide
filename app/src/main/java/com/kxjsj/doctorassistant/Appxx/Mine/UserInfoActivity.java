@@ -1,6 +1,5 @@
 package com.kxjsj.doctorassistant.Appxx.Mine;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.constraint.Group;
@@ -8,7 +7,6 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.ck.hello.nestrefreshlib.View.RefreshViews.SScrollview;
 import com.kxjsj.doctorassistant.App;
 import com.kxjsj.doctorassistant.Appxx.Mine.Login.AuthActivity;
 import com.kxjsj.doctorassistant.Appxx.Mine.Wallet.WalletActivity;
@@ -21,6 +19,7 @@ import com.kxjsj.doctorassistant.R;
 import com.kxjsj.doctorassistant.Utils.K2JUtils;
 import com.kxjsj.doctorassistant.View.SettingView;
 
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -31,8 +30,6 @@ import butterknife.OnClick;
  */
 public class UserInfoActivity extends BaseTitleActivity {
 
-    @BindView(R.id.sscrollview)
-    SScrollview sScrollview;
     @BindView(R.id.img)
     SettingView img;
     @BindView(R.id.nickname)
@@ -61,7 +58,6 @@ public class UserInfoActivity extends BaseTitleActivity {
     protected void initView(Bundle savedInstanceState) {
         ButterKnife.bind(this);
         setTitle("用户信息");
-        sScrollview.setRefreshMode(true, true, false, false);
         userInfo = App.getUserInfo();
         if (userInfo == null) {
             K2JUtils.toast("登录失效，请重新登录");

@@ -13,6 +13,10 @@ import com.kxjsj.doctorassistant.Screen.AdjustUtil;
 import com.kxjsj.doctorassistant.MobSMS.MessageUtils;
 import com.kxjsj.doctorassistant.Utils.GsonUtils;
 import com.kxjsj.doctorassistant.Utils.K2JUtils;
+import com.nestrefreshlib.RefreshViews.AdapterHelper.StateAdapter;
+import com.nestrefreshlib.RefreshViews.RefreshLayout;
+import com.nestrefreshlib.RefreshViews.RefreshWrap.RefreshHandlerImpl;
+import com.nestrefreshlib.State.Interface.Recorder;
 import com.qihoo360.replugin.RePluginApplication;
 import com.squareup.leakcanary.LeakCanary;
 import com.tencent.smtt.sdk.QbSdk;
@@ -48,13 +52,22 @@ public class App extends RePluginApplication {
             RxJavaPlugins.setErrorHandler(throwable -> {
                 K2JUtils.log("--", throwable.getMessage());
             });
+            RefreshLayout.init(new RefreshLayout.DefaultBuilder()
+                            .setHeaderLayoutidDefault(R.layout.header_layout)
+                            .setFooterLayoutidDefault(R.layout.footer_layout)
+                            .setScrollLayoutIdDefault(R.layout.recyclerview)
+                            .setBaseRefreshHandler(RefreshHandlerImpl.class)
+        .setCanfootrDefault(false)
+            );
+            if (LeakCanary.isInAnalyzerProcess(this)) {
+                // This process is dedicated to LeakCanary for heap analysis.
+                // You should not init your app in this process.
+                return;
+            }
+            LeakCanary.install(this);
         }
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            // This process is dedicated to LeakCanary for heap analysis.
-            // You should not init your app in this process.
-            return;
-        }
-        LeakCanary.install(this);
+
+
     }
 
     /**

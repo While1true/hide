@@ -4,14 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.ck.hello.nestrefreshlib.View.Adpater.Base.SimpleViewHolder;
-import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.DefaultStateListener;
-import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.SAdapter;
-import com.ck.hello.nestrefreshlib.View.RefreshViews.SRecyclerView;
 import com.kxjsj.doctorassistant.App;
 import com.kxjsj.doctorassistant.Appxx.Doctor.Home.DoctorHome;
 import com.kxjsj.doctorassistant.Component.BaseFragment;
@@ -22,6 +19,12 @@ import com.kxjsj.doctorassistant.Net.ApiController;
 import com.kxjsj.doctorassistant.R;
 import com.kxjsj.doctorassistant.Rx.DataObserver;
 import com.kxjsj.doctorassistant.Screen.OrentionUtils;
+import com.nestrefreshlib.Adpater.Base.Holder;
+import com.nestrefreshlib.RefreshViews.AdapterHelper.StateAdapter;
+import com.nestrefreshlib.RefreshViews.RefreshLayout;
+import com.nestrefreshlib.RefreshViews.RefreshListener;
+import com.nestrefreshlib.State.DefaultStateListener;
+import com.nestrefreshlib.State.Interface.StateEnum;
 
 import java.util.ArrayList;
 
@@ -35,10 +38,10 @@ import butterknife.Unbinder;
 
 public class CommunicateF extends BaseFragment {
     int spancount;
-    @BindView(R.id.srecyclerview)
-    SRecyclerView srecyclerview;
+    @BindView(R.id.refreshlayout)
+    RefreshLayout refreshLayout;
     Unbinder unbinder;
-    private SAdapter baseMutilAdapter;
+    private StateAdapter adapter;
     private GridLayoutManager manager;
     ArrayList<DoctorBean> bean;
 
@@ -46,7 +49,9 @@ public class CommunicateF extends BaseFragment {
     protected void initView(Bundle savedInstanceState) {
         setRetainInstance(true);
         if (savedInstanceState != null) {
-            bean=savedInstanceState.getParcelableArrayList("bean");
+            bean = savedInstanceState.getParcelableArrayList("bean");
+        }
+        if(bean==null) {
             loadLazy();
         }
     }
@@ -58,7 +63,7 @@ public class CommunicateF extends BaseFragment {
      */
     private void go2DoctorHome(DoctorBean.ContentBean bean) {
         Intent intent = new Intent(getContext(), DoctorHome.class);
-        intent.putExtra("data",bean);
+        intent.putExtra("data", bean);
         startActivity(intent);
     }
 
@@ -78,16 +83,17 @@ public class CommunicateF extends BaseFragment {
     protected void loadLazy() {
         caculateSpanCount();
         manager = new GridLayoutManager(getContext(), spancount);
-        baseMutilAdapter = new SAdapter()
+        adapter = new StateAdapter()
                 .addType(R.layout.title_layout, new DoctorHolder() {
                     @Override
-                    public void onBind(SimpleViewHolder holder, DoctorBean item, int position) {
-                        holder.setText(R.id.title,item.getMessage());
+                    public void onBind(Holder holder, DoctorBean item, int position) {
+                        holder.setText(R.id.title, item.getMessage());
                     }
 
                     @Override
-                    public boolean istype(DoctorBean item, int position) {
-                        return item.getType()==0;
+                    public boolean istype(Object obj, int position) {
+                        DoctorBean item = (DoctorBean) obj;
+                        return item.getType() == 0;
                     }
 
                     @Override
@@ -96,37 +102,49 @@ public class CommunicateF extends BaseFragment {
                     }
                 }).addType(R.layout.doctor, new DoctorHolder() {
                     @Override
-                    public void onBind(SimpleViewHolder holder, DoctorBean item, int position) {
+                    public void onBind(Holder holder, DoctorBean item, int position) {
                         DoctorBean.ContentBean content = item.getContent();
                         holder.itemView.setOnClickListener(view -> go2DoctorHome(content));
-                        GlideLoader.loadRound(holder.getView(R.id.imageview),content.getUserimg());
-                        holder.setText(R.id.doctor, content.getName()+"\n"+content.getDepartment()+"\n"+content.getUserid());
+                        GlideLoader.loadRound(holder.getView(R.id.imageview), content.getUserimg());
+                        holder.setText(R.id.doctor, content.getName() + "\n" + content.getDepartment() + "\n" + content.getUserid());
                     }
 
                     @Override
-                    public boolean istype(DoctorBean item, int position) {
-                        return item.getType()==1;
-                    }
-                }) .setStateListener(new DefaultStateListener() {
-                    @Override
-                    public void netError(Context context) {
-                        loadData();
+                    public boolean istype(Object obj, int position) {
+                        DoctorBean item = (DoctorBean) obj;
+                        return item.getType() == 1;
                     }
                 });
-        srecyclerview.addDefaultHeaderFooter()
-                .setAdapter(manager, baseMutilAdapter)
-                .setRefreshingListener(new SRecyclerView.OnRefreshListener() {
-                    @Override
-                    public void Refreshing() {
-                     loadData();
-                    }
-                });
-                if(firstLoad) {
-                    srecyclerview.setRefreshing();
-                }else{
-                    baseMutilAdapter.setBeanList(bean);
-                    baseMutilAdapter.showState(SAdapter.SHOW_NOMORE, "无更多内容了");
-                }
+        adapter.setStateListener(new DefaultStateListener() {
+            @Override
+            public void netError(Context context) {
+                loadData();
+            }
+        });
+        RecyclerView recyclerView = refreshLayout.getmScroll();
+        recyclerView.setLayoutManager(manager);
+        recyclerView.setAdapter(adapter);
+        refreshLayout.setListener(new RefreshListener() {
+            @Override
+            public void Refreshing() {
+                loadData();
+            }
+
+            @Override
+            public void Loading() {
+
+            }
+        });
+        if (firstLoad) {
+            refreshLayout.setRefreshing();
+        } else {
+            if (bean != null && !bean.isEmpty()) {
+                adapter.setList(bean);
+                adapter.showState(StateEnum.SHOW_NOMORE, "无更多内容了");
+            } else {
+                adapter.showEmpty();
+            }
+        }
 
     }
 
@@ -135,17 +153,21 @@ public class CommunicateF extends BaseFragment {
                 .subscribe(new DataObserver<ArrayList<DoctorBean>>(this) {
                     @Override
                     public void OnNEXT(ArrayList<DoctorBean> bean) {
-                        CommunicateF.this.bean=bean;
-                        baseMutilAdapter.setBeanList(bean);
-                        baseMutilAdapter.showState(SAdapter.SHOW_NOMORE, "无更多内容了");
-                        srecyclerview.notifyRefreshComplete();
+                        if (bean.isEmpty()) {
+                            adapter.showEmpty();
+                        } else {
+                            CommunicateF.this.bean = bean;
+                            adapter.setList(bean);
+                            adapter.showState(StateEnum.SHOW_NOMORE, "无更多内容了");
+                        }
+                        refreshLayout.NotifyCompleteRefresh0();
                     }
 
                     @Override
                     public void OnERROR(String error) {
                         super.OnERROR(error);
-                        srecyclerview.notifyRefreshComplete();
-                        baseMutilAdapter.showState(SAdapter.SHOW_ERROR, "发生错误了哦");
+                        refreshLayout.NotifyCompleteRefresh0();
+                        adapter.showState(StateEnum.SHOW_ERROR, "发生错误了哦");
                     }
                 });
 
@@ -163,8 +185,8 @@ public class CommunicateF extends BaseFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if(bean!=null){
-            outState.putParcelableArrayList("bean",bean);
+        if (bean != null) {
+            outState.putParcelableArrayList("bean", bean);
         }
 
     }

@@ -4,13 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.widget.Button;
 
-import com.ck.hello.nestrefreshlib.View.Adpater.Base.SimpleViewHolder;
-import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.DefaultStateListener;
-import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.PositionHolder;
-import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.SAdapter;
-import com.ck.hello.nestrefreshlib.View.RefreshViews.SRecyclerView;
 import com.kxjsj.doctorassistant.App;
 import com.kxjsj.doctorassistant.Appxx.Sicker.Remark.RemarkActivity;
 import com.kxjsj.doctorassistant.Component.BaseTitleActivity;
@@ -23,6 +19,12 @@ import com.kxjsj.doctorassistant.Rx.RxBaseBean;
 import com.kxjsj.doctorassistant.Rx.DataObserver;
 import com.kxjsj.doctorassistant.Rx.Utils.RxBus;
 import com.kxjsj.doctorassistant.Utils.K2JUtils;
+import com.kxjsj.doctorassistant.Utils.TextUtils;
+import com.nestrefreshlib.Adpater.Base.Holder;
+import com.nestrefreshlib.Adpater.Impliment.PositionHolder;
+import com.nestrefreshlib.RefreshViews.AdapterHelper.StateAdapter;
+import com.nestrefreshlib.RefreshViews.RefreshLayout;
+import com.nestrefreshlib.State.DefaultStateListener;
 
 import java.util.ArrayList;
 
@@ -32,8 +34,8 @@ import java.util.ArrayList;
 
 public class MoneyToPayDetailsActivity extends BaseTitleActivity {
     ArrayList<KotlinBean.DebitDetail>debitDetails;
-    private SAdapter adapter;
-    private SRecyclerView sRecyclerView;
+    private StateAdapter adapter;
+    private RefreshLayout refreshLayout;
     private Button pay;
 
     @Override
@@ -44,7 +46,7 @@ public class MoneyToPayDetailsActivity extends BaseTitleActivity {
     @Override
     protected void initView(Bundle savedInstanceState) {
         setTitle("费用明细");
-        sRecyclerView = findViewById(R.id.srecyclerview);
+        refreshLayout = findViewById(R.id.refreshlayout);
         pay = findViewById(R.id.button4);
         pay.setOnClickListener(v -> {
             doPay();
@@ -53,11 +55,11 @@ public class MoneyToPayDetailsActivity extends BaseTitleActivity {
             debitDetails= (ArrayList<KotlinBean.DebitDetail>) savedInstanceState.getSerializable("bean");
         }
 
-        adapter = new SAdapter()
+        adapter = new StateAdapter()
                 .addType(R.layout.room_info_item_title, new PositionHolder() {
                     @Override
-                    public void onBind(SimpleViewHolder holder, int position) {
-                        holder.setTextBold(true,R.id.tv1,R.id.tv2,R.id.tv3,R.id.tv4);
+                    public void onBind(Holder holder, int position) {
+                        TextUtils.setTextBold(holder,true,R.id.tv1,R.id.tv2,R.id.tv3,R.id.tv4);
                         holder.setText(R.id.tv1,"描述");
                         holder.setText(R.id.tv2,"日期");
                         holder.setText(R.id.tv3,"价格");
@@ -71,8 +73,8 @@ public class MoneyToPayDetailsActivity extends BaseTitleActivity {
                 })
                 .addType(R.layout.room_info_item, new PositionHolder() {
                     @Override
-                    public void onBind(SimpleViewHolder holder, int position) {
-                        holder.setTextBold(false,R.id.tv1,R.id.tv2,R.id.tv3,R.id.tv4);
+                    public void onBind(Holder holder, int position) {
+                        TextUtils.setTextBold(holder,false,R.id.tv1,R.id.tv2,R.id.tv3,R.id.tv4);
                         KotlinBean.DebitDetail hospitalBean = debitDetails.get(position - 1);
                         holder.setText(R.id.tv1,hospitalBean.getName());
                         holder.setText(R.id.tv2,hospitalBean.getCheck_time());
@@ -84,7 +86,8 @@ public class MoneyToPayDetailsActivity extends BaseTitleActivity {
                     public boolean istype(int position) {
                         return true;
                     }
-                }).setStateListener(new DefaultStateListener() {
+                });
+        adapter.setStateListener(new DefaultStateListener() {
                     @Override
                     public void netError(Context context) {
                         loadData();
@@ -100,10 +103,9 @@ public class MoneyToPayDetailsActivity extends BaseTitleActivity {
                 adapter.showEmpty();
             }
         }
-        sRecyclerView.setPullRate(2)
-//                .addItemDecorate(new MyItemDecorate())
-                .setAdapter(new LinearLayoutManager(this),adapter)
-                .setRefreshMode(true,true,false,false);
+        RecyclerView recyclerView = refreshLayout.getmScroll();
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
 
     }
 

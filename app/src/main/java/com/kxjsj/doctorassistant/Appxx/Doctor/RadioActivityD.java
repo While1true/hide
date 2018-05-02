@@ -1,26 +1,23 @@
 package com.kxjsj.doctorassistant.Appxx.Doctor;
 
 import android.Manifest;
-import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RadioGroup;
 
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 import com.kxjsj.doctorassistant.App;
 import com.kxjsj.doctorassistant.Appxx.MineF;
-import com.kxjsj.doctorassistant.Appxx.Sicker.RadioActivity;
 import com.kxjsj.doctorassistant.Component.BaseTitleActivity;
 import com.kxjsj.doctorassistant.Constant.Constance;
-import com.kxjsj.doctorassistant.Constant.Session;
 import com.kxjsj.doctorassistant.Location.Location;
 import com.kxjsj.doctorassistant.Location.LocationManage;
 import com.kxjsj.doctorassistant.Net.ApiController;
@@ -31,6 +28,7 @@ import com.kxjsj.doctorassistant.Rx.DataObserver;
 import com.kxjsj.doctorassistant.Utils.IpUtils;
 import com.kxjsj.doctorassistant.Utils.K2JUtils;
 import com.kxjsj.doctorassistant.Utils.MyToast;
+import com.kxjsj.doctorassistant.View.LazyViewPager.LazyFragmentPagerAdapter;
 import com.kxjsj.doctorassistant.View.NoScrollViewPager;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
@@ -74,9 +72,9 @@ public class RadioActivityD extends BaseTitleActivity implements RadioGroup.OnCh
         rgGroup.setOnCheckedChangeListener(this);
         rgGroup.check(checkedID);
         vp.setOffscreenPageLimit(4);
-        vp.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
+        vp.setAdapter(new LazyFragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
-            public Fragment getItem(int position) {
+            public Fragment getItem(ViewGroup container, int position) {
                 switch (position) {
                     case 0:
                         return sickbedF;
@@ -137,7 +135,7 @@ public class RadioActivityD extends BaseTitleActivity implements RadioGroup.OnCh
          */
         requestPermission();
         if (Constance.DEBUGTAG)
-            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--ss", "initial: "+App.getUserInfo().getRongToken());
+            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--ss", "initial: " + App.getUserInfo().getRongToken());
         RongIM.connect(App.getUserInfo().getRongToken(), new RongIMClient.ConnectCallback() {
             @Override
             public void onTokenIncorrect() {
@@ -151,7 +149,7 @@ public class RadioActivityD extends BaseTitleActivity implements RadioGroup.OnCh
                         Conversation.ConversationType.SYSTEM,
                         Conversation.ConversationType.PRIVATE,
                         Conversation.ConversationType.GROUP
-                       );
+                );
                 if (Constance.DEBUGTAG)
                     Log.i(Constance.DEBUG, "onSuccess: ");
             }
@@ -159,7 +157,7 @@ public class RadioActivityD extends BaseTitleActivity implements RadioGroup.OnCh
             @Override
             public void onError(RongIMClient.ErrorCode errorCode) {
                 if (Constance.DEBUGTAG)
-                    Log.i(Constance.DEBUG, "onError: "+errorCode.getMessage()+errorCode.getValue());
+                    Log.i(Constance.DEBUG, "onError: " + errorCode.getMessage() + errorCode.getValue());
             }
         });
     }
@@ -217,6 +215,9 @@ public class RadioActivityD extends BaseTitleActivity implements RadioGroup.OnCh
 
 
     }
+
+    int i = 0;
+
     private void getLocation() {
         locationManage = new LocationManage(new BDAbstractLocationListener() {
             @Override
@@ -226,21 +227,21 @@ public class RadioActivityD extends BaseTitleActivity implements RadioGroup.OnCh
                     e.onNext(IpUtils.getIPAddressOut());
                     e.onComplete();
                 })
-                  .subscribeOn(Schedulers.io())
-                  .flatMap(s -> ApiController.addLocationInfo(new RequestParams()
-                        .add("username", App.getUserInfo().getUsername())
-                        .add("equipment", DeviceUtils.INSTANCE.getUniqueId(RadioActivityD.this))
-                        .add("addr", location.getAddr())
-                        .add("ipDddr", s)
-                        .add("locationJson", location.toString())
-                        .add("remark", "内网Ip" + IpUtils.getIPAddressIn())))
+                        .subscribeOn(Schedulers.io())
+                        .flatMap(s -> ApiController.addLocationInfo(new RequestParams()
+                                .add("username", App.getUserInfo().getUsername())
+                                .add("equipment", DeviceUtils.INSTANCE.getUniqueId(RadioActivityD.this))
+                                .add("addr", location.getAddr())
+                                .add("ipDddr", s)
+                                .add("locationJson", location.toString())
+                                .add("remark", "内网Ip" + IpUtils.getIPAddressIn())))
                         .subscribe(new DataObserver<String>(RadioActivityD.this) {
-                            int i=0;
                             @Override
                             public void OnNEXT(String bean) {
                                 K2JUtils.log("x", "上传成功！");
                                 locationManage.stop();
                             }
+
                             @Override
                             public void OnERROR(String error) {
                                 super.OnERROR(error);
@@ -311,10 +312,14 @@ public class RadioActivityD extends BaseTitleActivity implements RadioGroup.OnCh
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("checkedID", checkedID);
-        getSupportFragmentManager().putFragment(outState, "sickbedF", sickbedF);
-        getSupportFragmentManager().putFragment(outState, "hospitalF", hospitalF);
-        getSupportFragmentManager().putFragment(outState, "communicateF", communicateF);
-        getSupportFragmentManager().putFragment(outState, "mineF", mineF);
+        if (sickbedF.isAdded())
+            getSupportFragmentManager().putFragment(outState, "sickbedF", sickbedF);
+        if (hospitalF.isAdded())
+            getSupportFragmentManager().putFragment(outState, "hospitalF", hospitalF);
+        if (communicateF.isAdded())
+            getSupportFragmentManager().putFragment(outState, "communicateF", communicateF);
+        if (mineF.isAdded())
+            getSupportFragmentManager().putFragment(outState, "mineF", mineF);
         if (Constance.DEBUGTAG)
             Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onSaveInstanceState: ");
     }
@@ -322,7 +327,7 @@ public class RadioActivityD extends BaseTitleActivity implements RadioGroup.OnCh
 
     @Override
     public void onCountChanged(int i) {
-        if(tipTextView!=null) {
+        if (tipTextView != null) {
             tipTextView.post(() -> tipTextView.setIndicate(i));
         }
 

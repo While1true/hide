@@ -5,11 +5,13 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
+import com.kxjsj.doctorassistant.View.LazyViewPager.LazyViewPager;
+
 /**
  * Created by vange on 2017/9/19.
  */
 
-public class NoScrollViewPager extends ViewPager {
+public class NoScrollViewPager extends LazyViewPager {
     private boolean noScroll = true;
 
     public NoScrollViewPager(Context context) {

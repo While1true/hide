@@ -52,6 +52,10 @@ public class QuiryInfoF extends BaseFragment {
         patientNo = App.getUserInfo().getPatientNo();
         if (savedInstanceState != null) {
             beans = (PatientBed) savedInstanceState.getSerializable("beans");
+        }
+        if(beans==null) {
+            loadLazy();
+        }else {
             setAndStartAnimation();
         }
 

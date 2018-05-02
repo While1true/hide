@@ -5,17 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.ck.hello.nestrefreshlib.View.Adpater.Base.SimpleViewHolder;
-import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.DefaultStateListener;
-import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.PositionHolder;
-import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.SAdapter;
-import com.ck.hello.nestrefreshlib.View.RefreshViews.SRecyclerView;
 import com.kxjsj.doctorassistant.App;
 import com.kxjsj.doctorassistant.Appxx.Sicker.Home.SickerHome;
 import com.kxjsj.doctorassistant.Appxx.Sicker.QuiryInfo.RemindActivity;
@@ -34,6 +30,12 @@ import com.kxjsj.doctorassistant.Rx.Utils.RxBus;
 import com.kxjsj.doctorassistant.Utils.K2JUtils;
 import com.kxjsj.doctorassistant.View.GradualButton;
 import com.kxjsj.doctorassistant.View.MoveTextview;
+import com.nestrefreshlib.Adpater.Base.Holder;
+import com.nestrefreshlib.Adpater.Impliment.PositionHolder;
+import com.nestrefreshlib.RefreshViews.AdapterHelper.StateAdapter;
+import com.nestrefreshlib.RefreshViews.RefreshLayout;
+import com.nestrefreshlib.RefreshViews.RefreshListener;
+import com.nestrefreshlib.State.DefaultStateListener;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -57,12 +59,12 @@ public class HospitalDF extends BaseFragment {
     MoveTextview movetext;
     @BindView(R.id.ll)
     LinearLayout ll;
-    @BindView(R.id.srecyclerview)
-    SRecyclerView srecyclerview;
+    @BindView(R.id.refreshlayout)
+    RefreshLayout refreshLayout;
     Unbinder unbinder;
     @BindView(R.id.seemore)
     GradualButton seemore;
-    private SAdapter adapter;
+    private StateAdapter adapter;
     ArrayList<KotlinBean.PushBean> bean = new ArrayList<>();
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -73,9 +75,7 @@ public class HospitalDF extends BaseFragment {
         if (savedInstanceState != null) {
             bean = (ArrayList<KotlinBean.PushBean>) savedInstanceState.getSerializable("bean");
         }
-        if (!firstLoad) {
-            loadLazy();
-        }
+        loadLazy();
     }
 
     @Override
@@ -85,36 +85,38 @@ public class HospitalDF extends BaseFragment {
 
     @Override
     protected void loadLazy() {
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         seemore.start(seemore.getCurrentTextColor(), getResources().getColor(R.color.colorecRed), 2000);
 
         Session userInfo = App.getUserInfo();
         acqurePush();
         initAdapter();
-        srecyclerview.addDefaultHeaderFooter()
-                .setAdapter(linearLayoutManager, adapter)
-                .setRefreshingListener(new SRecyclerView.OnRefreshListener() {
-                    @Override
-                    public void Refreshing() {
-                        getAllUnhandlerPush(userInfo);
-                    }
-                });
-        if (!firstLoad) {
-            setdata(bean);
-        }
-        if (firstLoad) {
-            srecyclerview.setRefreshing();
-        } else {
+        RecyclerView recyclerView = refreshLayout.getmScroll();
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        refreshLayout.setListener(new RefreshListener() {
+            @Override
+            public void Refreshing() {
+                getAllUnhandlerPush(userInfo);
+            }
+
+            @Override
+            public void Loading() {
+
+            }
+        });
+        if (!bean.isEmpty()) {
             adapter.showNomore();
+        } else {
+            refreshLayout.setRefreshing();
         }
 
     }
 
     private void initAdapter() {
-        adapter = new SAdapter()
+        adapter = new StateAdapter()
                 .addType(R.layout.title_layout, new PositionHolder() {
                     @Override
-                    public void onBind(SimpleViewHolder holder, int position) {
+                    public void onBind(Holder holder, int position) {
                         holder.setText(R.id.title, "待处理事项");
                     }
 
@@ -125,7 +127,7 @@ public class HospitalDF extends BaseFragment {
                 })
                 .addType(R.layout.doctor_answer_item_reply, new PositionHolder() {
                     @Override
-                    public void onBind(SimpleViewHolder holder, int position) {
+                    public void onBind(Holder holder, int position) {
                         if (Constance.DEBUGTAG)
                             Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onBind: " + position);
                         KotlinBean.PushBean pushBean = bean.get(position - 1);
@@ -153,26 +155,26 @@ public class HospitalDF extends BaseFragment {
                                     });
 
                         });
-                        if(null == pushBean.getReply()){
-                            holder.setVisible(R.id.mark,true);
-                        }else{
-                            holder.setVisible(R.id.mark,false);
+                        if (null == pushBean.getReply()) {
+                            holder.setVisible(R.id.mark, true);
+                        } else {
+                            holder.setVisible(R.id.mark, false);
                         }
-                         holder.setOnClickListener(R.id.mark, v -> {
-                             Session userInfo = App.getUserInfo();
-                             ApiController.replyPush(pushBean.getId() + "", userInfo.getUserid(), pushBean.getFromid(), userInfo.getType(), userInfo.getToken(), "已处理")
-                                     .subscribe(new DataObserver<Object>(getContext()) {
-                                         @Override
-                                         public void OnNEXT(Object beans) {
-                                             K2JUtils.toast("成功");
-                                             if (bean != null&&bean.contains(pushBean)) {
-                                                 bean.remove(pushBean);
-                                                 adapter.setCount(bean.size()+1);
-                                                 adapter.notifyDataSetChanged();
-                                             }
-                                         }
-                                     });
-                         });
+                        holder.setOnClickListener(R.id.mark, v -> {
+                            Session userInfo = App.getUserInfo();
+                            ApiController.replyPush(pushBean.getId() + "", userInfo.getUserid(), pushBean.getFromid(), userInfo.getType(), userInfo.getToken(), "已处理")
+                                    .subscribe(new DataObserver<Object>(getContext()) {
+                                        @Override
+                                        public void OnNEXT(Object beans) {
+                                            K2JUtils.toast("成功");
+                                            if (bean != null && bean.contains(pushBean)) {
+                                                bean.remove(pushBean);
+                                                adapter.setCount(bean.size() + 1);
+                                                adapter.notifyDataSetChanged();
+                                            }
+                                        }
+                                    });
+                        });
                         holder.itemView.setOnLongClickListener(v -> {
                             ReplyDialog replyDialog = new ReplyDialog();
                             replyDialog.setTitleStr("写下您的问题描述");
@@ -185,9 +187,9 @@ public class HospitalDF extends BaseFragment {
                                             @Override
                                             public void OnNEXT(Object beans) {
                                                 K2JUtils.toast("成功");
-                                                if (bean != null&&bean.contains(pushBean)) {
+                                                if (bean != null && bean.contains(pushBean)) {
                                                     bean.remove(pushBean);
-                                                    adapter.setCount(bean.size()+1);
+                                                    adapter.setCount(bean.size() + 1);
                                                     adapter.notifyDataSetChanged();
                                                 }
                                             }
@@ -202,13 +204,13 @@ public class HospitalDF extends BaseFragment {
                     public boolean istype(int position) {
                         return true;
                     }
-                })
-                .setStateListener(new DefaultStateListener() {
-                    @Override
-                    public void netError(Context context) {
-                        getAllUnhandlerPush(App.getUserInfo());
-                    }
                 });
+        adapter.setStateListener(new DefaultStateListener() {
+            @Override
+            public void netError(Context context) {
+                getAllUnhandlerPush(App.getUserInfo());
+            }
+        });
     }
 
     private void acqurePush() {
@@ -224,7 +226,7 @@ public class HospitalDF extends BaseFragment {
                             Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onNext: " + rxBaseBean);
                         KotlinBean.PushBean beanz = (KotlinBean.PushBean) rxBaseBean.getData();
                         if (Constance.DEBUGTAG)
-                            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onNext: "+beanz);
+                            Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onNext: " + beanz);
                         bean.add(beanz);
                         sortList();
                         adapter.notifyDataSetChanged();
@@ -272,21 +274,20 @@ public class HospitalDF extends BaseFragment {
                     @Override
                     public void OnERROR(String error) {
                         super.OnERROR(error);
-                        srecyclerview.notifyRefreshComplete();
+                        refreshLayout.NotifyCompleteRefresh0();
                         adapter.ShowError();
                     }
                 });
     }
 
     private void setdata(ArrayList<KotlinBean.PushBean> beans) {
-        if (bean.size() > 0) {
+        if (beans.size() > 0) {
             adapter.setCount(beans.size() + 1);
             adapter.showItem();
-            srecyclerview.notifyRefreshComplete();
         } else {
             adapter.showEmpty();
-            srecyclerview.notifyRefreshComplete();
         }
+        refreshLayout.NotifyCompleteRefresh0();
     }
 
     @Override

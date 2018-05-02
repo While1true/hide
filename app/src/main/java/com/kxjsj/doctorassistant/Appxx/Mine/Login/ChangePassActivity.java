@@ -10,15 +10,12 @@ import com.kxjsj.doctorassistant.Component.BaseTitleActivity;
 import com.kxjsj.doctorassistant.Net.ApiController;
 import com.kxjsj.doctorassistant.R;
 import com.kxjsj.doctorassistant.Rx.DataObserver;
-import com.kxjsj.doctorassistant.Rx.MyObserver;
 import com.kxjsj.doctorassistant.Utils.EncryptUtils;
 import com.kxjsj.doctorassistant.Utils.K2JUtils;
-import com.kxjsj.doctorassistant.Utils.RegularUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.annotations.NonNull;
 
 /**
  * Created by vange on 2017/10/13.

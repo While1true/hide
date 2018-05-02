@@ -3,12 +3,7 @@ package com.kxjsj.doctorassistant.Appxx.Sicker.QuiryInfo;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-
-import com.ck.hello.nestrefreshlib.View.Adpater.Base.SimpleViewHolder;
-import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.DefaultStateListener;
-import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.PositionHolder;
-import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.SAdapter;
-import com.ck.hello.nestrefreshlib.View.RefreshViews.SRecyclerView;
+import android.support.v7.widget.RecyclerView;
 import com.kxjsj.doctorassistant.App;
 import com.kxjsj.doctorassistant.Component.BaseTitleActivity;
 import com.kxjsj.doctorassistant.Constant.Session;
@@ -17,6 +12,12 @@ import com.kxjsj.doctorassistant.Net.ApiController;
 import com.kxjsj.doctorassistant.R;
 import com.kxjsj.doctorassistant.Rx.DataObserver;
 import com.kxjsj.doctorassistant.Utils.K2JUtils;
+import com.kxjsj.doctorassistant.Utils.TextUtils;
+import com.nestrefreshlib.Adpater.Base.Holder;
+import com.nestrefreshlib.Adpater.Impliment.PositionHolder;
+import com.nestrefreshlib.RefreshViews.AdapterHelper.StateAdapter;
+import com.nestrefreshlib.RefreshViews.RefreshLayout;
+import com.nestrefreshlib.State.DefaultStateListener;
 
 import java.util.ArrayList;
 
@@ -26,8 +27,8 @@ import java.util.ArrayList;
 
 public class MedicalInfo extends BaseTitleActivity {
     ArrayList<KotlinBean.MedicineBean>medicineBeans;
-    private SAdapter adapter;
-    private SRecyclerView sRecyclerView;
+    private StateAdapter adapter;
+    private RefreshLayout refreshLayout;
     String patientNo;
     @Override
     protected int getContentLayoutId() {
@@ -37,7 +38,7 @@ public class MedicalInfo extends BaseTitleActivity {
     @Override
     protected void initView(Bundle savedInstanceState) {
         setTitle("用药信息");
-        sRecyclerView = findViewById(R.id.srecyclerview);
+        refreshLayout = findViewById(R.id.refreshlayout);
         if(savedInstanceState!=null){
             medicineBeans= (ArrayList<KotlinBean.MedicineBean>) savedInstanceState.getSerializable("bean");
             patientNo=savedInstanceState.getString("patientNo");
@@ -45,11 +46,11 @@ public class MedicalInfo extends BaseTitleActivity {
         if(patientNo==null)
             patientNo= getIntent().getStringExtra("patientNo");
 
-        adapter = new SAdapter()
+        adapter = new StateAdapter()
                 .addType(R.layout.medical_info_item, new PositionHolder() {
                     @Override
-                    public void onBind(SimpleViewHolder holder, int position) {
-                        holder.setTextBold(true,R.id.tv1,R.id.tv2,R.id.tv3,R.id.tv4);
+                    public void onBind(Holder holder, int position) {
+                        TextUtils.setTextBold(holder,true,R.id.tv1,R.id.tv2,R.id.tv3,R.id.tv4);
                         holder.setText(R.id.tv1,"药品名称");
                         holder.setText(R.id.tv2,"单价");
                         holder.setText(R.id.tv3,"数量");
@@ -63,7 +64,7 @@ public class MedicalInfo extends BaseTitleActivity {
                 })
                 .addType(R.layout.medical_info_item, new PositionHolder() {
                     @Override
-                    public void onBind(SimpleViewHolder holder, int position) {
+                    public void onBind(Holder holder, int position) {
                         KotlinBean.MedicineBean medicineBean = medicineBeans.get(position - 1);
                         holder.setText(R.id.tv1,medicineBean.getName());
                         holder.setText(R.id.tv2,"￥"+medicineBean.getPrice());
@@ -75,7 +76,8 @@ public class MedicalInfo extends BaseTitleActivity {
                     public boolean istype(int position) {
                         return true;
                     }
-                }).setStateListener(new DefaultStateListener() {
+                });
+        adapter.setStateListener(new DefaultStateListener() {
                     @Override
                     public void netError(Context context) {
                         loadData();
@@ -91,9 +93,10 @@ public class MedicalInfo extends BaseTitleActivity {
                 adapter.showEmpty();
             }
         }
-        sRecyclerView.setPullRate(2)
-                .setAdapter(new LinearLayoutManager(this),adapter)
-                .setRefreshMode(true,true,false,false);
+        RecyclerView recyclerView = refreshLayout.getmScroll();
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+
 
     }
 

@@ -6,13 +6,9 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
-import com.ck.hello.nestrefreshlib.View.Adpater.Base.SimpleViewHolder;
-import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.DefaultStateListener;
-import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.PositionHolder;
-import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.SAdapter;
-import com.ck.hello.nestrefreshlib.View.RefreshViews.SRecyclerView;
 import com.kxjsj.doctorassistant.App;
 import com.kxjsj.doctorassistant.Component.BaseTitleActivity;
 import com.kxjsj.doctorassistant.Constant.Constance;
@@ -29,16 +25,18 @@ import com.kxjsj.doctorassistant.Screen.AdjustUtil;
 import com.kxjsj.doctorassistant.Screen.OrentionUtils;
 import com.kxjsj.doctorassistant.Utils.K2JUtils;
 import com.kxjsj.doctorassistant.View.GradualButton;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.nestrefreshlib.Adpater.Base.Holder;
+import com.nestrefreshlib.Adpater.Impliment.PositionHolder;
+import com.nestrefreshlib.RefreshViews.AdapterHelper.StateAdapter;
+import com.nestrefreshlib.RefreshViews.RefreshLayout;
+import com.nestrefreshlib.RefreshViews.RefreshListener;
+import com.nestrefreshlib.State.DefaultStateListener;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.Observable;
-import io.reactivex.functions.BiFunction;
 
 /**
  * Created by vange on 2017/9/29.
@@ -48,9 +46,9 @@ public class DoctorHome extends BaseTitleActivity {
     /**
      * 显示内容控件
      */
-    @BindView(R.id.srecyclerview)
-    SRecyclerView srecyclerview;
-    private SAdapter adapter;
+    @BindView(R.id.refreshlayout)
+    RefreshLayout refreshLayout;
+    private StateAdapter adapter;
 
     /**
      * 数据包
@@ -71,7 +69,7 @@ public class DoctorHome extends BaseTitleActivity {
         ButterKnife.bind(this);
         Intent intent = getIntent();
         if (savedInstanceState != null) {
-            average=savedInstanceState.getString("average");
+            average = savedInstanceState.getString("average");
             bean = savedInstanceState.getParcelable("data");
             datas = (ArrayList<KotlinBean.PushBean>) savedInstanceState.getSerializable("bean");
         }
@@ -82,36 +80,36 @@ public class DoctorHome extends BaseTitleActivity {
             setTitle(bean.getName() + "的个人主页");
         }
 
-        adapter = new SAdapter()
+        adapter = new StateAdapter()
                 .addType(R.layout.doctor_info, new PositionHolder() {
-                    @Override
-                    public void onBind(SimpleViewHolder holder, int position) {
+            @Override
+            public void onBind(Holder holder, int i) {
+                GlideLoader.loadRound(holder.getView(R.id.iv_doctor), bean.getUserimg());
+                holder.setText(R.id.introduction, bean.getRemark());
 
-                        GlideLoader.loadRound(holder.getView(R.id.iv_doctor), bean.getUserimg());
-                        holder.setText(R.id.introduction, bean.getRemark());
+                holder.setText(R.id.ranktext, average == null ? "无评分" : "平均评分：" + average);
+                holder.setRating(R.id.rating, average == null ? 0.0f : Float.parseFloat(average));
+                startButtonAnimator(holder);
+                holder.setOnClickListener(R.id.ask, v -> {
+                    askQuestion(bean.getUserid());
+                });
+                holder.setOnClickListener(R.id.communicate, view -> ConversationUtils.startChartSingle(DoctorHome.this, bean.getUserid(), bean.getDepartment() + "/" + bean.getName()));
 
-                        holder.setText(R.id.ranktext, average==null?"无评分":"平均评分："+average);
-                        holder.setRating(R.id.rating, average==null?0.0f:Float.parseFloat(average));
-                        startButtonAnimator(holder);
-                        holder.setOnClickListener(R.id.ask, v -> {
-                            askQuestion(bean.getUserid());
-                        });
-                        holder.setOnClickListener(R.id.communicate, view -> ConversationUtils.startChartSingle(DoctorHome.this, bean.getUserid(), bean.getDepartment() + "/" + bean.getName()));
-                    }
+            }
 
-                    @Override
-                    public boolean istype(int position) {
-                        return position == 0 && OrentionUtils.isPortrait(DoctorHome.this);
-                    }
-                })
+            @Override
+            public boolean istype(int position) {
+                return position == 0 && OrentionUtils.isPortrait(DoctorHome.this);
+            }
+        })
                 .addType(R.layout.doctor_info_land, new PositionHolder() {
                     @Override
-                    public void onBind(SimpleViewHolder holder, int position) {
+                    public void onBind(Holder holder, int i) {
                         GlideLoader.loadRound(holder.getView(R.id.iv_doctor), bean.getUserimg());
                         holder.setText(R.id.introduction, bean.getRemark());
 
-                        holder.setText(R.id.ranktext, (average==null||average.equals("0.0"))?"无评分":"平均评分："+average);
-                        holder.setRating(R.id.rating, average==null?0.0f:Float.parseFloat(average));
+                        holder.setText(R.id.ranktext, (average == null || average.equals("0.0")) ? "无评分" : "平均评分：" + average);
+                        holder.setRating(R.id.rating, average == null ? 0.0f : Float.parseFloat(average));
 
                         startButtonAnimator(holder);
                         holder.setOnClickListener(R.id.ask, v -> {
@@ -128,8 +126,10 @@ public class DoctorHome extends BaseTitleActivity {
                     }
                 })
                 .addType(R.layout.doctor_answer_item, new PositionHolder() {
+
+
                     @Override
-                    public void onBind(SimpleViewHolder holder, int position) {
+                    public void onBind(Holder holder, int position) {
                         if (datas.size() == 0) {
                             holder.setText(R.id.question, "当前无留言");
                             holder.setText(R.id.answer, "来做第一个留言的人吧");
@@ -138,31 +138,44 @@ public class DoctorHome extends BaseTitleActivity {
                         KotlinBean.PushBean pushBean = datas.get(position - 1);
                         holder.setText(R.id.question, pushBean.getFromName() + ":" + pushBean.getContent());
                         holder.setText(R.id.answer, bean.getName() + ":" + pushBean.getReply());
+
                     }
 
                     @Override
                     public boolean istype(int position) {
                         return true;
                     }
-                })
-                .setStateListener(new DefaultStateListener() {
-                    @Override
-                    public void netError(Context context) {
-                        loadData();
-                    }
                 });
-        srecyclerview.addDefaultHeaderFooter()
-                .setRefreshingListener(new SRecyclerView.OnRefreshListener() {
-                    @Override
-                    public void Refreshing() {
-                        loadData();
+        adapter.setStateListener(new DefaultStateListener() {
+            @Override
+            public void netError(Context context) {
+                loadData();
+            }
+        });
+        RecyclerView recyclerView = refreshLayout.getmScroll();
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+        refreshLayout.setListener(new RefreshListener() {
+            @Override
+            public void Refreshing() {
+                loadData();
+            }
 
-                    }
-                }).setAdapter(new LinearLayoutManager(this), adapter)
-                .setRefreshing();
+            @Override
+            public void Loading() {
+
+            }
+        });
+        if(datas==null){
+            loadData();
+        }else {
+            int size = datas.size();
+            adapter.setCount(size == 0 ? size + 2 : size + 1);
+            adapter.showItem();
+        }
     }
 
-    private void startButtonAnimator(SimpleViewHolder holder) {
+    private void startButtonAnimator(Holder holder) {
         GradualButton askButton = holder.getView(R.id.ask);
         askButton.start(0xff535353, getResources().getColor(R.color.colorPrimary));
 
@@ -182,7 +195,7 @@ public class DoctorHome extends BaseTitleActivity {
             replyDialog.setCallback(obj -> {
                 Session userInfo = App.getUserInfo();
                 ApiController.Comment(userid, userInfo.getUserid(), userInfo.getToken(), obj)
-                        .subscribe(new DataObserver(this) {
+                        .subscribe(new DataObserver<Object>(this) {
                             @Override
                             public void OnNEXT(Object bean) {
                                 replyDialog.dismiss();
@@ -217,7 +230,7 @@ public class DoctorHome extends BaseTitleActivity {
         Observable.zip(ApiController.getReplyComment(userInfo.getUserid(), userInfo.getToken()),
                 ApiController.selectAverage(bean.getUserid(), userInfo.getToken()),
                 (arrayListBaseBean, baseBean) -> {
-                        average = baseBean.getData().getAVERAGE();
+                    average = baseBean.getData().getAVERAGE();
                     return arrayListBaseBean;
                 })
                 .subscribe(new DataObserver<ArrayList<KotlinBean.PushBean>>(this) {
@@ -241,7 +254,7 @@ public class DoctorHome extends BaseTitleActivity {
 //                System.out.println(bean.size());
 //            }
 //        });
-        srecyclerview.notifyRefreshComplete();
+        refreshLayout.NotifyCompleteRefresh0();
 
     }
 
@@ -250,7 +263,7 @@ public class DoctorHome extends BaseTitleActivity {
         super.onDestroy();
         if (Constance.DEBUGTAG)
             Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "onDestroy: ");
-        srecyclerview.setRefreshingListener(null);
+        refreshLayout.setListener(null);
     }
 
     @Override

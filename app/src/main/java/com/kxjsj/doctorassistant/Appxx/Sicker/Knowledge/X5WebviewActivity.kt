@@ -4,20 +4,20 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.DefaultStateListener
-import com.ck.hello.nestrefreshlib.View.State.StateLayout
 import com.kxjsj.doctorassistant.Component.BaseTitleActivity
 import com.kxjsj.doctorassistant.JavaBean.KotlinBean
 import com.kxjsj.doctorassistant.Net.ApiController
 import com.kxjsj.doctorassistant.R
 import com.kxjsj.doctorassistant.Rx.DataObserver
+import com.nestrefreshlib.State.DefaultStateListener
+import com.nestrefreshlib.State.StateLayout
 import kotlinx.android.synthetic.main.x5web_layout.*
 
 /**
  * Created by vange on 2018/1/11.
  */
 class X5WebviewActivity:BaseTitleActivity() {
-    var statelayout:StateLayout?=null
+    var statelayout: StateLayout?=null
     var id:Int=0
     override fun initView(savedInstanceState: Bundle?) {
         var titlex=intent.getStringExtra("title")

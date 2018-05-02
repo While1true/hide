@@ -3,14 +3,8 @@ package com.kxjsj.doctorassistant.Appxx.Sicker.QuiryInfo;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-
-import com.ck.hello.nestrefreshlib.View.Adpater.Base.ItemHolder;
-import com.ck.hello.nestrefreshlib.View.Adpater.Base.SimpleViewHolder;
-import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.DefaultStateListener;
-import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.SAdapter;
-import com.ck.hello.nestrefreshlib.View.RefreshViews.SRecyclerView;
 import com.kxjsj.doctorassistant.Component.BaseTitleActivity;
 import com.kxjsj.doctorassistant.Constant.Constance;
 import com.kxjsj.doctorassistant.JavaBean.KotlinBean;
@@ -18,8 +12,11 @@ import com.kxjsj.doctorassistant.Net.ApiController;
 import com.kxjsj.doctorassistant.R;
 import com.kxjsj.doctorassistant.Rx.DataObserver;
 import com.kxjsj.doctorassistant.Screen.OrentionUtils;
-
-import org.apache.http.impl.cookie.BestMatchSpec;
+import com.nestrefreshlib.Adpater.Base.Holder;
+import com.nestrefreshlib.Adpater.Base.ItemHolder;
+import com.nestrefreshlib.RefreshViews.AdapterHelper.StateAdapter;
+import com.nestrefreshlib.RefreshViews.RefreshLayout;
+import com.nestrefreshlib.State.DefaultStateListener;
 
 import java.util.ArrayList;
 
@@ -31,9 +28,9 @@ import butterknife.ButterKnife;
  */
 
 public class CheckPartActivity extends BaseTitleActivity {
-    @BindView(R.id.srecyclerview)
-    SRecyclerView sRecyclerView;
-    private SAdapter adapter;
+    @BindView(R.id.refreshlayout)
+    RefreshLayout refreshLayout;
+    private StateAdapter stateAdapter;
     ArrayList<KotlinBean.CheckBean> beans;
     @Override
     protected int getContentLayoutId() {
@@ -49,10 +46,10 @@ public class CheckPartActivity extends BaseTitleActivity {
             beans= (ArrayList<KotlinBean.CheckBean>) savedInstanceState.getSerializable("bean");
         }
 
-        adapter = new SAdapter()
+        stateAdapter = new StateAdapter()
                 .addType(R.layout.check_programmer, new ItemHolder<KotlinBean.CheckBean>() {
                     @Override
-                    public void onBind(SimpleViewHolder holder, KotlinBean.CheckBean item, int position) {
+                    public void onBind(Holder holder, KotlinBean.CheckBean item, int position) {
                           holder.setText(R.id.title,item.getName()+"/"+item.getPart());
                           holder.setText(R.id.price,"￥"+item.getPrice());
                           holder.setText(R.id.number,"z："+item.getCheck_no());
@@ -60,10 +57,11 @@ public class CheckPartActivity extends BaseTitleActivity {
                     }
 
                     @Override
-                    public boolean istype(KotlinBean.CheckBean item, int position) {
+                    public boolean istype(Object item, int position) {
                         return true;
                     }
-                }).setStateListener(new DefaultStateListener() {
+                });
+        stateAdapter.setStateListener(new DefaultStateListener() {
                     @Override
                     public void netError(Context context) {
                         loadData();
@@ -74,15 +72,16 @@ public class CheckPartActivity extends BaseTitleActivity {
             loadData();
         }else{
             if(beans.size()>0) {
-                adapter.setBeanList(beans);
-                adapter.showItem();
+                stateAdapter.setList(beans);
+                stateAdapter.showItem();
             }else{
-                adapter.showEmpty();
+                stateAdapter.showEmpty();
             }
         }
-        sRecyclerView.setAdapter(new GridLayoutManager(this, OrentionUtils.isPortrait(this)?2:3), adapter)
-                .setRefreshMode(true,true,false,false)
-                .setPullRate(2);
+        refreshLayout.getAttrsUtils().setOVERSCROLL_ELASTIC(true);
+        RecyclerView recyclerView = refreshLayout.getmScroll();
+        recyclerView.setLayoutManager(new GridLayoutManager(this, OrentionUtils.isPortrait(this)?2:3));
+        recyclerView.setAdapter(stateAdapter);
     }
 
     private void loadData() {
@@ -91,11 +90,12 @@ public class CheckPartActivity extends BaseTitleActivity {
                     @Override
                     public void OnNEXT(ArrayList<KotlinBean.CheckBean> bean) {
                         beans=bean;
+                        refreshLayout.NotifyCompleteRefresh0();
                         if(beans.size()>0) {
-                            adapter.setBeanList(beans);
-                            adapter.showItem();
+                            stateAdapter.setList(beans);
+                            stateAdapter.showItem();
                         }else{
-                            adapter.showEmpty();
+                            stateAdapter.showEmpty();
                         }
                         if (Constance.DEBUGTAG)
                             Log.i(Constance.DEBUG + "--" + getClass().getSimpleName() + "--", "OnNEXT: "+bean.toString());
@@ -104,7 +104,8 @@ public class CheckPartActivity extends BaseTitleActivity {
                     @Override
                     public void OnERROR(String error) {
                         super.OnERROR(error);
-                        adapter.ShowError();
+                        refreshLayout.NotifyCompleteRefresh0();
+                        stateAdapter.ShowError();
                     }
                 });
     }

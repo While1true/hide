@@ -46,7 +46,6 @@ class MineF : BaseFragment(), View.OnClickListener {
 
     override fun initView(savedInstanceState: Bundle?) {
         log("------------")
-        scrollview.setRefreshMode(true, true, false, false)
         retainInstance = true
         val userInfo = App.getUserInfo()
         GlideLoader.loadRound(imageview, userInfo.imgUrl)
@@ -64,8 +63,12 @@ class MineF : BaseFragment(), View.OnClickListener {
         loginOut.setOnClickListener(this)
         remind.setOnClickListener(this)
         rating.setOnClickListener(this)
-        loginOut.postDelayed({ loginOut.start(loginOut.currentTextColor, resources.getColor(R.color.colorPrimary)) }, 600)
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loginOut.start(loginOut.currentTextColor, resources.getColor(R.color.colorPrimary))
     }
 
     override fun getLayoutId(): Int {

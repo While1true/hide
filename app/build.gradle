@@ -166,7 +166,7 @@ dependencies {
     compile(name: 'SMSSDK-3.0.0', ext: 'aar')
     compile(name: 'IMKit-debug', ext: 'aar')
     compile(name: 'IMLib-debug', ext: 'aar')
-    compile(name: 'nestrefreshlib1-debug', ext: 'aar')
+    compile(name: 'nestrefreshlib-release', ext: 'aar')
     compile files('libs/MobCommons-2017.0607.1736.jar')
     compile files('libs/MobTools-2017.0607.1736.jar')
 

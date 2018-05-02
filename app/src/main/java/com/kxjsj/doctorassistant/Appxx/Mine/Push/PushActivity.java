@@ -8,7 +8,6 @@ import com.kxjsj.doctorassistant.Constant.Constance;
 import com.kxjsj.doctorassistant.R;
 import com.kxjsj.doctorassistant.Utils.K2JUtils;
 import com.kxjsj.doctorassistant.View.SettingView;
-import com.xiaomi.mipush.sdk.MiPushClient;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

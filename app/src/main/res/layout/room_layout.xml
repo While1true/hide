@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.ck.hello.nestrefreshlib.View.RefreshViews.SScrollview
+<com.nestrefreshlib.RefreshViews.RefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    app:overscroll="true"
     android:id="@+id/sscrollview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -138,4 +139,4 @@
         app:subtitleText="2011-1-1"
         app:titletext="住院诊断" />
 </android.support.constraint.ConstraintLayout>
-</com.ck.hello.nestrefreshlib.View.RefreshViews.SScrollview>
+</com.nestrefreshlib.RefreshViews.RefreshLayout>

@@ -2,16 +2,10 @@ package com.kxjsj.doctorassistant.Appxx.Sicker.QuiryInfo;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 
-import com.ck.hello.nestrefreshlib.View.Adpater.Base.ItemHolder;
-import com.ck.hello.nestrefreshlib.View.Adpater.Base.SimpleViewHolder;
-import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.DefaultStateListener;
-import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.SAdapter;
-import com.ck.hello.nestrefreshlib.View.RefreshViews.SRecyclerView;
 import com.kxjsj.doctorassistant.App;
 import com.kxjsj.doctorassistant.Component.BaseTitleActivity;
 import com.kxjsj.doctorassistant.Constant.Constance;
@@ -21,12 +15,13 @@ import com.kxjsj.doctorassistant.Net.ApiController;
 import com.kxjsj.doctorassistant.R;
 import com.kxjsj.doctorassistant.Rx.DataObserver;
 import com.kxjsj.doctorassistant.Screen.OrentionUtils;
-import com.kxjsj.doctorassistant.Screen.SizeUtils;
-import com.kxjsj.doctorassistant.Utils.K2JUtils;
-import com.kxjsj.doctorassistant.View.WrapStaggeredManager;
+import com.nestrefreshlib.Adpater.Base.Holder;
+import com.nestrefreshlib.Adpater.Base.ItemHolder;
+import com.nestrefreshlib.RefreshViews.AdapterHelper.StateAdapter;
+import com.nestrefreshlib.RefreshViews.RefreshLayout;
+import com.nestrefreshlib.State.DefaultStateListener;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,9 +31,9 @@ import butterknife.ButterKnife;
  */
 
 public class ReportActivity extends BaseTitleActivity {
-    @BindView(R.id.srecyclerview)
-    SRecyclerView sRecyclerView;
-    private SAdapter adapter;
+    @BindView(R.id.refreshlayout)
+    RefreshLayout refreshLayout;
+    private StateAdapter adapter;
     ArrayList<KotlinBean.CheckReportBean> beans;
     String patientNo;
 
@@ -58,10 +53,10 @@ public class ReportActivity extends BaseTitleActivity {
         if(patientNo==null)
         patientNo= getIntent().getStringExtra("patientNo");
 
-        adapter = new SAdapter()
+        adapter = new StateAdapter()
                 .addType(R.layout.check_report_item, new ItemHolder<KotlinBean.CheckReportBean>() {
                     @Override
-                    public void onBind(SimpleViewHolder holder, KotlinBean.CheckReportBean item, int position) {
+                    public void onBind(Holder holder, KotlinBean.CheckReportBean item, int position) {
                       holder.setText(R.id.title,item.getName()+"/"+item.getPart()+"\n￥"+item.getPrice());
                       holder.setText(R.id.state,getStateString(item.getStatus()));
 //                      holder.setText(R.id.description,item.getResult_description());
@@ -73,10 +68,11 @@ public class ReportActivity extends BaseTitleActivity {
                     }
 
                     @Override
-                    public boolean istype(KotlinBean.CheckReportBean item, int position) {
+                    public boolean istype(Object item, int position) {
                         return true;
                     }
-                }).setStateListener(new DefaultStateListener() {
+                });
+        adapter.setStateListener(new DefaultStateListener() {
                     @Override
                     public void netError(Context context) {
                         loadData();
@@ -86,7 +82,7 @@ public class ReportActivity extends BaseTitleActivity {
             loadData();
         }else {
             if(beans.size()>0){
-                adapter.setBeanList(beans);
+                adapter.setList(beans);
                 adapter.showItem();
             }else{
                 adapter.showEmpty();
@@ -94,9 +90,9 @@ public class ReportActivity extends BaseTitleActivity {
         }
 
         int i = OrentionUtils.isPortrait(this) ? 2 : 3;
-        sRecyclerView.setAdapter(new StaggeredGridLayoutManager(i,StaggeredGridLayoutManager.VERTICAL),adapter)
-                .setRefreshMode(true,true,false,false)
-                .setPullRate(2);
+        RecyclerView recyclerView=refreshLayout.getmScroll();
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(i,StaggeredGridLayoutManager.VERTICAL));
+        recyclerView.setAdapter(adapter);
     }
 
     /**
@@ -138,7 +134,7 @@ public class ReportActivity extends BaseTitleActivity {
                         beans.addAll(bean);
                         beans.addAll(bean);
                         if(beans.size()>0){
-                            adapter.setBeanList(beans);
+                            adapter.setList(beans);
                             adapter.showItem();
                         }else{
                             adapter.showEmpty();

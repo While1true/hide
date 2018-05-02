@@ -3,14 +3,14 @@ package com.kxjsj.doctorassistant.Appxx.Sicker
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import com.ck.hello.nestrefreshlib.View.Adpater.Impliment.DefaultStateListener
-import com.ck.hello.nestrefreshlib.View.State.StateLayout
 import com.kxjsj.doctorassistant.Appxx.Sicker.Knowledge.knowledgePagerAdapter
 import com.kxjsj.doctorassistant.Component.BaseFragment
 import com.kxjsj.doctorassistant.JavaBean.KotlinBean
 import com.kxjsj.doctorassistant.Net.ApiController
 import com.kxjsj.doctorassistant.R
 import com.kxjsj.doctorassistant.Rx.DataObserver
+import com.nestrefreshlib.State.DefaultStateListener
+import com.nestrefreshlib.State.StateLayout
 import kotlinx.android.synthetic.main.knowledge_layout.*
 
 /**
@@ -28,6 +28,8 @@ class KnowledgeF : BaseFragment() {
         if (beanx != null) {
             initAdapter(beanx)
         }
+        if(beanx==null)
+        getData()
     }
 
     override fun getLayoutId(): Int {
@@ -42,7 +44,7 @@ class KnowledgeF : BaseFragment() {
                         if (beans?.size == 0)
                             stateLayout?.showEmpty()
                         else
-                            stateLayout?.showNomore()
+                            stateLayout?.showItem()
                         if (beanx == null) {
                             beanx = beans
                         } else {
@@ -80,7 +82,7 @@ class KnowledgeF : BaseFragment() {
     }
 
     override fun loadLazy() {
-        getData()
+
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {

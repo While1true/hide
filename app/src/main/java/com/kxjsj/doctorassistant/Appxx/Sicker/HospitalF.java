@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.ck.hello.nestrefreshlib.View.RefreshViews.SScrollview;
 import com.kxjsj.doctorassistant.App;
 import com.kxjsj.doctorassistant.Appxx.Sicker.QuiryInfo.RemindActivity;
 import com.kxjsj.doctorassistant.Component.BaseFragment;
@@ -29,6 +28,8 @@ import com.kxjsj.doctorassistant.Rx.Utils.RxBus;
 import com.kxjsj.doctorassistant.Utils.K2JUtils;
 import com.kxjsj.doctorassistant.View.GradualButton;
 import com.kxjsj.doctorassistant.View.MoveTextview;
+import com.nestrefreshlib.RefreshViews.RefreshLayout;
+import com.nestrefreshlib.RefreshViews.RefreshListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,7 +49,7 @@ public class HospitalF extends BaseFragment {
     @BindView(R.id.seemore)
     GradualButton seemore;
     @BindView(R.id.sscrollview)
-    SScrollview sscrollview;
+    RefreshLayout sscrollview;
     @BindView(R.id.help)
     GradualButton buttonhelp;
     @BindView(R.id.callhelp)
@@ -77,19 +78,23 @@ public class HospitalF extends BaseFragment {
         seemore.start(seemore.getCurrentTextColor(), getResources().getColor(R.color.colorecRed), 2000);
         buttoncallhelp.start(buttoncallhelp.getCurrentTextColor(), 0xff4070);
         buttonhelp.start(buttonhelp.getCurrentTextColor(), 0x4FB7DD);
-        sscrollview.addDefaultHeaderFooter()
-                .setRefreshingListener(new SScrollview.OnRefreshListener() {
-                    @Override
-                    public void Refreshing() {
-                        doNet();
-                    }
-                });
+        sscrollview.setListener(new RefreshListener() {
+            @Override
+            public void Refreshing() {
+                doNet();
+            }
+
+            @Override
+            public void Loading() {
+
+            }
+        });
         if (savedInstanceState != null) {
             beans = (PatientBed) savedInstanceState.getSerializable("beans");
         }
         if (beans != null)
             updateUi(beans);
-        if (firstLoad || beans == null)
+        if (beans == null)
             sscrollview.setRefreshing();
 
         RxBus.getDefault().toObservable(
@@ -114,6 +119,7 @@ public class HospitalF extends BaseFragment {
                 .subscribe(new DataObserver<PatientBed>(this) {
                     @Override
                     public void OnNEXT(PatientBed bean) {
+                        sscrollview.NotifyCompleteRefresh0();
                         if (bean == null) {
                             K2JUtils.toast("获取信息失败");
                         }
@@ -124,7 +130,7 @@ public class HospitalF extends BaseFragment {
                     @Override
                     public void OnERROR(String error) {
                         super.OnERROR(error);
-                        sscrollview.notifyRefreshComplete();
+                        sscrollview.NotifyCompleteRefresh0();
                     }
                 });
 
@@ -141,7 +147,7 @@ public class HospitalF extends BaseFragment {
 //                      date.setText(bean.get);
 //                      level.setText();
 //                      nurse.setText();
-        sscrollview.notifyRefreshComplete();
+        sscrollview.NotifyCompleteRefresh0();
     }
 
     @Override
